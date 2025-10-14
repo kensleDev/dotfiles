@@ -1,0 +1,18 @@
+[tools]
+node = "23.11.0"
+bat = "latest"
+btop = "latest"
+chezmoi="latest"
+fd="latest"
+fzf="latest"
+neovim="latest"
+ripgrep="latest"
+starship="latest"
+xh="latest"
+zoxide="latest"
+zsh="latest"
+make="latest"
+tmux="latest"
+gcc="latest"
+
+#"npm:bun" = "latest"
