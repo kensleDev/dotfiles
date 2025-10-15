@@ -11,6 +11,6 @@ starship="latest"
 xh="latest"
 zoxide="latest"
 eza="latest"
-
+rust = "latest"
 
 #"npm:bun" = "latest"
