@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 #HOME_DIR=/home/kd
 #BIN_DIR=/usr/local/bin
 
