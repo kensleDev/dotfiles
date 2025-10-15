@@ -3,7 +3,25 @@
 
 setup() {
   curl https://mise.run | sh
-  sudo apt install stow -y 
+  sudo mv $HOME/.local/bin/mise /usr/local/bin/mise
+  source ~/.bashrc
+  sudo apt install stow -y
+  install_docker
+}
+
+install_docker() {
+  curl -fsSL https://get.docker.com -o get-docker.sh
+  sh get-docker.sh
+  sudo sh -eux <<EOF
+  # Install newuidmap & newgidmap bi sudo sh -eux <<EOF
+  # Install newuidmap & newgidmap binaries
+  apt-get install -y uidmap
+  EOF sudo sh -eux <<EOF
+  # Install newuidmap & newgidmap binaries
+  apt-get install -y uidmap
+  EOF
+  
+  rm get-docker.sh
 }
 
 ensure_dotfiles_repo() {
@@ -30,7 +48,11 @@ apply_config() {
   done
 }
 
+echo "SETUP"
 setup
+echo "INSTALL_APPS"
 install_apps
+echo "ENSURE DOTFILES"
 ensure_dotfiles_repo
+echo "APPLY CONFIG"
 apply_config
