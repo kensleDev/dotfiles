@@ -48,7 +48,8 @@ alias upgrade='sudo apt update && sudo apt upgrade'
 
 # --------------------------------File Ops
 
-#alias c='clear'
+alias cl='clear'
+
 
 alias la='eza -l --icons --git'
 alias l='eza -l --icons --git -a'
@@ -87,6 +88,7 @@ alias tmks='tmux kill-session -t'
 alias tmsc='tmux a -t sysconfig'
 alias tmls='tmux list'
 alias tma='tmux a'
+alias ts='~/.config/zsh/scripts/tmux-sessionizer'
 
 
 #---- DOCKER
@@ -190,8 +192,8 @@ if [ -z "${_mise_cmd_not_found:-}" ]; then
     }
 fi
 
-alias c="cd $1"
 # Smart cd: path -> builtin cd, otherwise try zoxide; then ls
+alias c="cd $1"
 cd() {
   # no args: go home
   if [[ $# -eq 0 ]]; then
@@ -221,6 +223,7 @@ cd() {
   ls -a
 }
 
+# Fzf config file editor
 edit() {
   local editor="${EDITOR:-vim}"
 
