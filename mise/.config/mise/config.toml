@@ -10,9 +10,7 @@ ripgrep="latest"
 starship="latest"
 xh="latest"
 zoxide="latest"
-zsh="latest"
-make="latest"
-tmux="latest"
-gcc="latest"
+eza="latest"
+
 
 #"npm:bun" = "latest"
