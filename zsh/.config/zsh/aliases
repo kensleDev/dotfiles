@@ -56,6 +56,7 @@ alias upgrade='sudo apt update && sudo apt upgrade'
 
 # --------------------------------File Ops
 
+alias cb='cd -'
 #alias c='clear'
 alias cl='clear'
 
