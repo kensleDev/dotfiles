@@ -12,5 +12,7 @@ zoxide="latest"
 eza="latest"
 rust = "latest"
 zig = "latest"
+lazygit = "latest"
+imagemagick = "latest"
 
 #"npm:bun" = "latest"
