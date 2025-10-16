@@ -63,6 +63,8 @@ apply_config() {
   REPO_DIR="$HOME/.dotfiles"
   [ -d "$REPO_DIR" ] || { echo "$REPO_DIR not found" >&2; return 1; }
 
+  rm $HOME/.zshrc
+
   # For each top-level package dir (skip repo internals)
   for d in "$REPO_DIR"/*; do
     [ -d "$d" ] || continue
