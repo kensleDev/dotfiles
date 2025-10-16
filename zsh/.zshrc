@@ -36,3 +36,5 @@ source ~/.config/zsh/aliases
 
 theme=agnoster
 
+eval "$(mise activate zsh)"
+
