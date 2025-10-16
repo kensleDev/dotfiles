@@ -64,6 +64,8 @@ apply_config() {
   [ -d "$REPO_DIR" ] || { echo "$REPO_DIR not found" >&2; return 1; }
 
   rm $HOME/.zshrc
+  rm $HOME/.git
+
 
   # For each top-level package dir (skip repo internals)
   for d in "$REPO_DIR"/*; do
