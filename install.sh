@@ -63,17 +63,32 @@ apply_config() {
   REPO_DIR="$HOME/.dotfiles"
   [ -d "$REPO_DIR" ] || { echo "$REPO_DIR not found" >&2; return 1; }
 
-  # List only top-level dirs, exclude .git and script folders
+  # For each top-level package dir (skip repo internals)
   for d in "$REPO_DIR"/*; do
     [ -d "$d" ] || continue
     base="$(basename "$d")"
     case "$base" in
       .git|script|scripts) continue ;;
     esac
+
     echo "Stowing: $base"
-    stow -d "$REPO_DIR" -R -t "$HOME" "$base"
+
+    # 1) Dry-run to discover conflicts and back them up
+    #    We parse stow's warnings for: "existing target is neither a link nor a directory: <path>"
+    stow -nvt "$HOME" -d "$REPO_DIR" "$base" 2>&1 \
+      | sed -n 's/.* existing target is neither a link nor a directory: //p' \
+      | while IFS= read -r rel; do
+          [ -n "$rel" ] || continue
+          [ -e "$HOME/$rel" ] || continue
+          # timestamped backup to avoid overwriting previous backups
+          mv -v "$HOME/$rel" "$HOME/$rel.bak.$(date +%s)"
+        done
+
+    # 2) Real stow after backups
+    stow -vt "$HOME" -d "$REPO_DIR" "$base"
   done
 }
+
 
 # Don’t install Docker inside DevPod containers
 install_docker() {
