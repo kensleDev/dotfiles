@@ -49,12 +49,3 @@ apply_config() {
     stow -R -t "$HOME" "$dir"
   done
 }
-
-echo "SETUP"
-setup
-echo "INSTALL_APPS"
-install_apps
-echo "ENSURE DOTFILES"
-ensure_dotfiles_repo
-echo "APPLY CONFIG"
-apply_config
