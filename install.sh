@@ -7,7 +7,7 @@ setup() {
   curl https://mise.run | sh
   sudo mv $HOME/.local/bin/mise /usr/local/bin/mise
   source ~/.bashrc
-  sudo apt install stow -y
+  sudo apt install stow trash-cli -y
   install_docker
 }
 
