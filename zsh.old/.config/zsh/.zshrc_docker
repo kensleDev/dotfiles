@@ -13,17 +13,7 @@ source ~/.config/zsh/variables
 # |_|   |_|\__,_|\__, |_|_| |_|___/
 #                |___/             
 
-source ~/.config/zsh/plugins
-
-
-#  _____                 _   _                 
-# |  ___|   _ _ __   ___| |_(_) ___  _ __  ___ 
-# | |_ | | | | '_ \ / __| __| |/ _ \| '_ \/ __|
-# |  _|| |_| | | | | (__| |_| | (_) | | | \__ \
-# |_|   \__,_|_| |_|\___|\__|_|\___/|_| |_|___/
-
-source ~/.config/zsh/functions
-source ~/.config/zsh/fzf_functions
+# source ~/.config/zsh/plugins
 
 #     _    _ _                     
 #    / \  | (_) __ _ ___  ___  ___ 
@@ -33,6 +23,20 @@ source ~/.config/zsh/fzf_functions
                                  
 source ~/.config/zsh/aliases
 
+#  _____                 _   _                 
+# |  ___|   _ _ __   ___| |_(_) ___  _ __  ___ 
+# | |_ | | | | '_ \ / __| __| |/ _ \| '_ \/ __|
+# |  _|| |_| | | | | (__| |_| | (_) | | | \__ \
+# |_|   \__,_|_| |_|\___|\__|_|\___/|_| |_|___/
 
-theme=agnoster
+# source ~/.config/zsh/functions
 
+#  _____          _        _ _     
+# |_   _|        | |      | | |    
+#   | | _ __  ___| |_ __ _| | |___ 
+#   | || '_ \/ __| __/ _` | | / __|
+#  _| || | | \__ \ || (_| | | \__ \
+#  \___/_| |_|___/\__\__,_|_|_|___/                      
+
+# source ~/dotfiles/scripts/installs.sh
+# source ~/dotfiles/scripts/configure.sh
