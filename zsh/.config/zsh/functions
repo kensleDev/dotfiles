@@ -1,0 +1,205 @@
+# List directory files when changing directory
+function chpwd() {
+  emulate -L zsh
+  eza --tree --level=1 --icons --git
+}
+
+
+# Shell-GPT integration ZSH v0.1
+_sgpt_zsh() {
+    _sgpt_prev_cmd=$BUFFER
+    BUFFER+="⌛"
+    zle -I && zle redisplay
+    BUFFER=$(sgpt --shell <<< "$_sgpt_prev_cmd")
+    zle end-of-line
+}
+zle -N _sgpt_zsh
+bindkey ^l _sgpt_zsh
+# Shell-GPT integration ZSH v0.1
+
+# Smart cd: path -> builtin cd, otherwise try zoxide; then ls
+alias c="cd $1"
+cd() {
+  # no args: go home
+  if [[ $# -eq 0 ]]; then
+    builtin cd ~ || return
+    ls -a
+    return
+  fi
+
+  local arg="$1"
+
+  # If it's clearly a path or an existing dir, use builtin cd
+  if [[ -d "$arg" || "$arg" == "-" || "$arg" == ~* || "$arg" == /* || "$arg" == .* ]]; then
+    builtin cd -- "$arg" || return
+    ls -a
+    return
+  fi
+
+  # Otherwise, try zoxide jump (frecency match)
+  if command -v __zoxide_z >/dev/null 2>&1; then
+    __zoxide_z "$@" || return
+    ls -a
+    return
+  fi
+
+  # Fallback: try builtin cd anyway
+  builtin cd -- "$arg" || return
+  ls -a
+}
+
+###
+# FUZZY CONFIG EDITOR
+###
+edit() {
+  # local editor="${EDITOR:-vim}"
+  local editor="vim"
+
+  # Candidate config files/dirs (add/remove freely)
+  local -a candidates=(
+    "$HOME/.zshrc"
+    "$HOME/.config/zsh"
+    "$HOME/.config/zsh/zshrc"
+    "$HOME/.config/mise/config.toml"
+    "$HOME/.config/mise/config.yaml"
+    "$HOME/.config/mice/config.yml"      # in case your path is this
+    "$HOME/.config/tmux/tmux.conf"
+    "$HOME/.gitconfig"
+    "$HOME/.config/git/config"
+    "$HOME/.config/starship.toml"
+    "$HOME/.config/nvim/init.lua"
+    "$HOME/.config/nvim"                  # whole folder, if you prefer
+    "$HOME/.ssh/config"
+  )
+
+  # Keep only those that currently exist
+  local -a existing=()
+  local f
+  for f in "${candidates[@]}"; do
+    [[ -e "$f" ]] && existing+=("$f")
+  done
+
+  if (( ${#existing[@]} == 0 )); then
+    echo "No known config files found. Edit the candidate list in the function."
+    return 1
+  fi
+
+  # Optional query: `edit zsh` pre-filters the list
+  local query="$*"
+
+  # fzf preview: bat if available, else sed/ls
+  local preview='
+    if command -v bat >/dev/null 2>&1; then
+      if [ -d {} ]; then ls -la --color=always {}; else bat --style=numbers --color=always --line-range :200 {}; fi
+    else
+      if [ -d {} ]; then ls -la {}; else sed -n "1,200p" {}; fi
+    fi
+  '
+
+  local chosen
+  chosen="$(printf "%s\n" "${existing[@]}" \
+    | fzf --prompt="Edit config > " \
+          --height=80% \
+          --preview="$preview" \
+          --preview-window=right:60% \
+          --border \
+          ${query:+--query="$query"})" || return
+
+  [[ -z "$chosen" ]] && return 0
+
+  # Open dir vs file
+  if [[ -d "$chosen" ]]; then
+    "$editor" "$chosen"
+  else
+    "$editor" "$chosen"
+  fi
+}
+
+###
+# Mice
+###
+
+export MISE_SHELL=zsh
+export __MISE_ORIG_PATH="$PATH"
+
+mise() {
+  local command
+  command="${1:-}"
+  if [ "$#" = 0 ]; then
+    command mise
+    return
+  fi
+  shift
+
+  case "$command" in
+  deactivate|shell|sh)
+    # if argv doesn't contains -h,--help
+    if [[ ! " $@ " =~ " --help " ]] && [[ ! " $@ " =~ " -h " ]]; then
+      eval "$(command mise "$command" "$@")"
+      return $?
+    fi
+    ;;
+  esac
+  command mise "$command" "$@"
+}
+
+_mise_hook() {
+  eval "$(mise hook-env -s zsh)";
+}
+typeset -ag precmd_functions;
+if [[ -z "${precmd_functions[(r)_mise_hook]+1}" ]]; then
+  precmd_functions=( _mise_hook ${precmd_functions[@]} )
+fi
+typeset -ag chpwd_functions;
+if [[ -z "${chpwd_functions[(r)_mise_hook]+1}" ]]; then
+  chpwd_functions=( _mise_hook ${chpwd_functions[@]} )
+fi
+
+_mise_hook
+if [ -z "${_mise_cmd_not_found:-}" ]; then
+    _mise_cmd_not_found=1
+    # preserve existing handler if present
+    if typeset -f command_not_found_handler >/dev/null; then
+        functions -c command_not_found_handler _command_not_found_handler
+    fi
+
+    typeset -gA _mise_cnf_tried
+
+    # helper for fallback behavior
+    _mise_fallback() {
+        local _cmd="$1"; shift
+        if typeset -f _command_not_found_handler >/dev/null; then
+            _command_not_found_handler "$_cmd" "$@"
+            return $?
+        else
+            print -u2 -- "zsh: command not found: $_cmd"
+            return 127
+        fi
+    }
+
+    command_not_found_handler() {
+        local cmd="$1"; shift
+
+        # never intercept mise itself or retry already-attempted commands
+        if [[ "$cmd" == "mise" || "$cmd" == mise-* || -n "${_mise_cnf_tried["$cmd"]}" ]]; then
+            _mise_fallback "$cmd" "$@"
+            return $?
+        fi
+
+        # run the hook; only retry if the command is actually found afterward
+        if mise hook-not-found -s zsh -- "$cmd"; then
+            _mise_hook
+            if command -v -- "$cmd" >/dev/null 2>&1; then
+                "$cmd" "$@"
+                return $?
+            fi
+        else
+            # only mark as tried if mise explicitly can't handle it
+            _mise_cnf_tried["$cmd"]=1
+        fi
+
+        # fall back
+        _mise_fallback "$cmd" "$@"
+    }
+fi
+

@@ -1,0 +1,21 @@
+plugins=(zsh-autosuggestions zsh-syntax-highlighting, zsh-completions)
+
+source ~/.config/zsh/plugs/antigen.zsh
+source ~/.config/zsh/plugs/z.sh
+# source ~/.config/zsh/plugs/pickers/neovim_picker/index
+# source ~/.config/zsh/plugs/docker/docker_picker
+
+# Load the oh-my-zsh's library
+antigen use oh-my-zsh
+
+antigen bundle git
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle zsh-users/zsh-autosuggestions
+antigen bundle zsh-users/zsh-completions
+
+# Load the theme
+antigen theme awesomepanda
+
+# Tell antigen that you're done
+antigen apply
+
