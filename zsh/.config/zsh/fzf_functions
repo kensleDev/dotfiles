@@ -64,3 +64,84 @@ function fdFzf {
     fi
 	fi
 }
+
+# devpod fzf picker + ssh
+dp() {
+  # Require fzf and devpod
+  if ! command -v fzf >/dev/null 2>&1; then
+    echo "fzf not found. Please install fzf." >&2
+    return 1
+  fi
+  if ! command -v devpod >/dev/null 2>&1; then
+    echo "devpod not found. Please install DevPod CLI." >&2
+    return 1
+  fi
+
+  # Grab the table of workspaces
+  local table
+  table="$(devpod ls 2>/dev/null)"
+  if [[ -z "$table" ]]; then
+    echo "No DevPod workspaces found." >&2
+    return 1
+  fi
+
+  # Drop header lines (first two lines are usually header + separator).
+  # If format differs, this still works because we later re-validate rows by presence of '|'.
+  local rows
+  rows="$(printf "%s\n" "$table" | awk 'NR>2')"
+
+  # Optionally filter to "running" (case-insensitive). If that yields nothing, fall back to all.
+  local running
+  running="$(printf "%s\n" "$rows" | grep -i -E '\|.*(running|active|started|up)\b' || true)"
+  if [[ -n "$running" ]]; then
+    rows="$running"
+  fi
+
+  # Let user pick a row. Preview just echoes the split fields nicely.
+  local selection
+  selection="$(
+    printf "%s\n" "$rows" \
+      | grep '|' \
+      | fzf --ansi --height=80% --reverse --border \
+            --prompt="Pick a DevPod workspace> " \
+            --preview '
+              # Split the line on | and show fields
+              line="{}"
+              IFS="|" read -r _name _source _machine _provider _ide _lastused _age _rest <<<"$(echo "$line" | sed "s/|/|/g")"
+              name=$(echo "$_name" | xargs)
+              source=$(echo "$_source" | xargs)
+              machine=$(echo "$_machine" | xargs)
+              provider=$(echo "$_provider" | xargs)
+              ide=$(echo "$_ide" | xargs)
+              lastused=$(echo "$_lastused" | xargs)
+              age=$(echo "$_age" | xargs)
+              printf "Name:     %s\nSource:   %s\nMachine:  %s\nProvider: %s\nIDE:      %s\nLastUsed: %s\nAge:      %s\n" \
+                "$name" "$source" "$machine" "$provider" "$ide" "$lastused" "$age"
+            ' \
+            --preview-window=down,7,wrap
+  )" || return 130  # user cancelled
+
+  # Parse the chosen row
+  local name source
+  IFS="|" read -r name source _rest <<<"$selection"
+  name="$(echo "$name" | xargs)"
+  source="$(echo "$source" | xargs)"
+
+  if [[ -z "$name" ]]; then
+    echo "Could not parse workspace name." >&2
+    return 1
+  fi
+
+  # Decide what to pass to `devpod ssh`:
+  # - If SOURCE looks like a local path, use it (what you asked for).
+  # - If it looks like a git URL or is empty, fall back to NAME.
+  if [[ -n "$source" && -d "$source" ]]; then
+    echo "→ devpod ssh \"$source\""
+    devpod ssh "$source"
+  else
+    echo "Source is not a local directory; falling back to workspace name."
+    echo "→ devpod ssh \"$name\""
+    devpod ssh "$name"
+  fi
+}
+
