@@ -64,7 +64,7 @@ alias c='clear'
 alias la='eza -l --icons --git'
 alias l='eza -l --icons --git -a'
 alias lsa='eza --icons --git'
-alias ls='eza --icons --git -a'
+#alias ls='eza --icons --git -a'
 alias lt='eza --tree --level=2 --long --icons --git -a'
 alias lta='eza --tree --level=2 --long --icons --git'
 
