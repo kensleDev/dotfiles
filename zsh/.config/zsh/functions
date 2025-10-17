@@ -18,35 +18,35 @@ bindkey ^l _sgpt_zsh
 # Shell-GPT integration ZSH v0.1
 
 # Smart cd: path -> builtin cd, otherwise try zoxide; then ls
-alias c="cd $1"
-cd() {
-  # no args: go home
-  if [[ $# -eq 0 ]]; then
-    builtin cd ~ || return
-    ls -a
-    return
-  fi
-
-  local arg="$1"
-
-  # If it's clearly a path or an existing dir, use builtin cd
-  if [[ -d "$arg" || "$arg" == "-" || "$arg" == ~* || "$arg" == /* || "$arg" == .* ]]; then
-    builtin cd -- "$arg" || return
-    ls -a
-    return
-  fi
-
-  # Otherwise, try zoxide jump (frecency match)
-  if command -v __zoxide_z >/dev/null 2>&1; then
-    __zoxide_z "$@" || return
-    ls -a
-    return
-  fi
-
-  # Fallback: try builtin cd anyway
-  builtin cd -- "$arg" || return
-  ls -a
-}
+#alias c="cd $1"
+# cd() {
+#   # no args: go home
+#   if [[ $# -eq 0 ]]; then
+#     builtin cd ~ || return
+#     ls -a
+#     return
+#   fi
+#
+#   local arg="$1"
+#
+#   # If it's clearly a path or an existing dir, use builtin cd
+#   if [[ -d "$arg" || "$arg" == "-" || "$arg" == ~* || "$arg" == /* || "$arg" == .* ]]; then
+#     builtin cd -- "$arg" || return
+#     ls -a
+#     return
+#   fi
+#
+#   # Otherwise, try zoxide jump (frecency match)
+#   if command -v __zoxide_z >/dev/null 2>&1; then
+#     __zoxide_z "$@" || return
+#     ls -a
+#     return
+#   fi
+#
+#   # Fallback: try builtin cd anyway
+#   builtin cd -- "$arg" || return
+#   ls -a
+# }
 
 ###
 # FUZZY CONFIG EDITOR

@@ -56,9 +56,9 @@ alias upgrade='sudo apt update && sudo apt upgrade'
 
 # --------------------------------File Ops
 
+alias cd='z $1'
 alias cb='cd -'
-#alias c='clear'
-alias cl='clear'
+alias c='clear'
 
 
 alias la='eza -l --icons --git'
