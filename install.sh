@@ -22,7 +22,7 @@ setup() {
 	have stow || pkg_install stow
 	# trash-cli may not exist on all distros; ignore failures
 	have trash || pkg_install trash-cli || true
-	have tmux || pgk_install tmux
+	have tmux || pkg_install tmux
 
 	if ! have mise; then
 		# Install mise to $HOME/.local/bin
@@ -55,6 +55,8 @@ ensure_dotfiles_repo() {
 install_apps() {
 	if have mise; then
 		PATH="$HOME/.local/bin:$PATH" mise install || true
+
+		npm i -g opencode-ai
 	else
 		echo "mise not on PATH; skipping 'mise install'"
 	fi
