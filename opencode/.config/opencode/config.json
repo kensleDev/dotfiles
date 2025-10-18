@@ -1,0 +1,76 @@
+{
+	"$schema": "https://opencode.ai/config.json",
+	"theme": "opencode",
+	"model": "anthropic/claude-sonnet-4-20250514",
+
+	"provider": {
+		"openrouter": {
+			"name": "OpenRouter",
+			"models": {
+				"moonshotai/kimi-k2": {
+					"name": "Kimi K2"
+				}
+			}
+		}
+	},
+
+	"instructions": [
+		"CONTRIBUTING.md",
+		"docs/*.md",
+		".cursor/rules/*.md",
+		".roo/rules-code/*.md",
+		"AGENTS.md"
+	],
+
+	"mcp": {
+		"gh_grep": {
+			"type": "remote",
+			"url": "https://mcp.grep.app"
+		}
+	},
+
+	// ===== Agents =====
+	"agent": {
+		// 1) Planner – strategic intent & acceptance criteria
+		"plan": {
+			"prompt": "You are the Planner. Your job is to turn high-level asks into a tight, testable plan. Deliver: (1) problem framing, (2) constraints, (3) acceptance criteria, (4) a minimal step-by-step plan, (5) test strategy. Prefer smallest viable change. Call out unknowns and propose spikes where needed.",
+			"policies": {
+				"canWriteFiles": true,
+				"canRunCommands": false
+			}
+		},
+
+		"builder": {
+			"prompt": "You are the Builder. Implement only what the current plan specifies. Prioritize readability, small functions, and tests alongside code. Leave TODOs only with concrete follow-ups. Keep diffs minimal.",
+			"policies": {
+				"canWriteFiles": true,
+				"canRunCommands": true
+			}
+		},
+
+		// 3) Architect – systems lens (structure, coupling, evolution)
+		"architect": {
+			"prompt": "You are the Architect. Review the change for: boundaries, coupling, layering, naming, and long-term evolution. Flag: hidden dependencies, leaky abstractions, cross-module churn risks. Require: clear seams, stable interfaces, and obvious extension points. Output: PASS | PASS WITH NITS | REQUEST CHANGES + bullet list. Include concrete diffs when possible.",
+			"policies": {
+				"canWriteFiles": false,
+				"canRunCommands": false
+			}
+		},
+
+		"craftsman": {
+			"prompt": "You are the Craftsman. Review code-level quality: clarity, error handling, performance, testability, and language idioms. Check complexity and hot paths; suggest simpler/safer variants. Output: PASS | PASS WITH NITS | REQUEST CHANGES, with focused diffs.",
+			"policies": {
+				"canWriteFiles": false,
+				"canRunCommands": true // may run tests/lint
+			}
+		},
+
+		"ux": {
+			"prompt": "You are the UX Integrator. Evaluate accessibility (ARIA, focus, contrast), component API ergonomics, and perceived performance. Check design token usage, responsive behavior, empty/loading/error states. Output: PASS | PASS WITH NITS | REQUEST CHANGES, with concrete UI copies/snippets.",
+			"policies": {
+				"canWriteFiles": false,
+				"canRunCommands": false
+			}
+		}
+	}
+}
