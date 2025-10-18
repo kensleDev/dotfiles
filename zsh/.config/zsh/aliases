@@ -27,6 +27,7 @@ alias v="nvim"
 # ------------------------------ Devpod
 alias dpu="devpod up . --dotfiles https://github.com/kensledev/dotfiles --debug --recreate"
 alias dps="devpod ssh ."
+alias dpd="devpod delete"
 
 # ------------------------------ Git
 alias g="git"
