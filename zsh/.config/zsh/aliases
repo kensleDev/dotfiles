@@ -24,6 +24,10 @@ alias v="nvim"
 # alias o="nvr --remote"
 # alias k="nvr --remote-send"
 
+# ------------------------------ Devpod
+alias dpu="devpod up . --dotfiles https://github.com/kensledev/dotfiles --debug --recreate"
+alias dps="devpod ssh ."
+
 # ------------------------------ Git
 alias g="git"
 alias gpl="git pull"
