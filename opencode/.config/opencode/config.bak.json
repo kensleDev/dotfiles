@@ -1,0 +1,88 @@
+{
+	"$schema": "https://opencode.ai/config.json",
+	"theme": "opencode",
+	"model": "anthropic/claude-sonnet-4-20250514",
+
+	"mcp": {
+		"context7": {
+			"type": "local",
+			"command": ["npx", "-y", "@upstash/context7-mcp"],
+			"enabled": true
+		},
+
+		"github": {
+			"type": "remote",
+			"url": "https://api.githubcopilot.com/mcp/"
+		},
+		"filesystem": {
+			"type": "local",
+			"command": [
+				"npx",
+				"-y",
+				"@modelcontextprotocol/server-filesystem",
+				"${workspaceFolder}"
+			],
+			"environment": {}
+		},
+		"git": {
+			"type": "local",
+			"command": [
+				"npx",
+				"-y",
+				"@modelcontextprotocol/server-git",
+				"--repository",
+				"${workspaceFolder}"
+			],
+			"environment": {}
+		},
+
+		"figma": {
+			"type": "local",
+			"command": ["npx", "-y", "@figma/figma-api-mcp-server"],
+			"environment": {
+				"FIGMA_PERSONAL_ACCESS_TOKEN": ""
+			}
+		},
+
+		"fetch": {
+			"type": "local",
+			"command": ["npx", "-y", "@modelcontextprotocol/server-fetch"],
+			"environment": {}
+		},
+		"memory": {
+			"type": "local",
+			"command": ["npx", "-y", "@modelcontextprotocol/server-memory"],
+			"environment": {}
+		},
+		"sequential-thinking": {
+			"type": "local",
+			"command": [
+				"npx",
+				"-y",
+				"@modelcontextprotocol/server-sequential-thinking"
+			],
+			"environment": {}
+		},
+
+		"react-native-debugger": {
+			"type": "local",
+			"command": ["npx", "-y", "@twodoorsdev/react-native-debugger-mcp"],
+			"environment": {}
+		},
+		"mobile-automation": {
+			"type": "local",
+			"command": ["npx", "-y", "@mobilenext/mobile-mcp@latest"],
+			"environment": {}
+		},
+		"expo-server": {
+			"type": "local",
+			"command": ["npx", "-y", "expo-mcp-server"],
+			"environment": {}
+		},
+		"react-native-storybook": {
+			"type": "local",
+			"command": ["npx", "-y", "react-native-storybook-mcp"],
+			"environment": {}
+		}
+	}
+}

@@ -13,3 +13,4 @@ rust = "latest"
 xh = "latest"
 zig = "latest"
 zoxide = "latest"
+"npm:opencode-ai" = { version = "latest" }
