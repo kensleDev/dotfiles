@@ -1,76 +1,128 @@
 {
-	"$schema": "https://opencode.ai/config.json",
-	"theme": "opencode",
-	"model": "anthropic/claude-sonnet-4-20250514",
+  "$schema": "https://opencode.ai/config.json",
+  "theme": "opencode",
+  "model": "anthropic/claude-sonnet-4-20250514",
 
-	"provider": {
-		"openrouter": {
-			"name": "OpenRouter",
-			"models": {
-				"moonshotai/kimi-k2": {
-					"name": "Kimi K2"
-				}
-			}
-		}
-	},
+  "provider": {
+    "openrouter": {
+      "name": "OpenRouter",
+      "models": {
+        "moonshotai/kimi-k2": {
+          "name": "Kimi K2"
+        }
+      }
+    }
+  },
 
-	"instructions": [
-		"CONTRIBUTING.md",
-		"docs/*.md",
-		".cursor/rules/*.md",
-		".roo/rules-code/*.md",
-		"AGENTS.md"
-	],
+  "instructions": [
+    "CONTRIBUTING.md",
+    "docs/*.md",
+    ".cursor/rules/*.md",
+    ".roo/rules-code/*.md",
+    "AGENTS.md"
+  ],
 
-	"mcp": {
-		"gh_grep": {
-			"type": "remote",
-			"url": "https://mcp.grep.app"
-		}
-	},
+  "mcp": {
+    "gh_grep": {
+      "type": "remote",
+      "url": "https://mcp.grep.app"
+    }
+  },
 
-	// ===== Agents =====
-	"agent": {
-		// 1) Planner – strategic intent & acceptance criteria
-		"plan": {
-			"prompt": "You are the Planner. Your job is to turn high-level asks into a tight, testable plan. Deliver: (1) problem framing, (2) constraints, (3) acceptance criteria, (4) a minimal step-by-step plan, (5) test strategy. Prefer smallest viable change. Call out unknowns and propose spikes where needed.",
-			"policies": {
-				"canWriteFiles": true,
-				"canRunCommands": false
-			}
-		},
+  // ===== Agents =====
+  "agent": {
+    // 1) Planner – strategic intent & acceptance criteria
+    "planner": {
+      "mode": "primary",
+      "model": "github-copilot/gpt-5-mini",
+      // Burst rule: if plan requires >1 service boundary change or >200 lines of code touched across 4+ files, upshift once to gpt-5 for the planning pass only.
+      "prompt": "{file:./prompts/planner.txt}",
+      "policies": {
+        "canWriteFiles": true,
+        "canRunCommands": false
+      }
+    },
 
-		"builder": {
-			"prompt": "You are the Builder. Implement only what the current plan specifies. Prioritize readability, small functions, and tests alongside code. Leave TODOs only with concrete follow-ups. Keep diffs minimal.",
-			"policies": {
-				"canWriteFiles": true,
-				"canRunCommands": true
-			}
-		},
+    // 2) Builder – implementation
+    "builder": {
+      "mode": "primary",
+      "model": "github-copilot/grok-code-fast-1",
+      // Burst rule: if compile/test fails twice on the same ticket or diff >500 LOC, temporarily switch to gpt-5-codex for one generation cycle, then fall back to Grok
+      "prompt": "{file:./prompts/builder.txt}",
+      "policies": {
+        "canWriteFiles": true,
+        "canRunCommands": true
+      }
+    },
 
-		// 3) Architect – systems lens (structure, coupling, evolution)
-		"architect": {
-			"prompt": "You are the Architect. Review the change for: boundaries, coupling, layering, naming, and long-term evolution. Flag: hidden dependencies, leaky abstractions, cross-module churn risks. Require: clear seams, stable interfaces, and obvious extension points. Output: PASS | PASS WITH NITS | REQUEST CHANGES + bullet list. Include concrete diffs when possible.",
-			"policies": {
-				"canWriteFiles": false,
-				"canRunCommands": false
-			}
-		},
+    // 3) Architect – systems lens (structure, coupling, evolution)
+    "architect": {
+      "mode": "subagent",
+      "model": "github-copilot/claude-haiku-4.5",
+      // Burst rule: if repo context >80k tokens or cross-module review needed, upshift to claude-sonnet-4.5 (one pass)
+      "prompt": "{file:./prompts/architect.txt}",
+      "maxTokens": 1024,
+      "policies": {
+        "canWriteFiles": false,
+        "canRunCommands": false
+      }
+    },
 
-		"craftsman": {
-			"prompt": "You are the Craftsman. Review code-level quality: clarity, error handling, performance, testability, and language idioms. Check complexity and hot paths; suggest simpler/safer variants. Output: PASS | PASS WITH NITS | REQUEST CHANGES, with focused diffs.",
-			"policies": {
-				"canWriteFiles": false,
-				"canRunCommands": true // may run tests/lint
-			}
-		},
+    // 3) Craftsman - code level quality (clarity, error handling, performance, testability)
+    "craftsman": {
+      "mode": "subagent",
+      "model": "github-copilot/gpt-5-mini",
+      // Burst rule: if performance micro-optimisation or tricky generics arise, one pass with gpt-5-codex
+      "prompt": "{file:./prompts/craftsmans.txt}",
+      "maxTokens": 1024,
+      "temperature": 0.2,
+      "policies": {
+        "canWriteFiles": false,
+        "canRunCommands": true // may run tests/lint
+      }
+    },
 
-		"ux": {
-			"prompt": "You are the UX Integrator. Evaluate accessibility (ARIA, focus, contrast), component API ergonomics, and perceived performance. Check design token usage, responsive behavior, empty/loading/error states. Output: PASS | PASS WITH NITS | REQUEST CHANGES, with concrete UI copies/snippets.",
-			"policies": {
-				"canWriteFiles": false,
-				"canRunCommands": false
-			}
-		}
-	}
+    // 4) Ux – user experience (accessibility, API ergonomics, performance, responsiveness)
+    "ux": {
+      "mode": "subagent",
+      "model": "github-copilot/claude-haiku-4.5",
+      // Burst rule: if reviewing large design token systems or multi-brand theming, one pass with claude-sonnet-4.5
+      "prompt": "{file:./prompts/ux.txt}",
+      "maxTokens": 1024,
+      "policies": {
+        "canWriteFiles": false,
+        "canRunCommands": false
+      }
+    },
+
+    // 5) Error Handler - error handling specialist
+    "error-handler": {
+      "mode": "subagent",
+      "model": "github-copilot/gpt-5-mini",
+      // Burst rule: if it flags ambiguous propagation chains across services, one arbitration pass with gpt-5
+      "prompt": "{file:./prompts/error_handler.txt}",
+      "policies": {
+        "canWriteFiles": false,
+        "canRunCommands": false
+      }
+    }
+  }
 }
+
+/*
+Why this works
+
+Cost control by default: Haiku + 5-mini + Grok cover most cases with tool-calling and good quality.
+
+Premium only on pressure: Clear, automatic “burst” triggers based on repo size, diff size, or repeated failures.
+
+Task–model fit:
+
+Grok Code Fast 1 is tuned for code loops.
+
+GPT-5-mini is a strong, cheap workhorse for planning/details/tests.
+
+Claude Haiku 4.5 is excellent for concise reviews/UX notes at low cost.
+
+GPT-5 / Sonnet 4.5 / 5-Codex are reserved for large-context or tough cycles.
+*/
