@@ -2,7 +2,9 @@
   "$schema": "https://opencode.ai/config.json",
   "theme": "opencode",
   "model": "anthropic/claude-sonnet-4-20250514",
-
+  "$schema": "https://opencode.ai/config.json",
+  "theme": "opencode",
+  "model": "anthropic/claude-sonnet-4-20250514",
   "provider": {
     "openrouter": {
       "name": "OpenRouter",
@@ -13,7 +15,16 @@
       }
     }
   },
-
+  "provider": {
+    "openrouter": {
+      "name": "OpenRouter",
+      "models": {
+        "moonshotai/kimi-k2": {
+          "name": "Kimi K2"
+        }
+      }
+    }
+  },
   "instructions": [
     "CONTRIBUTING.md",
     "docs/*.md",
@@ -21,14 +32,25 @@
     ".roo/rules-code/*.md",
     "AGENTS.md"
   ],
-
+  "instructions": [
+    "CONTRIBUTING.md",
+    "docs/*.md",
+    ".cursor/rules/*.md",
+    ".roo/rules-code/*.md",
+    "AGENTS.md"
+  ],
   "mcp": {
     "gh_grep": {
       "type": "remote",
       "url": "https://mcp.grep.app"
     }
   },
-
+  "mcp": {
+    "gh_grep": {
+      "type": "remote",
+      "url": "https://mcp.grep.app"
+    }
+  },
   // ===== Agents =====
   "agent": {
     // 1) Planner – strategic intent & acceptance criteria
@@ -42,7 +64,6 @@
         "canRunCommands": false
       }
     },
-
     // 2) Builder – implementation
     "builder": {
       "mode": "primary",
@@ -54,7 +75,6 @@
         "canRunCommands": true
       }
     },
-
     // 3) Architect – systems lens (structure, coupling, evolution)
     "architect": {
       "mode": "subagent",
@@ -67,7 +87,6 @@
         "canRunCommands": false
       }
     },
-
     // 3) Craftsman - code level quality (clarity, error handling, performance, testability)
     "craftsman": {
       "mode": "subagent",
@@ -81,7 +100,6 @@
         "canRunCommands": true // may run tests/lint
       }
     },
-
     // 4) Ux – user experience (accessibility, API ergonomics, performance, responsiveness)
     "ux": {
       "mode": "subagent",
@@ -94,7 +112,6 @@
         "canRunCommands": false
       }
     },
-
     // 5) Error Handler - error handling specialist
     "error-handler": {
       "mode": "subagent",
@@ -108,7 +125,6 @@
     }
   }
 }
-
 /*
 Why this works
 
