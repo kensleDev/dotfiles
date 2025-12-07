@@ -9,8 +9,8 @@ add-zle-hook-widget () {
 add-zsh-hook () {
 	emulate -L zsh
 	local -a hooktypes
-	hooktypes=(chpwd precmd preexec periodic zshaddhistory zshexit zsh_directory_name) 
-	local usage="Usage: add-zsh-hook hook function\nValid hooks are:\n  $hooktypes" 
+	hooktypes=(chpwd precmd preexec periodic zshaddhistory zshexit zsh_directory_name)
+	local usage="Usage: add-zsh-hook hook function\nValid hooks are:\n  $hooktypes"
 	local opt
 	local -a autoopts
 	integer del list help
@@ -35,8 +35,8 @@ add-zsh-hook () {
 		print -u$(( 2 - help )) $usage
 		return $(( 1 - help ))
 	fi
-	local hook="${1}_functions" 
-	local fn="$2" 
+	local hook="${1}_functions"
+	local fn="$2"
 	if (( del ))
 	then
 		if (( ${(P)+hook} ))
@@ -72,7 +72,7 @@ alias_value () {
 }
 antigen () {
 	local MATCH MBEGIN MEND
-	[[ "$ZSH_EVAL_CONTEXT" =~ "toplevel:*" || "$ZSH_EVAL_CONTEXT" =~ "cmdarg:*" ]] && source "/Users/juliani/.dotfiles/zsh/.config/zsh/plugs/antigen.zsh" && eval antigen $@
+	[[ "$ZSH_EVAL_CONTEXT" =~ "toplevel:*" || "$ZSH_EVAL_CONTEXT" =~ "cmdarg:*" ]] && source "/Users/juliani/dotfiles/zsh/.config/zsh/plugs/antigen.zsh" && eval antigen $@
 	return 0
 }
 bashcompinit () {
@@ -84,11 +84,11 @@ bracketed-paste-magic () {
 	builtin autoload -XUz
 }
 bzr_prompt_info () {
-	BZR_CB=`bzr nick 2> /dev/null | grep -v "ERROR" | cut -d ":" -f2 | awk -F / '{print "bzr::"$1}'` 
+	BZR_CB=`bzr nick 2> /dev/null | grep -v "ERROR" | cut -d ":" -f2 | awk -F / '{print "bzr::"$1}'`
 	if [ -n "$BZR_CB" ]
 	then
-		BZR_DIRTY="" 
-		[[ -n `bzr status` ]] && BZR_DIRTY=" %{$fg[red]%} * %{$fg[green]%}" 
+		BZR_DIRTY=""
+		[[ -n `bzr status` ]] && BZR_DIRTY=" %{$fg[red]%} * %{$fg[green]%}"
 		echo "$ZSH_THEME_SCM_PROMPT_PREFIX$BZR_CB$BZR_DIRTY$ZSH_THEME_GIT_PROMPT_SUFFIX"
 	fi
 }
@@ -108,44 +108,44 @@ clippaste () {
 colors () {
 	emulate -L zsh
 	typeset -Ag color colour
-	color=(00 none 01 bold 02 faint 22 normal 03 italic 23 no-italic 04 underline 24 no-underline 05 blink 25 no-blink 07 reverse 27 no-reverse 08 conceal 28 no-conceal 30 black 40 bg-black 31 red 41 bg-red 32 green 42 bg-green 33 yellow 43 bg-yellow 34 blue 44 bg-blue 35 magenta 45 bg-magenta 36 cyan 46 bg-cyan 37 white 47 bg-white 39 default 49 bg-default) 
+	color=(00 none 01 bold 02 faint 22 normal 03 italic 23 no-italic 04 underline 24 no-underline 05 blink 25 no-blink 07 reverse 27 no-reverse 08 conceal 28 no-conceal 30 black 40 bg-black 31 red 41 bg-red 32 green 42 bg-green 33 yellow 43 bg-yellow 34 blue 44 bg-blue 35 magenta 45 bg-magenta 36 cyan 46 bg-cyan 37 white 47 bg-white 39 default 49 bg-default)
 	local k
 	for k in ${(k)color}
 	do
-		color[${color[$k]}]=$k 
+		color[${color[$k]}]=$k
 	done
 	for k in ${color[(I)3?]}
 	do
-		color[fg-${color[$k]}]=$k 
+		color[fg-${color[$k]}]=$k
 	done
 	for k in grey gray
 	do
-		color[$k]=${color[black]} 
-		color[fg-$k]=${color[$k]} 
-		color[bg-$k]=${color[bg-black]} 
+		color[$k]=${color[black]}
+		color[fg-$k]=${color[$k]}
+		color[bg-$k]=${color[bg-black]}
 	done
-	colour=(${(kv)color}) 
-	local lc=$'\e[' rc=m 
+	colour=(${(kv)color})
+	local lc=$'\e[' rc=m
 	typeset -Hg reset_color bold_color
-	reset_color="$lc${color[none]}$rc" 
-	bold_color="$lc${color[bold]}$rc" 
+	reset_color="$lc${color[none]}$rc"
+	bold_color="$lc${color[bold]}$rc"
 	typeset -AHg fg fg_bold fg_no_bold
 	for k in ${(k)color[(I)fg-*]}
 	do
-		fg[${k#fg-}]="$lc${color[$k]}$rc" 
-		fg_bold[${k#fg-}]="$lc${color[bold]};${color[$k]}$rc" 
-		fg_no_bold[${k#fg-}]="$lc${color[normal]};${color[$k]}$rc" 
+		fg[${k#fg-}]="$lc${color[$k]}$rc"
+		fg_bold[${k#fg-}]="$lc${color[bold]};${color[$k]}$rc"
+		fg_no_bold[${k#fg-}]="$lc${color[normal]};${color[$k]}$rc"
 	done
 	typeset -AHg bg bg_bold bg_no_bold
 	for k in ${(k)color[(I)bg-*]}
 	do
-		bg[${k#bg-}]="$lc${color[$k]}$rc" 
-		bg_bold[${k#bg-}]="$lc${color[bold]};${color[$k]}$rc" 
-		bg_no_bold[${k#bg-}]="$lc${color[normal]};${color[$k]}$rc" 
+		bg[${k#bg-}]="$lc${color[$k]}$rc"
+		bg_bold[${k#bg-}]="$lc${color[bold]};${color[$k]}$rc"
+		bg_no_bold[${k#bg-}]="$lc${color[normal]};${color[$k]}$rc"
 	done
 }
 command_not_found_handler () {
-	local cmd="$1" 
+	local cmd="$1"
 	shift
 	if [[ "$cmd" == "mise" || "$cmd" == mise-* || -n "${_mise_cnf_tried["$cmd"]}" ]]
 	then
@@ -161,20 +161,20 @@ command_not_found_handler () {
 			return $?
 		fi
 	else
-		_mise_cnf_tried["$cmd"]=1 
+		_mise_cnf_tried["$cmd"]=1
 	fi
 	_mise_fallback "$cmd" "$@"
 }
 compdef () {
-	
+
 }
 compgen () {
-	local opts prefix suffix job OPTARG OPTIND ret=1 
+	local opts prefix suffix job OPTARG OPTIND ret=1
 	local -a name res results jids
 	local -A shortopts
 	emulate -L sh
 	setopt kshglob noshglob braceexpand nokshautoload
-	shortopts=(a alias b builtin c command d directory e export f file g group j job k keyword u user v variable) 
+	shortopts=(a alias b builtin c command d directory e export f file g group j job k keyword u user v variable)
 	while getopts "o:A:G:C:F:P:S:W:X:abcdefgjkuv" name
 	do
 		case $name in
@@ -186,13 +186,13 @@ compgen () {
 					(builtin) results+=("${(k)builtins[@]}" "${(k)dis_builtins[@]}")  ;;
 					(command) results+=("${(k)commands[@]}" "${(k)aliases[@]}" "${(k)builtins[@]}" "${(k)functions[@]}" "${(k)reswords[@]}")  ;;
 					(directory) setopt bareglobqual
-						results+=(${IPREFIX}${PREFIX}*${SUFFIX}${ISUFFIX}(N-/)) 
+						results+=(${IPREFIX}${PREFIX}*${SUFFIX}${ISUFFIX}(N-/))
 						setopt nobareglobqual ;;
 					(disabled) results+=("${(k)dis_builtins[@]}")  ;;
 					(enabled) results+=("${(k)builtins[@]}")  ;;
 					(export) results+=("${(k)parameters[(R)*export*]}")  ;;
 					(file) setopt bareglobqual
-						results+=(${IPREFIX}${PREFIX}*${SUFFIX}${ISUFFIX}(N)) 
+						results+=(${IPREFIX}${PREFIX}*${SUFFIX}${ISUFFIX}(N))
 						setopt nobareglobqual ;;
 					(function) results+=("${(k)functions[@]}")  ;;
 					(group) emulate zsh
@@ -207,15 +207,15 @@ compgen () {
 						results+=("${res[@]}")  ;;
 					(job) results+=("${savejobtexts[@]%% *}")  ;;
 					(keyword) results+=("${(k)reswords[@]}")  ;;
-					(running) jids=("${(@k)savejobstates[(R)running*]}") 
+					(running) jids=("${(@k)savejobstates[(R)running*]}")
 						for job in "${jids[@]}"
 						do
-							results+=(${savejobtexts[$job]%% *}) 
+							results+=(${savejobtexts[$job]%% *})
 						done ;;
-					(stopped) jids=("${(@k)savejobstates[(R)suspended*]}") 
+					(stopped) jids=("${(@k)savejobstates[(R)suspended*]}")
 						for job in "${jids[@]}"
 						do
-							results+=(${savejobtexts[$job]%% *}) 
+							results+=(${savejobtexts[$job]%% *})
 						done ;;
 					(setopt | shopt) results+=("${(k)options[@]}")  ;;
 					(signal) results+=("SIG${^signals[@]}")  ;;
@@ -223,16 +223,16 @@ compgen () {
 					(variable) results+=("${(k)parameters[@]}")  ;;
 					(helptopic)  ;;
 				esac ;;
-			(F) COMPREPLY=() 
+			(F) COMPREPLY=()
 				local -a args
-				args=("${words[0]}" "${@[-1]}" "${words[CURRENT-2]}") 
+				args=("${words[0]}" "${@[-1]}" "${words[CURRENT-2]}")
 				() {
 					typeset -h words
 					$OPTARG "${args[@]}"
 				}
 				results+=("${COMPREPLY[@]}")  ;;
 			(G) setopt nullglob
-				results+=(${~OPTARG}) 
+				results+=(${~OPTARG})
 				unsetopt nullglob ;;
 			(W) results+=(${(Q)~=OPTARG})  ;;
 			(C) results+=($(eval $OPTARG))  ;;
@@ -240,9 +240,9 @@ compgen () {
 			(S) suffix="$OPTARG"  ;;
 			(X) if [[ ${OPTARG[0]} = '!' ]]
 				then
-					results=("${(M)results[@]:#${OPTARG#?}}") 
+					results=("${(M)results[@]:#${OPTARG#?}}")
 				else
-					results=("${results[@]:#$OPTARG}") 
+					results=("${results[@]:#$OPTARG}")
 				fi ;;
 		esac
 	done
@@ -251,7 +251,7 @@ compgen () {
 complete () {
 	emulate -L zsh
 	local args void cmd print remove
-	args=("$@") 
+	args=("$@")
 	zparseopts -D -a void o: A: G: W: C: F: P: S: X: a b c d e f g j k u v p=print r=remove
 	if [[ -n $print ]]
 	then
@@ -373,7 +373,7 @@ detect-clipboard () {
 		}
 	else
 		_retry_clipboard_detection_or_fail () {
-			local clipcmd="${1}" 
+			local clipcmd="${1}"
 			shift
 			if detect-clipboard
 			then
@@ -414,19 +414,19 @@ dp () {
 		return 1
 	fi
 	local table
-	table="$(devpod ls 2>/dev/null)" 
+	table="$(devpod ls 2>/dev/null)"
 	if [[ -z "$table" ]]
 	then
 		echo "No DevPod workspaces found." >&2
 		return 1
 	fi
 	local rows
-	rows="$(printf "%s\n" "$table" | awk 'NR>2')" 
+	rows="$(printf "%s\n" "$table" | awk 'NR>2')"
 	local running
-	running="$(printf "%s\n" "$rows" | grep -i -E '\|.*(running|active|started|up)\b' || true)" 
+	running="$(printf "%s\n" "$rows" | grep -i -E '\|.*(running|active|started|up)\b' || true)"
 	if [[ -n "$running" ]]
 	then
-		rows="$running" 
+		rows="$running"
 	fi
 	local selection
 	selection="$(
@@ -452,8 +452,8 @@ dp () {
   )"  || return 130
 	local name source
 	IFS="|" read -r name source _rest <<< "$selection"
-	name="$(echo "$name" | xargs)" 
-	source="$(echo "$source" | xargs)" 
+	name="$(echo "$name" | xargs)"
+	source="$(echo "$source" | xargs)"
 	if [[ -z "$name" ]]
 	then
 		echo "Could not parse workspace name." >&2
@@ -470,27 +470,27 @@ dp () {
 	fi
 }
 edit () {
-	local editor="vim" 
-	local -a candidates=("$HOME/.zshrc" "$HOME/.config/zsh" "$HOME/.config/zsh/zshrc" "$HOME/.config/mise/config.toml" "$HOME/.config/mise/config.yaml" "$HOME/.config/mice/config.yml" "$HOME/.config/tmux/tmux.conf" "$HOME/.gitconfig" "$HOME/.config/git/config" "$HOME/.config/starship.toml" "$HOME/.config/nvim/init.lua" "$HOME/.config/nvim" "$HOME/.ssh/config") 
-	local -a existing=() 
+	local editor="vim"
+	local -a candidates=("$HOME/.zshrc" "$HOME/.config/zsh" "$HOME/.config/zsh/zshrc" "$HOME/.config/mise/config.toml" "$HOME/.config/mise/config.yaml" "$HOME/.config/mice/config.yml" "$HOME/.config/tmux/tmux.conf" "$HOME/.gitconfig" "$HOME/.config/git/config" "$HOME/.config/starship.toml" "$HOME/.config/nvim/init.lua" "$HOME/.config/nvim" "$HOME/.ssh/config")
+	local -a existing=()
 	local f
 	for f in "${candidates[@]}"
 	do
-		[[ -e "$f" ]] && existing+=("$f") 
+		[[ -e "$f" ]] && existing+=("$f")
 	done
 	if (( ${#existing[@]} == 0 ))
 	then
 		echo "No known config files found. Edit the candidate list in the function."
 		return 1
 	fi
-	local query="$*" 
+	local query="$*"
 	local preview='
     if command -v bat >/dev/null 2>&1; then
       if [ -d {} ]; then ls -la --color=always {}; else bat --style=numbers --color=always --line-range :200 {}; fi
     else
       if [ -d {} ]; then ls -la {}; else sed -n "1,200p" {}; fi
     fi
-  ' 
+  '
 	local chosen
 	chosen="$(printf "%s\n" "${existing[@]}" \
     | fzf --prompt="Edit config > " \
@@ -516,14 +516,14 @@ env_default () {
 	export "$1=$2" && return 3
 }
 fdFzf () {
-	fdExists=$(which fd) 
+	fdExists=$(which fd)
 	if [ -z "$fdExists" ]
 	then
 		return
 	else
 		if [ "$(pwd)" = "$HOME" ]
 		then
-			goTo=$(fd -t d -d 1 . | fzf $($FZF_DEFAULTS)) 
+			goTo=$(fd -t d -d 1 . | fzf $($FZF_DEFAULTS))
 			if [ -z "$goTo" ]
 			then
 				return
@@ -532,7 +532,7 @@ fdFzf () {
 				return
 			fi
 		fi
-		goTo=$(fd -t d . | grep -vE '(node_modules)' | fzf) 
+		goTo=$(fd -t d . | grep -vE '(node_modules)' | fzf)
 		if [ -z "$goTo" ]
 		then
 			return
@@ -552,11 +552,11 @@ gdv () {
 	git diff -w "$@" | view -
 }
 ggf () {
-	[[ "$#" != 1 ]] && local b="$(git_current_branch)" 
+	[[ "$#" != 1 ]] && local b="$(git_current_branch)"
 	git push --force origin "${b:=$1}"
 }
 ggfl () {
-	[[ "$#" != 1 ]] && local b="$(git_current_branch)" 
+	[[ "$#" != 1 ]] && local b="$(git_current_branch)"
 	git push --force-with-lease origin "${b:=$1}"
 }
 ggl () {
@@ -564,7 +564,7 @@ ggl () {
 	then
 		git pull origin "${*}"
 	else
-		[[ "$#" == 0 ]] && local b="$(git_current_branch)" 
+		[[ "$#" == 0 ]] && local b="$(git_current_branch)"
 		git pull origin "${b:=$1}"
 	fi
 }
@@ -573,7 +573,7 @@ ggp () {
 	then
 		git push origin "${*}"
 	else
-		[[ "$#" == 0 ]] && local b="$(git_current_branch)" 
+		[[ "$#" == 0 ]] && local b="$(git_current_branch)"
 		git push origin "${b:=$1}"
 	fi
 }
@@ -586,13 +586,13 @@ ggpnp () {
 	fi
 }
 ggu () {
-	[[ "$#" != 1 ]] && local b="$(git_current_branch)" 
+	[[ "$#" != 1 ]] && local b="$(git_current_branch)"
 	git pull --rebase origin "${b:=$1}"
 }
 git_commits_ahead () {
 	if __git_prompt_git rev-parse --git-dir &> /dev/null
 	then
-		local commits="$(__git_prompt_git rev-list --count @{upstream}..HEAD 2>/dev/null)" 
+		local commits="$(__git_prompt_git rev-list --count @{upstream}..HEAD 2>/dev/null)"
 		if [[ -n "$commits" && "$commits" != 0 ]]
 		then
 			echo "$ZSH_THEME_GIT_COMMITS_AHEAD_PREFIX$commits$ZSH_THEME_GIT_COMMITS_AHEAD_SUFFIX"
@@ -602,7 +602,7 @@ git_commits_ahead () {
 git_commits_behind () {
 	if __git_prompt_git rev-parse --git-dir &> /dev/null
 	then
-		local commits="$(__git_prompt_git rev-list --count HEAD..@{upstream} 2>/dev/null)" 
+		local commits="$(__git_prompt_git rev-list --count HEAD..@{upstream} 2>/dev/null)"
 		if [[ -n "$commits" && "$commits" != 0 ]]
 		then
 			echo "$ZSH_THEME_GIT_COMMITS_BEHIND_PREFIX$commits$ZSH_THEME_GIT_COMMITS_BEHIND_SUFFIX"
@@ -611,8 +611,8 @@ git_commits_behind () {
 }
 git_current_branch () {
 	local ref
-	ref=$(__git_prompt_git symbolic-ref --quiet HEAD 2> /dev/null) 
-	local ret=$? 
+	ref=$(__git_prompt_git symbolic-ref --quiet HEAD 2> /dev/null)
+	local ret=$?
 	if [[ $ret != 0 ]]
 	then
 		[[ $ret == 128 ]] && return
@@ -674,7 +674,7 @@ git_prompt_info () {
 	local upstream
 	if (( ${+ZSH_THEME_GIT_SHOW_UPSTREAM} ))
 	then
-		upstream=$(__git_prompt_git rev-parse --abbrev-ref --symbolic-full-name "@{upstream}" 2>/dev/null)  && upstream=" -> ${upstream}" 
+		upstream=$(__git_prompt_git rev-parse --abbrev-ref --symbolic-full-name "@{upstream}" 2>/dev/null)  && upstream=" -> ${upstream}"
 	fi
 	echo "${ZSH_THEME_GIT_PROMPT_PREFIX}${ref}${upstream}$(parse_git_dirty)${ZSH_THEME_GIT_PROMPT_SUFFIX}"
 }
@@ -697,13 +697,13 @@ git_prompt_short_sha () {
 git_prompt_status () {
 	[[ "$(__git_prompt_git config --get oh-my-zsh.hide-status 2>/dev/null)" = 1 ]] && return
 	local -A prefix_constant_map
-	prefix_constant_map=('\?\? ' 'UNTRACKED' 'A  ' 'ADDED' 'M  ' 'ADDED' 'MM ' 'MODIFIED' ' M ' 'MODIFIED' 'AM ' 'MODIFIED' ' T ' 'MODIFIED' 'R  ' 'RENAMED' ' D ' 'DELETED' 'D  ' 'DELETED' 'UU ' 'UNMERGED' 'ahead' 'AHEAD' 'behind' 'BEHIND' 'diverged' 'DIVERGED' 'stashed' 'STASHED') 
+	prefix_constant_map=('\?\? ' 'UNTRACKED' 'A  ' 'ADDED' 'M  ' 'ADDED' 'MM ' 'MODIFIED' ' M ' 'MODIFIED' 'AM ' 'MODIFIED' ' T ' 'MODIFIED' 'R  ' 'RENAMED' ' D ' 'DELETED' 'D  ' 'DELETED' 'UU ' 'UNMERGED' 'ahead' 'AHEAD' 'behind' 'BEHIND' 'diverged' 'DIVERGED' 'stashed' 'STASHED')
 	local -A constant_prompt_map
-	constant_prompt_map=('UNTRACKED' "$ZSH_THEME_GIT_PROMPT_UNTRACKED" 'ADDED' "$ZSH_THEME_GIT_PROMPT_ADDED" 'MODIFIED' "$ZSH_THEME_GIT_PROMPT_MODIFIED" 'RENAMED' "$ZSH_THEME_GIT_PROMPT_RENAMED" 'DELETED' "$ZSH_THEME_GIT_PROMPT_DELETED" 'UNMERGED' "$ZSH_THEME_GIT_PROMPT_UNMERGED" 'AHEAD' "$ZSH_THEME_GIT_PROMPT_AHEAD" 'BEHIND' "$ZSH_THEME_GIT_PROMPT_BEHIND" 'DIVERGED' "$ZSH_THEME_GIT_PROMPT_DIVERGED" 'STASHED' "$ZSH_THEME_GIT_PROMPT_STASHED") 
+	constant_prompt_map=('UNTRACKED' "$ZSH_THEME_GIT_PROMPT_UNTRACKED" 'ADDED' "$ZSH_THEME_GIT_PROMPT_ADDED" 'MODIFIED' "$ZSH_THEME_GIT_PROMPT_MODIFIED" 'RENAMED' "$ZSH_THEME_GIT_PROMPT_RENAMED" 'DELETED' "$ZSH_THEME_GIT_PROMPT_DELETED" 'UNMERGED' "$ZSH_THEME_GIT_PROMPT_UNMERGED" 'AHEAD' "$ZSH_THEME_GIT_PROMPT_AHEAD" 'BEHIND' "$ZSH_THEME_GIT_PROMPT_BEHIND" 'DIVERGED' "$ZSH_THEME_GIT_PROMPT_DIVERGED" 'STASHED' "$ZSH_THEME_GIT_PROMPT_STASHED")
 	local status_constants
-	status_constants=(UNTRACKED ADDED MODIFIED RENAMED DELETED STASHED UNMERGED AHEAD BEHIND DIVERGED) 
+	status_constants=(UNTRACKED ADDED MODIFIED RENAMED DELETED STASHED UNMERGED AHEAD BEHIND DIVERGED)
 	local status_text
-	status_text="$(__git_prompt_git status --porcelain -b 2> /dev/null)" 
+	status_text="$(__git_prompt_git status --porcelain -b 2> /dev/null)"
 	if [[ $? -eq 128 ]]
 	then
 		return 1
@@ -711,31 +711,31 @@ git_prompt_status () {
 	local -A statuses_seen
 	if __git_prompt_git rev-parse --verify refs/stash &> /dev/null
 	then
-		statuses_seen[STASHED]=1 
+		statuses_seen[STASHED]=1
 	fi
 	local status_lines
-	status_lines=("${(@f)${status_text}}") 
+	status_lines=("${(@f)${status_text}}")
 	if [[ "$status_lines[1]" =~ "^## [^ ]+ \[(.*)\]" ]]
 	then
 		local branch_statuses
-		branch_statuses=("${(@s/,/)match}") 
+		branch_statuses=("${(@s/,/)match}")
 		for branch_status in $branch_statuses
 		do
 			if [[ ! $branch_status =~ "(behind|diverged|ahead) ([0-9]+)?" ]]
 			then
 				continue
 			fi
-			local last_parsed_status=$prefix_constant_map[$match[1]] 
-			statuses_seen[$last_parsed_status]=$match[2] 
+			local last_parsed_status=$prefix_constant_map[$match[1]]
+			statuses_seen[$last_parsed_status]=$match[2]
 		done
 	fi
 	for status_prefix in ${(k)prefix_constant_map}
 	do
-		local status_constant="${prefix_constant_map[$status_prefix]}" 
-		local status_regex=$'(^|\n)'"$status_prefix" 
+		local status_constant="${prefix_constant_map[$status_prefix]}"
+		local status_regex=$'(^|\n)'"$status_prefix"
 		if [[ "$status_text" =~ $status_regex ]]
 		then
-			statuses_seen[$status_constant]=1 
+			statuses_seen[$status_constant]=1
 		fi
 	done
 	local status_prompt
@@ -743,38 +743,38 @@ git_prompt_status () {
 	do
 		if (( ${+statuses_seen[$status_constant]} ))
 		then
-			local next_display=$constant_prompt_map[$status_constant] 
-			status_prompt="$next_display$status_prompt" 
+			local next_display=$constant_prompt_map[$status_constant]
+			status_prompt="$next_display$status_prompt"
 		fi
 	done
 	echo $status_prompt
 }
 git_remote_status () {
 	local remote ahead behind git_remote_status git_remote_status_detailed
-	remote=${$(__git_prompt_git rev-parse --verify ${hook_com[branch]}@{upstream} --symbolic-full-name 2>/dev/null)/refs\/remotes\/} 
+	remote=${$(__git_prompt_git rev-parse --verify ${hook_com[branch]}@{upstream} --symbolic-full-name 2>/dev/null)/refs\/remotes\/}
 	if [[ -n ${remote} ]]
 	then
-		ahead=$(__git_prompt_git rev-list ${hook_com[branch]}@{upstream}..HEAD 2>/dev/null | wc -l) 
-		behind=$(__git_prompt_git rev-list HEAD..${hook_com[branch]}@{upstream} 2>/dev/null | wc -l) 
+		ahead=$(__git_prompt_git rev-list ${hook_com[branch]}@{upstream}..HEAD 2>/dev/null | wc -l)
+		behind=$(__git_prompt_git rev-list HEAD..${hook_com[branch]}@{upstream} 2>/dev/null | wc -l)
 		if [[ $ahead -eq 0 ]] && [[ $behind -eq 0 ]]
 		then
-			git_remote_status="$ZSH_THEME_GIT_PROMPT_EQUAL_REMOTE" 
+			git_remote_status="$ZSH_THEME_GIT_PROMPT_EQUAL_REMOTE"
 		elif [[ $ahead -gt 0 ]] && [[ $behind -eq 0 ]]
 		then
-			git_remote_status="$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE" 
-			git_remote_status_detailed="$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_COLOR$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE$((ahead))%{$reset_color%}" 
+			git_remote_status="$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE"
+			git_remote_status_detailed="$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_COLOR$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE$((ahead))%{$reset_color%}"
 		elif [[ $behind -gt 0 ]] && [[ $ahead -eq 0 ]]
 		then
-			git_remote_status="$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE" 
-			git_remote_status_detailed="$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE_COLOR$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE$((behind))%{$reset_color%}" 
+			git_remote_status="$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE"
+			git_remote_status_detailed="$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE_COLOR$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE$((behind))%{$reset_color%}"
 		elif [[ $ahead -gt 0 ]] && [[ $behind -gt 0 ]]
 		then
-			git_remote_status="$ZSH_THEME_GIT_PROMPT_DIVERGED_REMOTE" 
-			git_remote_status_detailed="$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_COLOR$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE$((ahead))%{$reset_color%}$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE_COLOR$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE$((behind))%{$reset_color%}" 
+			git_remote_status="$ZSH_THEME_GIT_PROMPT_DIVERGED_REMOTE"
+			git_remote_status_detailed="$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_COLOR$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE$((ahead))%{$reset_color%}$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE_COLOR$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE$((behind))%{$reset_color%}"
 		fi
 		if [[ -n $ZSH_THEME_GIT_PROMPT_REMOTE_STATUS_DETAILED ]]
 		then
-			git_remote_status="$ZSH_THEME_GIT_PROMPT_REMOTE_STATUS_PREFIX$remote$git_remote_status_detailed$ZSH_THEME_GIT_PROMPT_REMOTE_STATUS_SUFFIX" 
+			git_remote_status="$ZSH_THEME_GIT_PROMPT_REMOTE_STATUS_PREFIX$remote$git_remote_status_detailed$ZSH_THEME_GIT_PROMPT_REMOTE_STATUS_SUFFIX"
 		fi
 		echo $git_remote_status
 	fi
@@ -800,7 +800,7 @@ grename () {
 }
 handle_completion_insecurities () {
 	local -aU insecure_dirs
-	insecure_dirs=(${(f@):-"$(compaudit 2>/dev/null)"}) 
+	insecure_dirs=(${(f@):-"$(compaudit 2>/dev/null)"})
 	[[ -z "${insecure_dirs}" ]] && return
 	print "[oh-my-zsh] Insecure completion-dependent directories detected:"
 	ls -ld "${(@)insecure_dirs}"
@@ -827,9 +827,9 @@ hg_prompt_info () {
 }
 is-at-least () {
 	emulate -L zsh
-	local IFS=".-" min_cnt=0 ver_cnt=0 part min_ver version order 
-	min_ver=(${=1}) 
-	version=(${=2:-$ZSH_VERSION} 0) 
+	local IFS=".-" min_cnt=0 ver_cnt=0 part min_ver version order
+	min_ver=(${=1})
+	version=(${=2:-$ZSH_VERSION} 0)
 	while (( $min_cnt <= ${#min_ver} ))
 	do
 		while [[ "$part" != <-> ]]
@@ -837,7 +837,7 @@ is-at-least () {
 			(( ++ver_cnt > ${#version} )) && return 0
 			if [[ ${version[ver_cnt]} = *[0-9][^0-9]* ]]
 			then
-				order=(${version[ver_cnt]} ${min_ver[ver_cnt]}) 
+				order=(${version[ver_cnt]} ${min_ver[ver_cnt]})
 				if [[ ${version[ver_cnt]} = <->* ]]
 				then
 					[[ $order != ${${(On)order}} ]] && return 1
@@ -846,7 +846,7 @@ is-at-least () {
 				fi
 				[[ $order[1] != $order[2] ]] && return 0
 			fi
-			part=${version[ver_cnt]##*[^0-9]} 
+			part=${version[ver_cnt]##*[^0-9]}
 		done
 		while true
 		do
@@ -855,7 +855,7 @@ is-at-least () {
 		done
 		(( part > min_ver[min_cnt] )) && return 0
 		(( part < min_ver[min_cnt] )) && return 1
-		part='' 
+		part=''
 	done
 }
 jenv_prompt_info () {
@@ -863,7 +863,7 @@ jenv_prompt_info () {
 }
 mise () {
 	local command
-	command="${1:-}" 
+	command="${1:-}"
 	if [ "$#" = 0 ]
 	then
 		command /Users/juliani/.local/bin/mise
@@ -883,12 +883,12 @@ mkcd () {
 	mkdir -p $@ && cd ${@:$#}
 }
 nvimGoToFiles () {
-	nvimExists=$(which nvim) 
+	nvimExists=$(which nvim)
 	if [ -z "$nvimExists" ]
 	then
 		return
 	fi
-	selection=$(displayFZFFiles) 
+	selection=$(displayFZFFiles)
 	if [ -z "$selection" ]
 	then
 		return
@@ -897,24 +897,24 @@ nvimGoToFiles () {
 	fi
 }
 nvimGoToLine () {
-	nvimExists=$(which nvim) 
+	nvimExists=$(which nvim)
 	if [ -z "$nvimExists" ]
 	then
 		return
 	fi
-	selection=$(displayRgPipedFzf) 
+	selection=$(displayRgPipedFzf)
 	if [ -z "$selection" ]
 	then
 		return
 	else
-		filename=$(echo $selection | awk -F ':' '{print $1}') 
-		line=$(echo $selection | awk -F ':' '{print $2}') 
+		filename=$(echo $selection | awk -F ':' '{print $1}')
+		line=$(echo $selection | awk -F ':' '{print $2}')
 		nvim $(printf "+%s %s" $line $filename) +"normal zz"
 	fi
 }
 nvm_prompt_info () {
 	which nvm &> /dev/null || return
-	local nvm_prompt=${$(nvm current)#v} 
+	local nvm_prompt=${$(nvm current)#v}
 	echo "${ZSH_THEME_NVM_PROMPT_PREFIX}${nvm_prompt}${ZSH_THEME_NVM_PROMPT_SUFFIX}"
 }
 omz () {
@@ -922,7 +922,7 @@ omz () {
 		_omz::help
 		return 1
 	}
-	local command="$1" 
+	local command="$1"
 	shift
 	(( $+functions[_omz::$command] )) || {
 		_omz::help
@@ -933,17 +933,17 @@ omz () {
 omz_diagnostic_dump () {
 	emulate -L zsh
 	builtin echo "Generating diagnostic dump; please be patient..."
-	local thisfcn=omz_diagnostic_dump 
+	local thisfcn=omz_diagnostic_dump
 	local -A opts
 	local opt_verbose opt_noverbose opt_outfile
-	local timestamp=$(date +%Y%m%d-%H%M%S) 
-	local outfile=omz_diagdump_$timestamp.txt 
+	local timestamp=$(date +%Y%m%d-%H%M%S)
+	local outfile=omz_diagdump_$timestamp.txt
 	builtin zparseopts -A opts -D -- "v+=opt_verbose" "V+=opt_noverbose"
-	local verbose n_verbose=${#opt_verbose} n_noverbose=${#opt_noverbose} 
+	local verbose n_verbose=${#opt_verbose} n_noverbose=${#opt_noverbose}
 	(( verbose = 1 + n_verbose - n_noverbose ))
 	if [[ ${#*} > 0 ]]
 	then
-		opt_outfile=$1 
+		opt_outfile=$1
 	fi
 	if [[ ${#*} > 1 ]]
 	then
@@ -952,7 +952,7 @@ omz_diagnostic_dump () {
 	fi
 	if [[ -n "$opt_outfile" ]]
 	then
-		outfile="$opt_outfile" 
+		outfile="$opt_outfile"
 	fi
 	_omz_diag_dump_one_big_text &> "$outfile"
 	if [[ $? != 0 ]]
@@ -993,10 +993,10 @@ omz_termsupport_preexec () {
 	emulate -L zsh
 	setopt extended_glob
 	local -a cmdargs
-	cmdargs=("${(z)2}") 
+	cmdargs=("${(z)2}")
 	if [[ "${cmdargs[1]}" = fg ]]
 	then
-		local job_id jobspec="${cmdargs[2]#%}" 
+		local job_id jobspec="${cmdargs[2]#%}"
 		case "$jobspec" in
 			(<->) job_id=${jobspec}  ;;
 			("" | % | +) job_id=${(k)jobstates[(r)*:+:*]}  ;;
@@ -1006,30 +1006,30 @@ omz_termsupport_preexec () {
 		esac
 		if [[ -n "${jobtexts[$job_id]}" ]]
 		then
-			1="${jobtexts[$job_id]}" 
-			2="${jobtexts[$job_id]}" 
+			1="${jobtexts[$job_id]}"
+			2="${jobtexts[$job_id]}"
 		fi
 	fi
-	local CMD=${1[(wr)^(*=*|sudo|ssh|mosh|rake|-*)]:gs/%/%%} 
-	local LINE="${2:gs/%/%%}" 
+	local CMD=${1[(wr)^(*=*|sudo|ssh|mosh|rake|-*)]:gs/%/%%}
+	local LINE="${2:gs/%/%%}"
 	title '$CMD' '%100>...>$LINE%<<'
 }
 omz_urldecode () {
 	emulate -L zsh
-	local encoded_url=$1 
-	local caller_encoding=$langinfo[CODESET] 
-	local LC_ALL=C 
+	local encoded_url=$1
+	local caller_encoding=$langinfo[CODESET]
+	local LC_ALL=C
 	export LC_ALL
-	local tmp=${encoded_url:gs/+/ /} 
-	tmp=${tmp:gs/\\/\\\\/} 
-	tmp=${tmp:gs/%/\\x/} 
+	local tmp=${encoded_url:gs/+/ /}
+	tmp=${tmp:gs/\\/\\\\/}
+	tmp=${tmp:gs/%/\\x/}
 	local decoded
 	eval "decoded=\$'$tmp'"
 	local safe_encodings
-	safe_encodings=(UTF-8 utf8 US-ASCII) 
+	safe_encodings=(UTF-8 utf8 US-ASCII)
 	if [[ -z ${safe_encodings[(r)$caller_encoding]} ]]
 	then
-		decoded=$(echo -E "$decoded" | iconv -f UTF-8 -t $caller_encoding) 
+		decoded=$(echo -E "$decoded" | iconv -f UTF-8 -t $caller_encoding)
 		if [[ $? != 0 ]]
 		then
 			echo "Error converting string from UTF-8 to $caller_encoding" >&2
@@ -1042,53 +1042,53 @@ omz_urlencode () {
 	emulate -L zsh
 	local -a opts
 	zparseopts -D -E -a opts r m P
-	local in_str=$1 
-	local url_str="" 
+	local in_str=$1
+	local url_str=""
 	local spaces_as_plus
 	if [[ -z $opts[(r)-P] ]]
 	then
-		spaces_as_plus=1 
+		spaces_as_plus=1
 	fi
-	local str="$in_str" 
-	local encoding=$langinfo[CODESET] 
+	local str="$in_str"
+	local encoding=$langinfo[CODESET]
 	local safe_encodings
-	safe_encodings=(UTF-8 utf8 US-ASCII) 
+	safe_encodings=(UTF-8 utf8 US-ASCII)
 	if [[ -z ${safe_encodings[(r)$encoding]} ]]
 	then
-		str=$(echo -E "$str" | iconv -f $encoding -t UTF-8) 
+		str=$(echo -E "$str" | iconv -f $encoding -t UTF-8)
 		if [[ $? != 0 ]]
 		then
 			echo "Error converting string from $encoding to UTF-8" >&2
 			return 1
 		fi
 	fi
-	local i byte ord LC_ALL=C 
+	local i byte ord LC_ALL=C
 	export LC_ALL
-	local reserved=';/?:@&=+$,' 
-	local mark='_.!~*''()-' 
-	local dont_escape="[A-Za-z0-9" 
+	local reserved=';/?:@&=+$,'
+	local mark='_.!~*''()-'
+	local dont_escape="[A-Za-z0-9"
 	if [[ -z $opts[(r)-r] ]]
 	then
-		dont_escape+=$reserved 
+		dont_escape+=$reserved
 	fi
 	if [[ -z $opts[(r)-m] ]]
 	then
-		dont_escape+=$mark 
+		dont_escape+=$mark
 	fi
-	dont_escape+="]" 
-	local url_str="" 
+	dont_escape+="]"
+	local url_str=""
 	for ((i = 1; i <= ${#str}; ++i )) do
-		byte="$str[i]" 
+		byte="$str[i]"
 		if [[ "$byte" =~ "$dont_escape" ]]
 		then
-			url_str+="$byte" 
+			url_str+="$byte"
 		else
 			if [[ "$byte" == " " && -n $spaces_as_plus ]]
 			then
-				url_str+="+" 
+				url_str+="+"
 			else
-				ord=$(( [##16] #byte )) 
-				url_str+="%$ord" 
+				ord=$(( [##16] #byte ))
+				url_str+="%$ord"
 			fi
 		fi
 	done
@@ -1100,7 +1100,7 @@ open_command () {
 		(darwin*) open_cmd='open'  ;;
 		(cygwin*) open_cmd='cygstart'  ;;
 		(linux*) [[ "$(uname -r)" != *icrosoft* ]] && open_cmd='nohup xdg-open'  || {
-				open_cmd='cmd.exe /c start ""' 
+				open_cmd='cmd.exe /c start ""'
 				[[ -e "$1" ]] && {
 					1="$(wslpath -w "${1:a}")"  || return 1
 				}
@@ -1114,18 +1114,18 @@ open_command () {
 parse_git_dirty () {
 	local STATUS
 	local -a FLAGS
-	FLAGS=('--porcelain') 
+	FLAGS=('--porcelain')
 	if [[ "$(__git_prompt_git config --get oh-my-zsh.hide-dirty)" != "1" ]]
 	then
 		if [[ "${DISABLE_UNTRACKED_FILES_DIRTY:-}" == "true" ]]
 		then
-			FLAGS+='--untracked-files=no' 
+			FLAGS+='--untracked-files=no'
 		fi
 		case "${GIT_STATUS_IGNORE_SUBMODULES:-}" in
 			(git)  ;;
 			(*) FLAGS+="--ignore-submodules=${GIT_STATUS_IGNORE_SUBMODULES:-dirty}"  ;;
 		esac
-		STATUS=$(__git_prompt_git status ${FLAGS} 2> /dev/null | tail -1) 
+		STATUS=$(__git_prompt_git status ${FLAGS} 2> /dev/null | tail -1)
 	fi
 	if [[ -n $STATUS ]]
 	then
@@ -1135,7 +1135,7 @@ parse_git_dirty () {
 	fi
 }
 pyenv () {
-	local command=${1:-} 
+	local command=${1:-}
 	[ "$#" -gt 0 ] && shift
 	case "$command" in
 		(rehash | shell) eval "$(pyenv "sh-$command" "$@")" ;;
@@ -1154,19 +1154,19 @@ ruby_prompt_info () {
 rvm_prompt_info () {
 	[ -f $HOME/.rvm/bin/rvm-prompt ] || return 1
 	local rvm_prompt
-	rvm_prompt=$($HOME/.rvm/bin/rvm-prompt ${=ZSH_THEME_RVM_PROMPT_OPTIONS} 2>/dev/null) 
+	rvm_prompt=$($HOME/.rvm/bin/rvm-prompt ${=ZSH_THEME_RVM_PROMPT_OPTIONS} 2>/dev/null)
 	[[ -z "${rvm_prompt}" ]] && return 1
 	echo "${ZSH_THEME_RUBY_PROMPT_PREFIX}${rvm_prompt}${ZSH_THEME_RUBY_PROMPT_SUFFIX}"
 }
 spectrum_bls () {
-	local ZSH_SPECTRUM_TEXT=${ZSH_SPECTRUM_TEXT:-Arma virumque cano Troiae qui primus ab oris} 
+	local ZSH_SPECTRUM_TEXT=${ZSH_SPECTRUM_TEXT:-Arma virumque cano Troiae qui primus ab oris}
 	for code in {000..255}
 	do
 		print -P -- "$code: $BG[$code]$ZSH_SPECTRUM_TEXT%{$reset_color%}"
 	done
 }
 spectrum_ls () {
-	local ZSH_SPECTRUM_TEXT=${ZSH_SPECTRUM_TEXT:-Arma virumque cano Troiae qui primus ab oris} 
+	local ZSH_SPECTRUM_TEXT=${ZSH_SPECTRUM_TEXT:-Arma virumque cano Troiae qui primus ab oris}
 	for code in {000..255}
 	do
 		print -P -- "$code: $FG[$code]$ZSH_SPECTRUM_TEXT%{$reset_color%}"
@@ -1195,10 +1195,10 @@ takegit () {
 }
 takeurl () {
 	local data thedir
-	data="$(mktemp)" 
+	data="$(mktemp)"
 	curl -L "$1" > "$data"
 	tar xf "$data"
-	thedir="$(tar tf "$data" | head -1)" 
+	thedir="$(tar tf "$data" | head -1)"
 	rm "$data"
 	cd "$thedir"
 }

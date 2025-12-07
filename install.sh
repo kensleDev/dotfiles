@@ -25,7 +25,7 @@ setup() {
 	    # Non-interactive install
 	    curl https://mise.run | MISE_INSTALL_PATH="$HOME/.local/bin/mise" sh
 	    export PATH="$HOME/.local/bin:$PATH"
-	    
+
 	    # Also add to zshrc if it exists
 	    if [ -f "$HOME/.zshrc" ] && ! grep -q "mise activate" "$HOME/.zshrc"; then
 		{
@@ -35,7 +35,7 @@ setup() {
 		    echo 'eval "$(mise activate zsh)"'
 		} >>"$HOME/.zshrc"
 	    fi
-	    
+
 	    if [ -f "$HOME/.bashrc" ] && ! grep -q "mise activate" "$HOME/.bashrc"; then
 		{
 		    echo
@@ -47,7 +47,7 @@ setup() {
 	fi
 }
 ensure_dotfiles_repo() {
-	REPO_DIR="$HOME/.dotfiles"
+	REPO_DIR="$HOME/dotfiles"
 	REPO_URL="https://github.com/kensledev/dotfiles.git"
 	if [ -d "$REPO_DIR/.git" ]; then
 		echo "Dotfiles repo exists at $REPO_DIR"
@@ -66,7 +66,7 @@ install_apps() {
 }
 
 apply_config() {
-	REPO_DIR="$HOME/.dotfiles"
+	REPO_DIR="$HOME/dotfiles"
 	[ -d "$REPO_DIR" ] || {
 		echo "$REPO_DIR not found" >&2
 		return 1

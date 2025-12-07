@@ -54,7 +54,7 @@ setup() {
 }
 
 ensure_dotfiles_repo() {
-	REPO_DIR="$HOME/.dotfiles"
+	REPO_DIR="$HOME/dotfiles"
 	REPO_URL="https://github.com/kensledev/dotfiles.git"
 
 	if [ -d "$REPO_DIR/.git" ]; then
@@ -74,7 +74,7 @@ install_apps() {
 }
 
 apply_config() {
-	REPO_DIR="$HOME/.dotfiles"
+	REPO_DIR="$HOME/dotfiles"
 	[ -d "$REPO_DIR" ] || {
 		echo "$REPO_DIR not found" >&2
 		return 1
