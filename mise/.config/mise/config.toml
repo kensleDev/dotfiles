@@ -6,11 +6,12 @@ fzf = "latest"
 gh = "latest"
 lazygit = "latest"
 neovim = "latest"
-node = "latest"
+# node = "latest"
 opencode = "latest"
 ripgrep = "latest"
-rust = "latest"
+# rust = "latest"
 xh = "latest"
-zig = "latest"
 zoxide = "latest"
 "npm:opencode-ai" = { version = "latest" }
+"npm:bun" = { version = "latest" }
+"npm:@anthropic-ai/claude-code" = { version = "latest" }

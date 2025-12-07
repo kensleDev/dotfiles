@@ -1,0 +1,9 @@
+<script lang="ts">
+  import { getContext } from "svelte";
+  import ScanPageView from "@/scan/components/ScanPageView.svelte";
+
+  // Get camera sheet state from parent layout via context
+  const cameraSheetOpen = getContext<{ value: boolean }>("cameraSheetOpen");
+</script>
+
+<ScanPageView {cameraSheetOpen} />

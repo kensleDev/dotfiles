@@ -1,0 +1,13 @@
+{
+  "name": "cli-quest",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "scripts": {
+    "start": "bun ./cli-quest.ts"
+  }
+}

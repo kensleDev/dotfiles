@@ -1,0 +1,133 @@
+[DEBUG] Watching for changes in setting files /Users/juliani/.claude/settings.json...
+[DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+[DEBUG] Total LSP servers loaded: 0
+[DEBUG] LSP manager initialized with 0 servers
+[DEBUG] LSP server manager initialized successfully
+[DEBUG] Loading skills from directories: managed=/Library/Application Support/ClaudeCode/.claude/skills, user=/Users/juliani/.claude/skills, project=/Users/juliani/repos/cli/cli-quest-web/.claude/skills
+[DEBUG] >>>>> getPluginSkills CALLED <<<<<
+[DEBUG] Creating shell snapshot for zsh (/bin/zsh)
+[DEBUG] Looking for shell config file: /Users/juliani/.zshrc
+[DEBUG] Snapshots directory: /Users/juliani/.claude/shell-snapshots
+[DEBUG] Creating snapshot at: /Users/juliani/.claude/shell-snapshots/snapshot-zsh-1762360045322-ms4n8g.sh
+[DEBUG] Shell binary exists: true
+[DEBUG] Execution timeout: 10000ms
+[DEBUG] Writing to temp file: /Users/juliani/.claude/todos/1dc6a241-0059-4de6-b6bf-fd9a51f6f147-agent-1dc6a241-0059-4de6-b6bf-fd9a51f6f147.json.tmp.93266.1762360045323
+[DEBUG] Temp file written successfully, size: 2 bytes
+[DEBUG] Renaming /Users/juliani/.claude/todos/1dc6a241-0059-4de6-b6bf-fd9a51f6f147-agent-1dc6a241-0059-4de6-b6bf-fd9a51f6f147.json.tmp.93266.1762360045323 to /Users/juliani/.claude/todos/1dc6a241-0059-4de6-b6bf-fd9a51f6f147-agent-1dc6a241-0059-4de6-b6bf-fd9a51f6f147.json
+[DEBUG] File /Users/juliani/.claude/todos/1dc6a241-0059-4de6-b6bf-fd9a51f6f147-agent-1dc6a241-0059-4de6-b6bf-fd9a51f6f147.json written atomically
+[DEBUG] getPluginSkills: Processing 0 enabled plugins
+[DEBUG] Total plugin skills loaded: 0
+[DEBUG] Total plugin commands loaded: 0
+[DEBUG] Registered 0 hooks from 0 plugins
+[DEBUG] Loaded 1 unique skills (managed: 0, user: 1, project: 0, duplicates removed: 0)
+[DEBUG] getSkillsIfEnabled returning: 1 skill dir commands, 0 plugin skills
+[ERROR] Failed to backup config: Error: EACCES: permission denied, copyfile '/Users/juliani/.claude.json' -> '/Users/juliani/.claude.json.backup'
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.93266.1762360045450
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 44166 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.93266.1762360045450 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[ERROR] Failed to backup config: Error: EACCES: permission denied, copyfile '/Users/juliani/.claude.json' -> '/Users/juliani/.claude.json.backup'
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.93266.1762360045475
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 44166 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.93266.1762360045475 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[ERROR] Failed to backup config: Error: EACCES: permission denied, copyfile '/Users/juliani/.claude.json' -> '/Users/juliani/.claude.json.backup'
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.93266.1762360045484
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 44166 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.93266.1762360045484 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[ERROR] Failed to backup config: Error: EACCES: permission denied, copyfile '/Users/juliani/.claude.json' -> '/Users/juliani/.claude.json.backup'
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.93266.1762360045491
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 44166 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.93266.1762360045491 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=/Users/juliani/.local/share/mise/installs/node/23.11.0/lib/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/arm64-darwin/rg)
+[DEBUG] Total plugin agents loaded: 0
+[ERROR] Failed to backup config: Error: EACCES: permission denied, copyfile '/Users/juliani/.claude.json' -> '/Users/juliani/.claude.json.backup'
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.93266.1762360045535
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 44166 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.93266.1762360045535 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Getting matching hook commands for SessionStart with query: startup
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+[DEBUG] Skills and commands included in Skill tool: webapp-testing
+[DEBUG] Slash commands included in SlashCommand tool:
+[ERROR] Failed to backup config: Error: EACCES: permission denied, copyfile '/Users/juliani/.claude.json' -> '/Users/juliani/.claude.json.backup'
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.93266.1762360045575
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 44061 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.93266.1762360045575 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[ERROR] Failed to backup config: Error: EACCES: permission denied, copyfile '/Users/juliani/.claude.json' -> '/Users/juliani/.claude.json.backup'
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.93266.1762360045581
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 44061 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.93266.1762360045581 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[ERROR] Failed to backup config: Error: EACCES: permission denied, copyfile '/Users/juliani/.claude.json' -> '/Users/juliani/.claude.json.backup'
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.93266.1762360045588
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 44061 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.93266.1762360045588 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] performStartupChecks called
+[DEBUG] Starting background plugin installations
+[DEBUG] performBackgroundPluginInstallations called
+[ERROR] Failed to backup config: Error: EACCES: permission denied, copyfile '/Users/juliani/.claude.json' -> '/Users/juliani/.claude.json.backup'
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.93266.1762360045820
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 44166 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.93266.1762360045820 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Setting installation status: 0 marketplaces, 0 installable plugins, 0 uninstallable plugins
+[DEBUG] Loaded plugins - Enabled: 0, Disabled: 0, Commands: 0, Agents: 0, Errors: 0
+[DEBUG] Shell snapshot created successfully (46315 bytes)
+[ERROR] Failed to backup config: Error: EACCES: permission denied, copyfile '/Users/juliani/.claude.json' -> '/Users/juliani/.claude.json.backup'
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.93266.1762360045861
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 44166 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.93266.1762360045861 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Getting matching hook commands for SessionEnd with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Cleaned up session snapshot: /Users/juliani/.claude/shell-snapshots/snapshot-zsh-1762360045322-ms4n8g.sh
+[DEBUG] LSP server manager shut down successfully
+[DEBUG] Metrics opt-out check failed: No API key available
+[DEBUG] Metrics check failed, defaulting to disabled
+[DEBUG] Metrics export disabled by organization setting
+[DEBUG] BigQuery metrics exporter flush complete
+[DEBUG] BigQuery metrics exporter flush complete
+[DEBUG] BigQuery metrics exporter shutdown complete
+[ERROR] Failed to backup config: Error: EACCES: permission denied, copyfile '/Users/juliani/.claude.json' -> '/Users/juliani/.claude.json.backup'
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.93266.1762360225236
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 44617 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.93266.1762360225236 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically

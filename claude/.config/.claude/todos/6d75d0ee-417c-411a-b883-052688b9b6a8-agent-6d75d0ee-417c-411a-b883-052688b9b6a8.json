@@ -1,0 +1,26 @@
+[
+  {
+    "content": "Investigate command palette arrow key navigation issue",
+    "status": "completed",
+    "priority": "high",
+    "id": "1"
+  },
+  {
+    "content": "Check command palette component keyboard handling",
+    "status": "completed",
+    "priority": "high",
+    "id": "2"
+  },
+  {
+    "content": "Verify focus management in command palette items",
+    "status": "completed",
+    "priority": "high",
+    "id": "3"
+  },
+  {
+    "content": "Fix arrow key navigation in command palette",
+    "status": "completed",
+    "priority": "high",
+    "id": "4"
+  }
+]

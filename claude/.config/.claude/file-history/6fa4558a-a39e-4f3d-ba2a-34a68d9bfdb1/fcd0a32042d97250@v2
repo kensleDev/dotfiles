@@ -1,0 +1,95 @@
+import * as readline from 'readline';
+import { Challenge, GameState } from '../types';
+import { StateManager } from './StateManager';
+import { Display } from './Display';
+import { setupChallengeEnvironment } from './Utils';
+
+export class ChallengeRunner {
+  static async runChallenge(challenge: Challenge, state: GameState): Promise<'next' | 'exit'> {
+    // Setup the challenge environment
+    setupChallengeEnvironment(challenge);
+
+    // Display the challenge
+    Display.showChallenge(challenge, state);
+
+    const rl = Display.createReadlineInterface();
+
+    return new Promise<'next' | 'exit'>((resolve) => {
+      rl.prompt();
+
+      rl.on('line', (input: string) => {
+        const command = input.trim().toLowerCase();
+
+        switch (command) {
+          case 'check':
+            if (this.validateSolution(challenge)) {
+              console.log(`\n✅ SUCCESS! Challenge completed!\n`);
+              state = StateManager.markChallengeCompleted(state, challenge.id, challenge.tool);
+              setTimeout(() => {
+                rl.close();
+                resolve('next');
+              }, 1500);
+            } else {
+              console.log(`\n❌ Not quite right. Keep trying!\n`);
+              rl.prompt();
+            }
+            break;
+
+          case 'hint':
+            Display.showHint(challenge, state);
+            state = StateManager.markHintUsed(state, challenge.id);
+            rl.prompt();
+            break;
+
+          case 'solution':
+            Display.showSolution(challenge);
+            state = StateManager.markChallengeCompleted(state, challenge.id, challenge.tool);
+            setTimeout(() => {
+              rl.close();
+              resolve('next');
+            }, 2000);
+            break;
+
+          case 'reset':
+            setupChallengeEnvironment(challenge);
+            console.log(`\n♻️ Challenge reset!\n`);
+            rl.prompt();
+            break;
+
+          case 'back':
+            rl.close();
+            resolve('next');
+            break;
+
+          case 'exit':
+            console.log(`\n👋 Progress saved. Run the game again to continue!\n`);
+            rl.close();
+            resolve('exit');
+            break;
+
+          case '':
+            rl.prompt();
+            break;
+
+          default:
+            console.log(`\n⚠️ Unknown command. Try: check, hint, solution, reset, back, or exit\n`);
+            rl.prompt();
+            break;
+        }
+      });
+
+      rl.on('close', () => {
+        resolve('next');
+      });
+    });
+  }
+
+  private static validateSolution(challenge: Challenge): boolean {
+    try {
+      return challenge.validation();
+    } catch (error) {
+      Display.showErrorMessage(`Validation error: ${error}`);
+      return false;
+    }
+  }
+}

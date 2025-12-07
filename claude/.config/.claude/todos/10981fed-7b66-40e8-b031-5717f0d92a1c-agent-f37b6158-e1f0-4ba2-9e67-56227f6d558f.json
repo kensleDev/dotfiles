@@ -1,0 +1,27 @@
+[
+  {
+    "content": "Update auth config to match new snake_case schema",
+    "status": "completed",
+    "activeForm": "Updating auth config"
+  },
+  {
+    "content": "Update completeSignup.remote.ts field references",
+    "status": "completed",
+    "activeForm": "Updating completeSignup.remote.ts"
+  },
+  {
+    "content": "Update remaining 10 files with field references",
+    "status": "completed",
+    "activeForm": "Updating remaining files"
+  },
+  {
+    "content": "Clean up generated auth-schema.ts file",
+    "status": "completed",
+    "activeForm": "Cleaning up auth-schema.ts"
+  },
+  {
+    "content": "Test signup flow",
+    "status": "pending",
+    "activeForm": "Testing signup flow"
+  }
+]

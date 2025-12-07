@@ -1,0 +1,167 @@
+<script lang="ts">
+	import {
+		DropdownMenu,
+		DropdownMenuContent,
+		DropdownMenuItem,
+		DropdownMenuTrigger,
+		DropdownMenuSeparator
+	} from '@/components/ui/dropdown-menu';
+	import { Button } from '@/components/ui/button';
+	import { Input } from '@/components/ui/input';
+	import { Label } from '@/components/ui/label';
+	import * as Dialog from '@/components/ui/dialog';
+	import { dialogsStore } from '@/state/dialogs.store.svelte';
+	import { pagesStore } from '@/state/pages.store.svelte';
+	import { updatePageTitle, deletePage } from '@/db/client/repos/page.repo.svelte';
+	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
+	import { DEFAULT_WORKSPACE_ID } from '@/constants/workspace';
+
+	type Props = {
+		page: {
+			id: string;
+			title: string;
+			parentId: string | null;
+		};
+		onRename: (pageId: string, newTitle: string) => void;
+		onDelete: (pageId: string) => void;
+	};
+
+	let { page, onRename, onDelete }: Props = $props();
+
+	let isRenaming = $state(false);
+	let newPageName = $state(page.title);
+	let isDeleting = $state(false);
+
+	async function handleRename() {
+		if (newPageName.trim() && newPageName.trim() !== page.title) {
+			try {
+				await onRename(page.id, newPageName.trim());
+				isRenaming = false;
+			} catch (error) {
+				console.error('Failed to rename page:', error);
+			}
+		}
+	}
+
+	async function handleDelete() {
+		try {
+			await onDelete(page.id);
+			isDeleting = false;
+			// Navigate to home after deletion
+			goto(resolve('/home'));
+		} catch (error) {
+			console.error('Failed to delete page:', error);
+		}
+	}
+
+	function handleCreateChildPage() {
+		dialogsStore.openNewPageDialog(page.id, 'New Page');
+	}
+
+	function handleDuplicatePage() {
+		dialogsStore.openNewPageDialog(null, `${page.title} (copy)`);
+	}
+</script>
+
+<DropdownMenu>
+	<DropdownMenuTrigger asChild>
+		<Button
+			variant="ghost"
+			size="sm"
+			class="h-8 w-8 p-0"
+			aria-label="Page actions"
+		>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				class="h-4 w-4"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke="currentColor"
+			>
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+				/>
+			</svg>
+		</Button>
+	</DropdownMenuTrigger>
+	<DropdownMenuContent class="w-48">
+		<DropdownMenuItem onclick={handleCreateChildPage}>
+			Add child page
+		</DropdownMenuItem>
+		<DropdownMenuItem onclick={handleDuplicatePage}>
+			Duplicate page
+		</DropdownMenuItem>
+		<DropdownMenuSeparator />
+		<DropdownMenuItem onclick={() => isRenaming = true}>
+			Rename
+		</DropdownMenuItem>
+		<DropdownMenuItem
+			onclick={() => isDeleting = true}
+			class="text-red-600 hover:text-red-700 focus:text-red-700 focus:bg-red-50"
+		>
+			Delete
+		</DropdownMenuItem>
+	</DropdownMenuContent>
+</DropdownMenu>
+
+<!-- Rename Dialog -->
+{#if isRenaming}
+	<Dialog.Root open>
+		<Dialog.Content class="sm:max-w-[425px]">
+			<Dialog.Header>
+				<Dialog.Title>Rename Page</Dialog.Title>
+			</Dialog.Header>
+			<div class="grid gap-4 py-4">
+				<div class="grid grid-cols-4 items-center gap-4">
+					<Label for="name" class="text-right">Name</Label>
+					<Input
+						bind:value={newPageName}
+						id="name"
+						class="col-span-3"
+						autofocus
+					/>
+				</div>
+			</div>
+			<Dialog.Footer>
+				<Button onclick={() => isRenaming = false} variant="outline">
+					Cancel
+				</Button>
+				<Button onclick={handleRename}>
+					Rename
+				</Button>
+			</Dialog.Footer>
+		</Dialog.Content>
+	</Dialog.Root>
+{/if}
+
+<!-- Delete Dialog -->
+{#if isDeleting}
+	<Dialog.Root open>
+		<Dialog.Content class="sm:max-w-[425px]">
+			<Dialog.Header>
+				<Dialog.Title>Delete Page</Dialog.Title>
+			</Dialog.Header>
+			<div class="py-4">
+				<p class="text-sm text-muted-foreground">
+					Are you sure you want to delete "{page.title}"? This action cannot be undone.
+				</p>
+			</div>
+			<Dialog.Footer>
+				<Button onclick={() => isDeleting = false} variant="outline">
+					Cancel
+				</Button>
+				<Button
+					onclick={handleDelete}
+					variant="destructive"
+					class="bg-red-600 hover:bg-red-700"
+				>
+					Delete
+				</Button>
+			</Dialog.Footer>
+		</Dialog.Content>
+	</Dialog.Root>
+{/if}

@@ -1,0 +1,19 @@
+// import type { Session, SupabaseClient } from "@supabase/supabase-js";
+
+import type { Session, User } from "better-auth";
+
+declare global {
+  namespace App {
+    interface Locals {
+      session: Session | null;
+      user: User | null;
+      // supabase: SupabaseClient;
+      // getSession: () => Promise<Session | null>;
+    }
+  }
+}
+export {};
+
+export declare module "svelte-copy-to-clipboard" {
+  export { default } from "svelte-copy-to-clipboard";
+}

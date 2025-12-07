@@ -1,0 +1,103 @@
+[DEBUG] Watching for changes in setting files /Users/juliani/.claude/settings.json, /Users/juliani/repos/svelte5/secure_qr/.claude/settings.local.json...
+[DEBUG] Applying permission update: Adding 20 allow rule(s) to destination 'localSettings': ["Bash(find:*)","Bash(bun run:*)","Bash(pkill:*)","Bash(true)","mcp__chrome-devtools__new_page","Bash(curl:*)","mcp__chrome-devtools__list_pages","Bash(timeout 20 bun run dev)","Bash(mv:*)","Bash(node:*)","Bash(rm:*)","Bash(timeout 30 bun run dev)","Bash(cat:*)","WebSearch","WebFetch(domain:www.better-auth.com)","Bash(bun:*)","Bash(lsof:*)","Bash(npx @better-auth/cli generate:*)","WebFetch(domain:svelte.dev)","Read(//private/tmp/**)"]
+[DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+[DEBUG] Registered 0 hooks from 0 plugins
+[DEBUG] Loading skills from directories: managed=/Library/Application Support/ClaudeCode/.claude/skills, user=/Users/juliani/.claude/skills, project=/Users/juliani/repos/svelte5/secure_qr/.claude/skills
+[DEBUG] Loaded 0 skills total (managed: 0, user: 0, project: 0)
+[DEBUG] Total plugin commands loaded: 0
+[DEBUG] Total plugin skills loaded: 0
+[DEBUG] Creating shell snapshot for zsh (/bin/zsh)
+[DEBUG] Looking for shell config file: /Users/juliani/.zshrc
+[DEBUG] Snapshots directory: /Users/juliani/.claude/shell-snapshots
+[DEBUG] Creating snapshot at: /Users/juliani/.claude/shell-snapshots/snapshot-zsh-1760388177851-03ygjf.sh
+[DEBUG] Shell binary exists: true
+[DEBUG] Execution timeout: 10000ms
+[DEBUG] Writing to temp file: /Users/juliani/.claude/todos/21b8c92e-c224-4dee-b164-35aa1b451e2c-agent-21b8c92e-c224-4dee-b164-35aa1b451e2c.json.tmp.10409.1760388177852
+[DEBUG] Temp file written successfully, size: 2 bytes
+[DEBUG] Renaming /Users/juliani/.claude/todos/21b8c92e-c224-4dee-b164-35aa1b451e2c-agent-21b8c92e-c224-4dee-b164-35aa1b451e2c.json.tmp.10409.1760388177852 to /Users/juliani/.claude/todos/21b8c92e-c224-4dee-b164-35aa1b451e2c-agent-21b8c92e-c224-4dee-b164-35aa1b451e2c.json
+[DEBUG] File /Users/juliani/.claude/todos/21b8c92e-c224-4dee-b164-35aa1b451e2c-agent-21b8c92e-c224-4dee-b164-35aa1b451e2c.json written atomically
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.10409.1760388177933
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 58991 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.10409.1760388177933 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.10409.1760388177935
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 58991 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.10409.1760388177935 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.10409.1760388178089
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 58991 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.10409.1760388178089 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=/Users/juliani/.vscode/extensions/anthropic.claude-code-2.0.14-darwin-arm64/resources/native-binary/claude)
+[DEBUG] Total plugin agents loaded: 0
+[DEBUG] MCP server "chrome-devtools": Starting connection with timeout of 30000ms
+[DEBUG] MCP server "context7": Initializing HTTP transport to https://mcp.context7.com/mcp
+[DEBUG] MCP server "context7": Node version: v24.3.0, Platform: darwin
+[DEBUG] MCP server "context7": Environment: {"NODE_OPTIONS":"not set","UV_THREADPOOL_SIZE":"default","HTTP_PROXY":"not set","HTTPS_PROXY":"not set","NO_PROXY":"not set"}
+[DEBUG] MCP server "context7": MTLS options: default
+[DEBUG] MCP server "context7": HTTP transport options: {"url":"https://mcp.context7.com/mcp","headers":{"User-Agent":"claude-code/2.0.14","CONTEXT7_API_KEY":"ctx7sk-5e8dc899-e2ad-4931-a6e9-28825594977e"},"hasAuthProvider":true,"timeoutMs":60000}
+[DEBUG] MCP server "context7": HTTP transport created successfully
+[DEBUG] MCP server "context7": Client created, setting up request handler
+[DEBUG] MCP server "context7": Starting connection with timeout of 30000ms
+[DEBUG] MCP server "context7": Testing basic HTTP connectivity to https://mcp.context7.com/mcp
+[DEBUG] MCP server "context7": Parsed URL: host=mcp.context7.com, port=default, protocol=https:
+[DEBUG] MCP server "svelte": Starting connection with timeout of 30000ms
+[DEBUG] MCP server "context7": No token data found
+[DEBUG] Shell snapshot created successfully (177390 bytes)
+[DEBUG] MCP server "context7": No token data found
+[DEBUG] MCP server "context7": No token data found
+[DEBUG] MCP server "context7": Successfully connected to http server in 535ms
+[DEBUG] MCP server "context7": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"Context7","version":"1.0.13"}}
+[DEBUG] MCP server "context7": No token data found
+[ERROR] MCP server "chrome-devtools" Server stderr: chrome-devtools-mcp exposes content of the browser instance to the MCP clients allowing them to inspect,
+debug, and modify any data in the browser or DevTools.
+Avoid sharing sensitive or personal information that you do not want to share with MCP clients.
+[DEBUG] MCP server "chrome-devtools": Successfully connected to stdio server in 1436ms
+[DEBUG] MCP server "chrome-devtools": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"chrome_devtools","title":"Chrome DevTools MCP server","version":"0.8.1"}}
+[DEBUG] MCP server "svelte": Successfully connected to stdio server in 2781ms
+[DEBUG] MCP server "svelte": Connection established with capabilities: {"hasTools":true,"hasPrompts":true,"hasResources":true,"serverVersion":{"name":"Svelte MCP","version":"0.0.1","description":"The official Svelte MCP server implementation"}}
+[DEBUG] MCP server "shadcn-ui-mcp-server": Starting connection with timeout of 30000ms
+[ERROR] MCP server "shadcn-ui-mcp-server" Server stderr: INFO: Starting Shadcn UI MCP Server...
+[ERROR] MCP server "shadcn-ui-mcp-server" Server stderr: INFO: Using default framework: 'react'
+INFO: Using default framework: 'react'
+INFO: MCP Server configured for REACT framework
+INFO: Repository: shadcn-ui/ui
+INFO: File extension: .tsx
+INFO: Description: React components from shadcn/ui v4
+INFO: To switch frameworks: set FRAMEWORK=svelte|vue or use --framework svelte|vue
+INFO: Using default framework: 'react'
+[ERROR] MCP server "shadcn-ui-mcp-server" Server stderr: INFO: GitHub API key updated successfully
+GitHub API key updated successfully
+INFO: GitHub API configured with token
+[ERROR] MCP server "shadcn-ui-mcp-server" Server stderr: INFO: Setting up request handlers...
+INFO: Handlers setup complete
+[ERROR] MCP server "shadcn-ui-mcp-server" Server stderr: INFO: Transport initialized: stdio
+[ERROR] MCP server "shadcn-ui-mcp-server" Server stderr: INFO: Server started successfully
+[DEBUG] MCP server "shadcn-ui-mcp-server": Successfully connected to undefined server in 812ms
+[DEBUG] MCP server "shadcn-ui-mcp-server": Connection established with capabilities: {"hasTools":true,"hasPrompts":true,"hasResources":true,"serverVersion":{"name":"shadcn-ui-mcp-server","version":"1.1.0"}}
+[DEBUG] Executing hooks for SessionStart:startup
+[DEBUG] Getting matching hook commands for SessionStart with query: startup
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Getting matching hook commands for SessionEnd with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Cleaned up session snapshot: /Users/juliani/.claude/shell-snapshots/snapshot-zsh-1760388177851-03ygjf.sh
+[DEBUG] MCP server "context7": HTTP connection closed after 3s (cleanly)
+[DEBUG] MCP server "chrome-devtools": Sending SIGINT to MCP server process
+[DEBUG] MCP server "svelte": Sending SIGINT to MCP server process
+[DEBUG] MCP server "shadcn-ui-mcp-server": UNKNOWN connection closed after 0s (cleanly)
+[DEBUG] MCP server "context7": HTTP connection dropped after 3s uptime
+[DEBUG] MCP server "context7": Connection error: SSE stream disconnected: AbortError: The operation was aborted.
+[DEBUG] MCP server "shadcn-ui-mcp-server": UNKNOWN connection closed after 0s (cleanly)
+[DEBUG] MCP server "chrome-devtools": STDIO connection closed after 2s (cleanly)
+[DEBUG] MCP server "svelte": STDIO connection closed after 1s (cleanly)
+[DEBUG] MCP server "chrome-devtools": MCP server process exited cleanly
+[DEBUG] MCP server "svelte": MCP server process exited cleanly

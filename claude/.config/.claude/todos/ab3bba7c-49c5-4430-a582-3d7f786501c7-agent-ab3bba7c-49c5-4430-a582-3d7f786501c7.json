@@ -1,0 +1,26 @@
+[
+  {
+    "content": "Examine auth client configuration and identify fetch issue",
+    "status": "completed",
+    "priority": "high",
+    "id": "1"
+  },
+  {
+    "content": "Fix auth baseURL configuration",
+    "status": "completed",
+    "priority": "high",
+    "id": "2"
+  },
+  {
+    "content": "Test authentication without dev server issues",
+    "status": "completed",
+    "priority": "medium",
+    "id": "3"
+  },
+  {
+    "content": "Document solution for user",
+    "status": "completed",
+    "priority": "medium",
+    "id": "4"
+  }
+]

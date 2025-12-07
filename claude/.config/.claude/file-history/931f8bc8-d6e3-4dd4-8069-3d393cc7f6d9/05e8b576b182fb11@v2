@@ -1,0 +1,102 @@
+// type FieldSchema = {
+//   safeParse: (value: unknown) => {
+//     success: boolean;
+//     error?: { errors: Array<{ message: string }> };
+//   };
+// };
+
+/**
+ * Creates a form helper for managing field validation, errors, and touched state
+ * @param schema - The Zod schema object with shape property containing field schemas
+ * @returns An object with errors, touched state, and validation functions
+ */
+export function createFormHelper<
+  T extends Record<string, FieldSchema>,
+>(schema: { shape: T }) {
+  // Field-specific error state
+  let errors = $state<Record<string, string>>({});
+
+  // Track which fields have been touched by the user
+  let touched = $state<Record<string, boolean>>({});
+
+  /**
+   * Validates a single field and updates error state
+   * @param fieldName - The name of the field to validate
+   * @param value - The current value of the field
+   */
+  function validateField(fieldName: string, value: string) {
+    // Mark field as touched
+    touched[fieldName] = true;
+
+    // Get the field schema
+    const fieldSchema = schema.shape[fieldName as keyof typeof schema.shape];
+
+    if (fieldSchema) {
+      const result = fieldSchema.safeParse(value);
+
+      if (result.success) {
+        // Remove error if validation passes
+        const { [fieldName]: _, ...rest } = errors;
+        errors = rest;
+      } else {
+        // Set error if validation fails (only if field has been touched)
+        if (touched[fieldName]) {
+          errors[fieldName] = result.error!.errors[0].message;
+        }
+      }
+    }
+  }
+
+  /**
+   * Validates all fields in the provided data and sets errors
+   * @param data - Object containing all field values to validate
+   * @returns true if all validations passed, false otherwise
+   */
+  function validateAllFields(data: Record<string, unknown>): boolean {
+    // Clear previous errors
+    errors = {};
+
+    // Mark all fields as touched
+    Object.keys(data).forEach((key) => {
+      touched[key] = true;
+    });
+
+    let isValid = true;
+
+    // Validate each field
+    Object.entries(data).forEach(([fieldName, value]) => {
+      const fieldSchema = schema.shape[fieldName as keyof typeof schema.shape];
+
+      if (fieldSchema) {
+        const result = fieldSchema.safeParse(value);
+
+        if (!result.success) {
+          errors[fieldName] = result.error!.errors[0].message;
+          isValid = false;
+        }
+      }
+    });
+
+    return isValid;
+  }
+
+  /**
+   * Clears all errors and touched state
+   */
+  function resetForm() {
+    errors = {};
+    touched = {};
+  }
+
+  return {
+    get errors() {
+      return errors;
+    },
+    get touched() {
+      return touched;
+    },
+    validateField,
+    validateAllFields,
+    resetForm,
+  };
+}

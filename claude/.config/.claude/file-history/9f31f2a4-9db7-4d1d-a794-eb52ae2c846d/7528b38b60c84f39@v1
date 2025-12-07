@@ -1,0 +1,8 @@
+# AGENTS.md
+
+## Memory settings
+
+CRITICAL: Update the docs/memory/progress.md feature update. Add bug reports to docs/memory/bugs.md, log every architectural decision you make to docs/memory/decisions.md. Make sure to include which user story or feature request each decision is related to.
+
+## Tools
+Always use context7 mcp if avaible to you

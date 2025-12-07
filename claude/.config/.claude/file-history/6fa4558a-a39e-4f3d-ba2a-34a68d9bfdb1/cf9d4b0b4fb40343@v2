@@ -1,0 +1,87 @@
+import { Challenge } from '../..';
+import * as fs from 'fs';
+import * as path from 'path';
+
+export const challenge4: Challenge = {
+  id: 'fd-4',
+  title: "Large File Analysis",
+  tool: 'fd',
+  story: `📊 Performance Optimization
+
+The build is slow! You need to find large files in the project that might be causing performance issues.
+
+Your task: Use 'fd' to find all files larger than 100KB, then sort them by size (largest first) and save to 'large-files.txt'.
+
+Source: .cli-quest-game/project`,
+
+  setup: () => {
+    // This will be handled by the game runner
+  },
+
+  validation: () => {
+    const resultFile = path.join(process.cwd(), '.cli-quest-game/large-files.txt');
+    if (!fs.existsSync(resultFile)) return false;
+
+    const content = fs.readFileSync(resultFile, 'utf-8').trim();
+    const lines = content.split('\n').filter(l => l.trim());
+
+    // Should find and sort large files correctly
+    return lines.length === 4 &&
+           lines[0].includes('large-lib.js') &&
+           lines[0].includes('150KB');
+  },
+
+  hints: [
+    "Use fd with exec to check file sizes",
+    "Combine with awk to process sizes",
+    "Try: fd -x ls -lh {} | awk '$5 > \"100K\"' | sort -k5 -hr > .cli-quest-game/large-files.txt"
+  ],
+
+  solution: "fd -x ls -lh {} | awk '$5 > \"100K\"' | sort -k5 -hr > .cli-quest-game/large-files.txt",
+  difficulty: 4,
+  estimatedTime: 7
+};
+
+export const challenge5: Challenge = {
+  id: 'fd-5',
+  title: "Deep Dependency Search",
+  tool: 'fd',
+  story: `🔍 Complex Project Analysis
+
+You need to find all TypeScript files that import React hooks specifically, excluding node_modules.
+
+Your task: Use 'fd' to recursively find .ts files in src/, then filter those that contain React hook imports.
+
+Requirements:
+- Only search in .cli-quest-game/src/
+- Exclude node_modules directory
+- Find files importing 'useState', 'useEffect', or 'useContext'`,
+
+  setup: () => {
+    // This will be handled by the game runner
+  },
+
+  validation: () => {
+    const resultFile = path.join(process.cwd(), '.cli-quest-game/react-hook-files.txt');
+    if (!fs.existsSync(resultFile)) return false;
+
+    const content = fs.readFileSync(resultFile, 'utf-8').trim();
+    const lines = content.split('\n').filter(l => l.trim());
+
+    // Should find specific React hook usage files
+    return lines.length === 5 &&
+           lines.some(line => line.includes('Counter.tsx')) &&
+           lines.some(line => line.includes('UserProfile.ts')) &&
+           lines.some(line => line.includes('DataStore.ts'));
+  },
+
+  hints: [
+    "Use fd to find TypeScript files, then grep for React hooks",
+    "Combine multiple commands with pipe",
+    "Try: fd '.ts$' .cli-quest-game/src -x grep -l \"useState\\|useEffect\\|useContext\" {} | grep -v node_modules > .cli-quest-game/react-hook-files.txt"
+  ],
+
+  solution: "fd '.ts$' .cli-quest-game/src -x grep -l \"useState\\|useEffect\\|useContext\" {} | grep -v node_modules > .cli-quest-game/react-hook-files.txt",
+  difficulty: 5,
+  estimatedTime: 10
+};

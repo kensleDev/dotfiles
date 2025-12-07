@@ -1,0 +1,2320 @@
+[DEBUG] Watching for changes in setting files /Users/juliani/.claude/settings.json...
+[DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+[DEBUG] >>>>> getSkillsIfEnabled() CALLED <<<<<
+[DEBUG] ENABLE_SKILLS value: true, type: boolean
+[DEBUG] ENABLE_SKILLS check passed, loading skills...
+[DEBUG] Loading skills from directories: managed=/Library/Application Support/ClaudeCode/.claude/skills, user=/Users/juliani/.claude/skills, project=/Users/juliani/repos/svelte5/wiki/.claude/skills
+[DEBUG] >>>>> getPluginSkills CALLED <<<<<
+[DEBUG] Creating shell snapshot for zsh (/bin/zsh)
+[DEBUG] Looking for shell config file: /Users/juliani/.zshrc
+[DEBUG] Snapshots directory: /Users/juliani/.claude/shell-snapshots
+[DEBUG] Creating snapshot at: /Users/juliani/.claude/shell-snapshots/snapshot-zsh-1761769919361-zi4xhk.sh
+[DEBUG] Shell binary exists: true
+[DEBUG] Execution timeout: 10000ms
+[DEBUG] Writing to temp file: /Users/juliani/.claude/todos/db881be1-adb9-431d-a2b0-6f20d9e84f4e-agent-db881be1-adb9-431d-a2b0-6f20d9e84f4e.json.tmp.62487.1761769919362
+[DEBUG] Temp file written successfully, size: 2 bytes
+[DEBUG] Renaming /Users/juliani/.claude/todos/db881be1-adb9-431d-a2b0-6f20d9e84f4e-agent-db881be1-adb9-431d-a2b0-6f20d9e84f4e.json.tmp.62487.1761769919362 to /Users/juliani/.claude/todos/db881be1-adb9-431d-a2b0-6f20d9e84f4e-agent-db881be1-adb9-431d-a2b0-6f20d9e84f4e.json
+[DEBUG] File /Users/juliani/.claude/todos/db881be1-adb9-431d-a2b0-6f20d9e84f4e-agent-db881be1-adb9-431d-a2b0-6f20d9e84f4e.json written atomically
+[DEBUG] getPluginSkills: Processing 0 enabled plugins
+[DEBUG] Total plugin skills loaded: 0
+[DEBUG] Total plugin commands loaded: 0
+[DEBUG] Registered 0 hooks from 0 plugins
+[DEBUG] Loaded 0 unique skills (managed: 0, user: 0, project: 0, duplicates removed: 0)
+[DEBUG] getSkillsIfEnabled returning: 0 skill dir commands, 0 plugin skills
+[DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=/Users/juliani/Library/Application Support/Zed/external_agents/claude-code-acp/0.8.0/node_modules/@anthropic-ai/claude-agent-sdk/vendor/ripgrep/arm64-darwin/rg)
+[DEBUG] Total plugin agents loaded: 0
+[DEBUG] MCP server "mcp-server-context7": Starting connection with timeout of 30000ms
+[DEBUG] MCP server "acpPermission": Initializing HTTP transport to http://127.0.0.1:62744/mcp
+[DEBUG] MCP server "acpPermission": Node version: v23.11.0, Platform: darwin
+[DEBUG] MCP server "acpPermission": Environment: {"NODE_OPTIONS":"not set","UV_THREADPOOL_SIZE":"default","HTTP_PROXY":"not set","HTTPS_PROXY":"not set","NO_PROXY":"not set"}
+[DEBUG] MCP server "acpPermission": MTLS options: default
+[DEBUG] MCP server "acpPermission": HTTP transport options: {"url":"http://127.0.0.1:62744/mcp","headers":{"User-Agent":"claude-code/2.0.27","x-acp-proxy-session-id":"019a31ab-90d7-76b7-ab50-b9ea1122db1f"},"hasAuthProvider":true,"timeoutMs":60000}
+[DEBUG] MCP server "acpPermission": HTTP transport created successfully
+[DEBUG] MCP server "acpPermission": Client created, setting up request handler
+[DEBUG] MCP server "acpPermission": Starting connection with timeout of 30000ms
+[DEBUG] MCP server "acpPermission": Testing basic HTTP connectivity to http://127.0.0.1:62744/mcp
+[DEBUG] MCP server "acpPermission": Parsed URL: host=127.0.0.1, port=62744, protocol=http:
+[DEBUG] MCP server "acpPermission": Using loopback address: 127.0.0.1
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Successfully connected to http server in 83ms
+[DEBUG] MCP server "acpPermission": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"acpPermission","version":"1.0.0"}}
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": HTTP connection dropped after 0s uptime
+[DEBUG] MCP server "acpPermission": Connection error: Streamable HTTP error: Failed to open SSE stream: Not Found
+[DEBUG] MCP server "acpPermission": HTTP connection dropped after 0s uptime
+[DEBUG] MCP server "acpPermission": Connection error: Streamable HTTP error: Failed to open SSE stream: Not Found
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.62487.1761769919577
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 60029 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.62487.1761769919577 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.62487.1761769919583
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 60029 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.62487.1761769919583 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Shell snapshot created successfully (46179 bytes)
+[ERROR] MCP server "mcp-server-context7" Server stderr: Context7 Documentation MCP Server running on stdio
+[DEBUG] MCP server "mcp-server-context7": Successfully connected to stdio server in 153ms
+[DEBUG] MCP server "mcp-server-context7": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"Context7","version":"1.0.26"}}
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.62487.1761769919681
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 60029 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.62487.1761769919681 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[ERROR] "AxiosError: AxiosError: Request failed with status code 401\n    at UR (file:///Users/juliani/Library/Application%20Support/Zed/external_agents/claude-code-acp/0.8.0/node_modules/@anthropic-ai/claude-agent-sdk/cli.js:24:1136)\n    at IncomingMessage.<anonymous> (file:///Users/juliani/Library/Application%20Support/Zed/external_agents/claude-code-acp/0.8.0/node_modules/@anthropic-ai/claude-agent-sdk/cli.js:29:9845)\n    at IncomingMessage.emit (node:events:519:35)\n    at IncomingMessage.emit (node:domain:489:12)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)\n    at g3A.request (file:///Users/juliani/Library/Application%20Support/Zed/external_agents/claude-code-acp/0.8.0/node_modules/@anthropic-ai/claude-agent-sdk/cli.js:31:2129)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async dh2 (file:///Users/juliani/Library/Application%20Support/Zed/external_agents/claude-code-acp/0.8.0/node_modules/@anthropic-ai/claude-agent-sdk/cli.js:3574:15030)"
+[DEBUG] Failed to fetch Grove notice config: AxiosError: Request failed with status code 401
+[DEBUG] Getting matching hook commands for SessionStart with query: startup
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.62487.1761769920087
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 60029 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.62487.1761769920087 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Glob
+[DEBUG] Getting matching hook commands for PreToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] executePreToolHooks called for tool: Glob
+[DEBUG] Getting matching hook commands for PreToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] executePreToolHooks called for tool: Glob
+[DEBUG] Getting matching hook commands for PreToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] executePreToolHooks called for tool: Glob
+[DEBUG] Getting matching hook commands for PreToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] executePreToolHooks called for tool: Glob
+[DEBUG] Getting matching hook commands for PreToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] MCP server "acp": Calling MCP tool: Read
+[DEBUG] MCP server "acp": Tool 'Read' completed successfully in 3ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] MCP server "acp": Calling MCP tool: Read
+[DEBUG] MCP server "acp": Calling MCP tool: Read
+[DEBUG] MCP server "acp": Calling MCP tool: Read
+[DEBUG] MCP server "acp": Calling MCP tool: Read
+[DEBUG] MCP server "acp": Tool 'Read' completed successfully in 31ms
+[DEBUG] MCP server "acp": Tool 'Read' completed successfully in 32ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] MCP server "acp": Tool 'Read' completed successfully in 35ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] MCP server "acp": Tool 'Read' completed successfully in 95ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] executePreToolHooks called for tool: Glob
+[DEBUG] Getting matching hook commands for PreToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] MCP server "acp": Calling MCP tool: Read
+[DEBUG] MCP server "acp": Calling MCP tool: Read
+[DEBUG] MCP server "acp": Calling MCP tool: Read
+[DEBUG] MCP server "acp": Tool 'Read' completed successfully in 7ms
+[DEBUG] MCP server "acp": Tool 'Read' completed successfully in 6ms
+[DEBUG] MCP server "acp": Tool 'Read' completed successfully in 6ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] executePreToolHooks called for tool: Grep
+[DEBUG] Getting matching hook commands for PreToolUse with query: Grep
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Grep" (0 before deduplication)
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] MCP server "acp": Calling MCP tool: Read
+[DEBUG] MCP server "acp": Calling MCP tool: Read
+[DEBUG] MCP server "acp": Calling MCP tool: Read
+[DEBUG] MCP server "acp": Tool 'Read' completed successfully in 6ms
+[DEBUG] MCP server "acp": Tool 'Read' completed successfully in 6ms
+[DEBUG] MCP server "acp": Tool 'Read' completed successfully in 6ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Grep
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Grep" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: ExitPlanMode
+[DEBUG] Getting matching hook commands for PreToolUse with query: ExitPlanMode
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "ExitPlanMode" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 17s
+[DEBUG] Applying permission update: Setting mode to 'acceptEdits'
+[DEBUG] Getting matching hook commands for PostToolUse with query: ExitPlanMode
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "ExitPlanMode" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 25ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 28ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Glob
+[DEBUG] Getting matching hook commands for PreToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] MCP server "acp": Calling MCP tool: Read
+[DEBUG] Getting matching hook commands for PostToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] MCP server "acp": Tool 'Read' completed successfully in 6ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Edit" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 21ms
+[DEBUG] MCP server "acp": Calling MCP tool: Edit
+[DEBUG] MCP server "acp": Tool 'Edit' completed successfully in 15ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Edit" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 24ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 1ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] MCP server "acp": Calling MCP tool: Read
+[DEBUG] MCP server "acp": Tool 'Read' completed successfully in 2ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Edit" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 27ms
+[DEBUG] MCP server "acp": Calling MCP tool: Edit
+[DEBUG] MCP server "acp": Tool 'Edit' completed successfully in 183ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Edit" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Edit" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 25ms
+[DEBUG] MCP server "acp": Calling MCP tool: Edit
+[DEBUG] MCP server "acp": Tool 'Edit' completed successfully in 362ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Edit" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Edit" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 25ms
+[DEBUG] MCP server "acp": Calling MCP tool: Edit
+[DEBUG] MCP server "acp": Tool 'Edit' completed successfully in 361ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Edit" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 25ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 514ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 24ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 306ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 21ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 348ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 23ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 326ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 22ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 417ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 24ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 334ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] executePreToolHooks called for tool: Grep
+[DEBUG] Getting matching hook commands for PreToolUse with query: Grep
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Grep" (0 before deduplication)
+[DEBUG] MCP server "acp": Calling MCP tool: Read
+[DEBUG] Getting matching hook commands for PostToolUse with query: Grep
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Grep" (0 before deduplication)
+[DEBUG] MCP server "acp": Tool 'Read' completed successfully in 28ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: ExitPlanMode
+[DEBUG] Getting matching hook commands for PreToolUse with query: ExitPlanMode
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "ExitPlanMode" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' still running (30s elapsed)
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 38s
+[DEBUG] Applying permission update: Setting mode to 'acceptEdits'
+[DEBUG] Getting matching hook commands for PostToolUse with query: ExitPlanMode
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "ExitPlanMode" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 32ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 296ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 28ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 323ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 35ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 307ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Glob
+[DEBUG] Getting matching hook commands for PreToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] executePreToolHooks called for tool: Glob
+[DEBUG] Getting matching hook commands for PreToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 27ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 722ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 25ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 297ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Glob
+[DEBUG] Getting matching hook commands for PreToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] executePreToolHooks called for tool: Glob
+[DEBUG] Getting matching hook commands for PreToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] MCP server "acp": Calling MCP tool: Read
+[DEBUG] MCP server "acp": Tool 'Read' completed successfully in 5ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] MCP server "acp": Calling MCP tool: Read
+[DEBUG] MCP server "acp": Tool 'Read' completed successfully in 1ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 27ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 9ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 24ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 6ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Glob
+[DEBUG] Getting matching hook commands for PreToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 20s
+[DEBUG] MCP server "acp": Calling MCP tool: Bash
+[DEBUG] MCP server "acp": Tool 'Bash' completed successfully in 39ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] MCP server "acp": Calling MCP tool: Read
+[DEBUG] MCP server "acp": Calling MCP tool: Read
+[DEBUG] MCP server "acp": Tool 'Read' completed successfully in 2ms
+[DEBUG] MCP server "acp": Tool 'Read' completed successfully in 3ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 26ms
+[DEBUG] MCP server "acp": Calling MCP tool: Bash
+[DEBUG] MCP server "acp": Tool 'Bash' completed successfully in 2s
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 25ms
+[DEBUG] MCP server "acp": Calling MCP tool: Bash
+[DEBUG] MCP server "acp": Tool 'Bash' completed successfully in 23ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 25ms
+[DEBUG] MCP server "acp": Calling MCP tool: Bash
+[DEBUG] MCP server "acp": Tool 'Bash' completed successfully in 435ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] MCP server "acp": Calling MCP tool: Read
+[DEBUG] MCP server "acp": Tool 'Read' completed successfully in 1ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 26ms
+[DEBUG] MCP server "acp": Calling MCP tool: Bash
+[DEBUG] MCP server "acp": Tool 'Bash' completed successfully in 653ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 23ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 2ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 22ms
+[DEBUG] MCP server "acp": Calling MCP tool: Bash
+[DEBUG] MCP server "acp": Tool 'Bash' completed successfully in 164ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 23ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 4ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 25ms
+[DEBUG] MCP server "acp": Calling MCP tool: Bash
+[DEBUG] MCP server "acp": Tool 'Bash' completed successfully in 62ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Edit" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 25ms
+[DEBUG] MCP server "acp": Calling MCP tool: Edit
+[DEBUG] MCP server "acp": Tool 'Edit' completed successfully in 26ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Edit" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 25ms
+[DEBUG] MCP server "acp": Calling MCP tool: Bash
+[DEBUG] MCP server "acp": Tool 'Bash' completed successfully in 609ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 25ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 8ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 23ms
+[DEBUG] MCP server "acp": Calling MCP tool: Bash
+[DEBUG] MCP server "acp": Tool 'Bash' completed successfully in 565ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 24ms
+[DEBUG] MCP server "acp": Calling MCP tool: Bash
+[DEBUG] MCP server "acp": Tool 'Bash' completed successfully in 41ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] MCP server "acp": Calling MCP tool: Read
+[DEBUG] MCP server "acp": Tool 'Read' completed successfully in 1ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[ERROR] Error streaming, falling back to non-streaming mode: terminated
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 26ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 9ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 25ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 9ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 24ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 6ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 25ms
+[DEBUG] MCP server "acp": Calling MCP tool: Bash
+[DEBUG] MCP server "acp": Tool 'Bash' completed successfully in 61ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 25ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 16ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 24ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 8ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 25ms
+[DEBUG] MCP server "acp": Calling MCP tool: Bash
+[DEBUG] MCP server "acp": Tool 'Bash' completed successfully in 43ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 19ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 332ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 25ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 264ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 23ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 382ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 26ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 371ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 25ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 487ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 24ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 266ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] MCP server "acp": Calling MCP tool: Read
+[DEBUG] MCP server "acp": Tool 'Read' completed successfully in 1ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] MCP server "acp": Calling MCP tool: Read
+[DEBUG] MCP server "acp": Tool 'Read' completed successfully in 3ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[ERROR] "Error streaming, falling back to non-streaming mode: 502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class=\"no-js ie7 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 8]>    <html class=\"no-js ie8 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if gt IE 8]><!--> <html class=\"no-js\" lang=\"en-US\"> <!--<![endif]-->\n<head>\n\n<title> | 500: Internal server error</title>\n<meta charset=\"UTF-8\" />\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n<meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\" />\n<meta name=\"robots\" content=\"noindex, nofollow\" />\n<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\" />\n<link rel=\"stylesheet\" id=\"cf_styles-css\" href=\"/cdn-cgi/styles/main.css\" />\n</head>\n<body>\n<div id=\"cf-wrapper\">\n    <div id=\"cf-error-details\" class=\"p-0\">\n        <header class=\"mx-auto pt-10 lg:pt-6 lg:px-8 w-240 lg:w-full mb-8\">\n            <h1 class=\"inline-block sm:block sm:mb-2 font-light text-60 lg:text-4xl text-black-dark leading-tight mr-2\">\n                <span class=\"inline-block\">Internal server error</span>\n                <span class=\"code-label\">Error code 500</span>\n            </h1>\n            <div>\n                Visit <a href=\"https://www.cloudflare.com/5xx-error-landing?utm_source=errorcode_500&utm_campaign=api.anthropic.com\" target=\"_blank\" rel=\"noopener noreferrer\">cloudflare.com</a> for more information.\n            </div>\n            <div class=\"mt-3\">2025-10-29 21:31:07 UTC</div>\n        </header>\n        <div class=\"my-8 bg-gradient-gray\">\n            <div class=\"w-240 lg:w-full mx-auto\">\n                <div class=\"clearfix md:px-8\">\n                    <div id=\"cf-browser-status\" class=\" relative w-1/3 md:w-full py-15 md:p-0 md:py-8 md:text-left md:border-solid md:border-0 md:border-b md:border-gray-400 overflow-hidden float-left md:float-none text-center\">\n  <div class=\"relative mb-10 md:m-0\">\n    \n    <span class=\"cf-icon-browser block md:hidden h-20 bg-center bg-no-repeat\"></span>\n    <span class=\"cf-icon-ok w-12 h-12 absolute left-1/2 md:left-auto md:right-0 md:top-0 -ml-6 -bottom-4\"></span>\n    \n  </div>\n  <span class=\"md:block w-full truncate\">You</span>\n  <h3 class=\"md:inline-block mt-3 md:mt-0 text-2xl text-gray-600 font-light leading-1.3\">\n  \n    Browser\n  \n  </h3>\n  \n  <span class=\"leading-1.3 text-2xl text-green-success\">Working</span>\n  \n</div>\n                    <div id=\"cf-cloudflare-status\" class=\"cf-error-source relative w-1/3 md:w-full py-15 md:p-0 md:py-8 md:text-left md:border-solid md:border-0 md:border-b md:border-gray-400 overflow-hidden float-left md:float-none text-center\">\n  <div class=\"relative mb-10 md:m-0\">\n    <a href=\"https://www.cloudflare.com/5xx-error-landing?utm_source=errorcode_500&#38;utm_campaign=api.anthropic.com\" target=\"_blank\" rel=\"noopener noreferrer\">\n    <span class=\"cf-icon-cloud block md:hidden h-20 bg-center bg-no-repeat\"></span>\n    <span class=\"cf-icon-error w-12 h-12 absolute left-1/2 md:left-auto md:right-0 md:top-0 -ml-6 -bottom-4\"></span>\n    </a>\n  </div>\n  <span class=\"md:block w-full truncate\">Manchester</span>\n  <h3 class=\"md:inline-block mt-3 md:mt-0 text-2xl text-gray-600 font-light leading-1.3\">\n  <a href=\"https://www.cloudflare.com/5xx-error-landing?utm_source=errorcode_500&utm_campaign=api.anthropic.com\" target=\"_blank\" rel=\"noopener noreferrer\">\n    Cloudflare\n  </a>\n  </h3>\n  \n  <span class=\"leading-1.3 text-2xl text-red-error\">Error</span>\n  \n</div>\n                    <div id=\"cf-host-status\" class=\" relative w-1/3 md:w-full py-15 md:p-0 md:py-8 md:text-left md:border-solid md:border-0 md:border-b md:border-gray-400 overflow-hidden float-left md:float-none text-center\">\n  <div class=\"relative mb-10 md:m-0\">\n    \n    <span class=\"cf-icon-server block md:hidden h-20 bg-center bg-no-repeat\"></span>\n    <span class=\"cf-icon-ok w-12 h-12 absolute left-1/2 md:left-auto md:right-0 md:top-0 -ml-6 -bottom-4\"></span>\n    \n  </div>\n  <span class=\"md:block w-full truncate\">api.anthropic.com</span>\n  <h3 class=\"md:inline-block mt-3 md:mt-0 text-2xl text-gray-600 font-light leading-1.3\">\n  \n    Host\n  \n  </h3>\n  \n  <span class=\"leading-1.3 text-2xl text-green-success\">Working</span>\n  \n</div>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"w-240 lg:w-full mx-auto mb-8 lg:px-8\">\n            <div class=\"clearfix\">\n                <div class=\"w-1/2 md:w-full float-left pr-6 md:pb-10 md:pr-0 leading-relaxed\">\n                    <h2 class=\"text-3xl font-normal leading-1.3 mb-4\">What happened?</h2>\n                    <p>There is an internal server error on Cloudflare's network.</p>\n                </div>\n                <div class=\"w-1/2 md:w-full float-left leading-relaxed\">\n                    <h2 class=\"text-3xl font-normal leading-1.3 mb-4\">What can I do?</h2>\n                    <p class=\"mb-6\">Please try again in a few minutes.</p>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"cf-error-footer cf-wrapper w-240 lg:w-full py-10 sm:py-4 sm:px-8 mx-auto text-center sm:text-left border-solid border-0 border-t border-gray-300\">\n    <p class=\"text-13\">\n      <span class=\"cf-footer-item sm:block sm:mb-1\">Cloudflare Ray ID: <strong class=\"font-semibold\">9965c7235d9da122</strong></span>\n      <span class=\"cf-footer-separator sm:hidden\">&bull;</span>\n      <span id=\"cf-footer-item-ip\" class=\"cf-footer-item hidden sm:block sm:mb-1\">\n        Your IP:\n        <button type=\"button\" id=\"cf-footer-ip-reveal\" class=\"cf-footer-ip-reveal-btn\">Click to reveal</button>\n        <span class=\"hidden\" id=\"cf-footer-ip\">81.106.214.33</span>\n        <span class=\"cf-footer-separator sm:hidden\">&bull;</span>\n      </span>\n      <span class=\"cf-footer-item sm:block sm:mb-1\"><span>Performance &amp; security by</span> <a rel=\"noopener noreferrer\" href=\"https://www.cloudflare.com/5xx-error-landing?utm_source=errorcode_500&#38;utm_campaign=api.anthropic.com\" id=\"brand_link\" target=\"_blank\">Cloudflare</a></span>\n      \n    </p>\n    <script>(function(){function d(){var b=a.getElementById(\"cf-footer-item-ip\"),c=a.getElementById(\"cf-footer-ip-reveal\");b&&\"classList\"in b&&(b.classList.remove(\"hidden\"),c.addEventListener(\"click\",function(){c.classList.add(\"hidden\");a.getElementById(\"cf-footer-ip\").classList.remove(\"hidden\")}))}var a=document;document.addEventListener&&a.addEventListener(\"DOMContentLoaded\",d)})();</script>\n  </div><!-- /.error-footer -->\n\n    </div>\n</div>\n</body>\n</html>"
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 27ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 32ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Getting matching hook commands for PreCompact with query: auto
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "auto" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Getting matching hook commands for SessionStart with query: compact
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "compact" (0 before deduplication)
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] MCP server "acp": Calling MCP tool: Read
+[DEBUG] MCP server "acp": Tool 'Read' completed successfully in 1ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Edit" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 26ms
+[DEBUG] MCP server "acp": Calling MCP tool: Edit
+[DEBUG] MCP server "acp": Tool 'Edit' completed successfully in 438ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Edit" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Edit" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 26ms
+[DEBUG] MCP server "acp": Calling MCP tool: Edit
+[DEBUG] MCP server "acp": Tool 'Edit' completed successfully in 185ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Edit" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Edit" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 27ms
+[DEBUG] MCP server "acp": Calling MCP tool: Edit
+[DEBUG] MCP server "acp": Tool 'Edit' completed successfully in 189ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Edit" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Edit" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 28ms
+[DEBUG] MCP server "acp": Calling MCP tool: Edit
+[DEBUG] MCP server "acp": Tool 'Edit' completed successfully in 414ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Edit" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Edit" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 28ms
+[DEBUG] MCP server "acp": Calling MCP tool: Edit
+[DEBUG] MCP server "acp": Tool 'Edit' completed successfully in 463ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Edit" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Edit" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 29ms
+[DEBUG] MCP server "acp": Calling MCP tool: Edit
+[DEBUG] MCP server "acp": Tool 'Edit' completed successfully in 211ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Edit" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Edit" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 27ms
+[DEBUG] MCP server "acp": Calling MCP tool: Edit
+[DEBUG] MCP server "acp": Tool 'Edit' completed successfully in 190ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Edit" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] MCP server "acp": Calling MCP tool: Read
+[DEBUG] MCP server "acp": Tool 'Read' completed successfully in 2ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Edit" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 28ms
+[DEBUG] MCP server "acp": Calling MCP tool: Edit
+[DEBUG] MCP server "acp": Tool 'Edit' completed successfully in 214ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Edit" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Edit" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 28ms
+[DEBUG] MCP server "acp": Calling MCP tool: Edit
+[DEBUG] MCP server "acp": Tool 'Edit' completed successfully in 66ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Edit" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] MCP server "acp": Calling MCP tool: Read
+[DEBUG] MCP server "acp": Tool 'Read' completed successfully in 6ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Read" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 30ms
+[DEBUG] MCP server "acp": Calling MCP tool: Bash
+[DEBUG] MCP server "acp": Tool 'Bash' completed successfully in 8s
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 29ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 5ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 26ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 2ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 26ms
+[DEBUG] MCP server "acp": Calling MCP tool: Write
+[DEBUG] MCP server "acp": Tool 'Write' completed successfully in 8ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Write" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 25ms
+[DEBUG] MCP server "acp": Calling MCP tool: Bash
+[DEBUG] MCP server "acp": Tool 'Bash' completed successfully in 47ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: mcp__acp__Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": Calling MCP tool: permission
+[DEBUG] MCP server "acpPermission": No token data found
+[DEBUG] MCP server "acpPermission": Tool 'permission' completed successfully in 23ms
+[DEBUG] MCP server "acp": Calling MCP tool: Bash
+[DEBUG] MCP server "acp": Tool 'Bash' completed successfully in 33ms
+[DEBUG] Getting matching hook commands for PostToolUse with query: mcp__acp__Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "mcp__acp__Bash" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Streaming aborted by user: Request was aborted.
+[ERROR] Error in non-streaming fallback: Request was aborted.
+[ERROR] "Error: Error: Request was aborted.\n    at Bl._createMessage (file:///Users/juliani/Library/Application%20Support/Zed/external_agents/claude-code-acp/0.8.0/node_modules/@anthropic-ai/claude-agent-sdk/cli.js:207:4515)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)"
+[DEBUG] Getting matching hook commands for SessionEnd with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] MCP server "acpPermission": HTTP connection closed after 4033s (with errors)
+[DEBUG] Cleaned up session snapshot: /Users/juliani/.claude/shell-snapshots/snapshot-zsh-1761769919361-zi4xhk.sh
+[DEBUG] MCP server "mcp-server-context7": Sending SIGINT to MCP server process
+[DEBUG] MCP server "mcp-server-context7": STDIO connection closed after 4033s (cleanly)
+[DEBUG] MCP server "mcp-server-context7": MCP server process exited cleanly

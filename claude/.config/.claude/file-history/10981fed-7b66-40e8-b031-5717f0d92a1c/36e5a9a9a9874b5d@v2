@@ -1,0 +1,158 @@
+import { form } from "$app/server";
+import { POLAR_ACCESS_TOKEN } from "$env/static/private";
+import { db } from "@/db/server";
+import { user } from "@/db/server/schema.server";
+import { auth } from "@/server/auth";
+import { tryPromise } from "@julian-i/try-error";
+import { Polar } from "@polar-sh/sdk";
+import { eq } from "drizzle-orm";
+import { z } from "zod";
+
+// Import auth directly instead of making HTTP calls
+
+const completeSignupSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  checkoutId: z.string().min(1, "Checkout ID is required"),
+  migrateData: z
+    .string()
+    .transform((val) => val === "true")
+    .optional()
+    .default(false),
+});
+
+const polar = new Polar({
+  accessToken: POLAR_ACCESS_TOKEN,
+  server: "sandbox",
+});
+
+export const completeSignupRemote = form(
+  completeSignupSchema,
+  async ({ email, name, password, checkoutId, migrateData }) => {
+    console.log({
+      email,
+      name,
+      password: password ? "****" : "",
+      checkoutId,
+      migrateData,
+    });
+
+    // Verify checkout with Polar
+    const [checkout, checkoutError] = await tryPromise(
+      polar.checkouts.get({ id: checkoutId })
+    );
+
+    if (checkoutError ?? !checkout) {
+      console.error("Error fetching checkout:", checkoutError ?? "No checkout");
+      return {
+        success: false,
+        error: "Invalid checkout session. Please try again or contact support.",
+      };
+    }
+
+    if (checkout.status !== "succeeded" || checkout.customerEmail !== email) {
+      return {
+        success: false,
+        error: "Checkout verification failed. Please ensure you're using the correct email address.",
+      };
+    }
+
+    // Create user account via Better-Auth directly
+    const [userData, signupError] = await tryPromise(
+      auth.api.signUpEmail({
+        body: {
+          email,
+          password,
+          name,
+        },
+      })
+    );
+
+    if (signupError) {
+      if (
+        signupError instanceof Error &&
+        signupError.message?.includes("email")
+      ) {
+        return {
+          success: false,
+          error: "An account already exists with this email address. Please sign in instead or use a different email.",
+        };
+      }
+
+      return {
+        success: false,
+        error: signupError instanceof Error
+          ? signupError.message
+          : "Failed to create account. Please try again.",
+      };
+    }
+
+    if (!userData?.user?.id) {
+      return {
+        success: false,
+        error: "Failed to create account. Please try again or contact support.",
+      };
+    }
+
+    // Update user with Polar subscription data
+    // if (userData.user?.id) {
+    const [subscriptions, subscriptionsError] = await tryPromise(
+      polar.subscriptions.list({
+        customerId: checkout.customerId,
+      })
+    );
+
+    if (subscriptionsError) {
+      console.error("⚠️ Error fetching subscriptions:", subscriptionsError);
+      return {
+        success: false,
+        error: "Account created but failed to link subscription. Please contact support.",
+      };
+    }
+
+    const activeSubscription = subscriptions.result?.items?.find(
+      (sub) => sub.status === "active" || sub.status === "trialing"
+    );
+
+    const [updateResult, updateError] = await tryPromise(
+      db
+        .update(user)
+        .set({
+          polar_customer_id: checkout.customerId || null,
+          subscription_status: activeSubscription ? "active" : "inactive",
+          current_period_end: activeSubscription?.currentPeriodEnd
+            ? new Date(activeSubscription.currentPeriodEnd)
+            : null,
+        })
+        .where(eq(user.id, userData.user.id))
+    );
+
+    if (updateError) {
+      console.error("⚠️ Error updating user:", updateError);
+      return {
+        success: false,
+        error: "Account created but failed to update subscription details. Please contact support.",
+      };
+    }
+
+    console.log({ "User update result": updateResult });
+    console.log("User created and subscription updated:", {
+      userId: userData.user.id,
+      email: userData.user.email,
+      checkoutId,
+      polar_customer_id: checkout.customerId,
+      subscription_status: activeSubscription ? "active" : "inactive",
+    });
+
+    return {
+      success: true,
+      user: {
+        id: userData.user.id,
+        email: userData.user.email,
+        name: userData.user.name,
+      },
+      migrateData,
+    };
+  }
+);

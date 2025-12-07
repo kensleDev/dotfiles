@@ -1,0 +1,79 @@
+<script lang="ts">
+  import { getAuthState } from "@/auth/guards.svelte";
+  import CancelSubscription from "@/billing/components/CancelSubscription/CancelSubscription.svelte";
+  import Button from "@/components/ui/button/button.svelte";
+  import * as Sheet from "@/components/ui/sheet";
+  import { ArrowUp, LogIn, Menu } from "@lucide/svelte";
+  import { onMount } from "svelte";
+
+  let sheetOpen = $state(false);
+  let authStatus = $state<"anon" | "unsubscribed" | "subscribed">("anon");
+
+  // Check auth status on mount and periodically
+  onMount(async () => {
+    authStatus = await getAuthState();
+
+    // Recheck every 30 seconds to catch subscription changes
+    const interval = setInterval(async () => {
+      authStatus = await getAuthState();
+    }, 30000);
+
+    return () => clearInterval(interval);
+  });
+
+  let { signOut }: { signOut: () => void } = $props();
+</script>
+
+<section class="md:hidden">
+  <Sheet.Root bind:open={sheetOpen}>
+    <Sheet.Trigger>
+      <Button variant="outline" size="icon">
+        <Menu class="h-[1.2rem] w-[1.2rem]" />
+        <span class="sr-only">Open menu</span>
+      </Button>
+    </Sheet.Trigger>
+    <Sheet.Content side="right" class="px-4">
+      <!-- <Sheet.Header>
+        <Sheet.Title>Settings</Sheet.Title>
+        <Sheet.Description>Customize your preferences</Sheet.Description>
+      </Sheet.Header> -->
+      <div class="py-6 space-y-4 pt-16">
+        <!-- <div class="flex items-center justify-between">
+          <span class="text-sm font-medium">Theme</span>
+          <ThemeSwitch />
+        </div> -->
+
+        {#if authStatus === "anon"}
+          <Button
+            href="/auth/sign-in"
+            variant="outline"
+            onclick={() => signOut()}
+            class="hover:text-green-400 hover:!border-green-400 border w-full"
+          >
+            <LogIn />
+            Sign In
+          </Button>
+
+          <Button
+            href="/subscribe"
+            variant="outline"
+            onclick={() => signOut()}
+            class="hover:text-blue-300 hover:!border-blue-300 border w-full"
+          >
+            <ArrowUp />
+            Upgrade
+          </Button>
+        {:else}
+          <Button
+            href="/auth/sign-out"
+            onclick={() => signOut()}
+            variant="outline"
+            class="w-full hover:text-red-400">Sign Out</Button
+          >
+
+          <CancelSubscription />
+        {/if}
+      </div>
+    </Sheet.Content>
+  </Sheet.Root>
+</section>

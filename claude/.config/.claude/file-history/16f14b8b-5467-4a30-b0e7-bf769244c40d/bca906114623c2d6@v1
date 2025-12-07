@@ -1,0 +1,70 @@
+import Dexie, { type EntityTable } from "dexie";
+
+// Define the Scan interface
+export interface Scan {
+  id?: string;
+  data: string;
+  qrcode: string;
+  created_at: Date;
+  visited: boolean;
+  isSafe: boolean;
+}
+
+// Function to create a new Dexie database instance
+export function createDatabase(dbName: string = "SecureQRDB") {
+  const db = new Dexie(dbName) as Dexie & {
+    scans: EntityTable<Scan, "id">;
+  };
+
+  // Define schema version 1
+  db.version(1).stores({
+    scans: "id, data, created_at, visited, isSafe",
+  });
+
+  return db;
+}
+
+// Database instances for different contexts
+export const anonymousDb = createDatabase("SecureQRDB_Anonymous");
+export const loggedInDb = createDatabase("SecureQRDB_LoggedIn");
+
+// Export a default instance for backward compatibility (e.g., for non-logged-in users)
+export const db = anonymousDb;
+
+// Utility function to get the appropriate database based on auth status
+export function getDatabase(isLoggedIn: boolean = false) {
+  return isLoggedIn ? loggedInDb : anonymousDb;
+}
+
+// Data migration utility
+export async function migrateAnonymousDataToLoggedIn() {
+  try {
+    // Get all data from anonymous database
+    const anonymousScans = await anonymousDb.scans.toArray();
+    
+    if (anonymousScans.length === 0) {
+      return { success: true, migratedCount: 0 };
+    }
+
+    // Transfer data to logged-in database
+    await loggedInDb.scans.bulkAdd(anonymousScans);
+    
+    // Clear anonymous database after successful migration
+    await anonymousDb.scans.clear();
+    
+    return { success: true, migratedCount: anonymousScans.length };
+  } catch (error) {
+    console.error("Data migration failed:", error);
+    return { success: false, error: error instanceof Error ? error.message : "Unknown error" };
+  }
+}
+
+// Utility to get scan count from anonymous database
+export async function getAnonymousDataCount() {
+  try {
+    return await anonymousDb.scans.count();
+  } catch (error) {
+    console.error("Failed to count anonymous data:", error);
+    return 0;
+  }
+}

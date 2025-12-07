@@ -1,0 +1,104 @@
+import { POLAR_ACCESS_TOKEN } from "$env/static/private";
+import { db } from "@/db/server";
+import { user } from "@/db/server/schema.server";
+import { Polar } from "@polar-sh/sdk";
+import type { RequestHandler } from "@sveltejs/kit";
+import { json } from "@sveltejs/kit";
+import { eq } from "drizzle-orm";
+import { z } from "zod";
+
+const completeSignupSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  checkoutId: z.string().min(1, "Checkout ID is required"),
+  migrateData: z.boolean().optional().default(false),
+});
+
+const polar = new Polar({
+  accessToken: POLAR_ACCESS_TOKEN,
+  server: "sandbox",
+});
+
+export const POST: RequestHandler = async ({ request, url }) => {
+  try {
+    const body = await request.json();
+    const validatedData = completeSignupSchema.parse(body);
+
+    // Verify checkout with Polar
+    const checkout = await polar.checkouts.get({
+      id: validatedData.checkoutId,
+    });
+    if (
+      checkout.status !== "succeeded" ||
+      checkout.customerEmail !== validatedData.email
+    ) {
+      return json({ error: "Invalid checkout session" }, { status: 400 });
+    }
+
+    // Create user account via Better-Auth
+    const signUpResponse = await fetch(`${url.origin}/api/auth/sign-up/email`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: validatedData.email,
+        password: validatedData.password,
+        name: validatedData.name,
+      }),
+    });
+
+    if (!signUpResponse.ok) {
+      const errorData = await signUpResponse.json();
+      return json(
+        {
+          error: errorData.message?.includes("email")
+            ? "Account already exists with this email"
+            : errorData.message || "Failed to create account",
+        },
+        { status: signUpResponse.status === 400 ? 409 : 500 }
+      );
+    }
+
+    const userData = await signUpResponse.json();
+
+    // Update user with Polar subscription data
+    if (userData.user?.id) {
+      try {
+        const subscriptions = await polar.subscriptions.list({
+          customerId: checkout.customerId,
+        });
+        const activeSubscription = subscriptions.result?.items?.find(
+          (sub) => sub.status === "active" || sub.status === "trialing"
+        );
+
+        await db
+          .update(user)
+          .set({
+            polarCustomerId: checkout.customerId || null,
+            subscriptionStatus: activeSubscription ? "active" : "inactive",
+            currentPeriodEnd: activeSubscription?.currentPeriodEnd
+              ? new Date(activeSubscription.currentPeriodEnd)
+              : null,
+          })
+          .where(eq(user.id, userData.user.id));
+      } catch (error) {
+        console.error("Error updating user subscription:", error);
+      }
+    }
+
+    return json({
+      success: true,
+      user: userData.user,
+      migrateData: validatedData.migrateData,
+    });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return json(
+        { error: "Invalid request data", details: error.issues },
+        { status: 400 }
+      );
+    }
+    console.error("Unexpected error:", error);
+    return json({ error: "Internal server error" }, { status: 500 });
+  }
+};

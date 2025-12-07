@@ -1,0 +1,75 @@
+import { betterAuth } from "better-auth";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
+
+import {
+  GITHUB_CLIENT_ID,
+  GITHUB_CLIENT_SECRET,
+  GITHUB_OAUTH_REDIRECT_URI,
+} from "$env/static/private";
+
+import { db } from "@/db/server";
+
+import * as schema from "../db/server/schema.server";
+// import { sendEmail } from '$lib/email';
+
+export const auth = betterAuth({
+  database: drizzleAdapter(db, {
+    provider: "pg",
+    schema: {
+      ...schema,
+    },
+  }),
+
+  user: {
+    additionalFields: {
+      polarCustomerId: {
+        type: "string",
+        required: false,
+        fieldName: "polar_customer_id"
+      },
+      subscriptionStatus: {
+        type: "string",
+        required: false,
+        defaultValue: "inactive",
+        fieldName: "subscription_status"
+      },
+      activationToken: {
+        type: "string",
+        required: false,
+        fieldName: "activation_token"
+      },
+      currentPeriodEnd: {
+        type: "date",
+        required: false,
+        fieldName: "current_period_end"
+      }
+    }
+  },
+
+  socialProviders: {
+    github: {
+      clientId: GITHUB_CLIENT_ID,
+      clientSecret: GITHUB_CLIENT_SECRET,
+      redirectURI: GITHUB_OAUTH_REDIRECT_URI,
+    },
+    // google: {
+    //   clientId: GOOGLE_CLIENT_ID,
+    //   clientSecret: GOOGLE_CLIENT_SECRET,
+    //   redirectURI: GOOGLE_OAUTH_REDIRECT_URI,
+    // },
+  },
+  emailAndPassword: {
+    enabled: true,
+  },
+
+  // emailVerification: {
+  // 	sendVerificationEmail: async ({ user, url, token }, request) => {
+  // 		await sendEmail({
+  // 			from: 'Your Company <onboarding@yourdomain.com>',
+  // 			to: user.email,
+  // 			subject: 'Verify your email address',
+  // 			text: `Click the link to verify your email: ${url}`
+  // 		});
+  // 	}
+  // }
+});

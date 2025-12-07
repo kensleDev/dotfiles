@@ -1,0 +1,5 @@
+<script>
+  import ScanPageView from "@/scan/components/ScanPageView.svelte";
+</script>
+
+<ScanPageView />
