@@ -1,0 +1,22 @@
+import { CustomerPortal } from "@polar-sh/sveltekit";
+
+// function getUser(userId: string) {
+//   return db.select().from(user).where(eq(user.id, userId)).limit(1);
+// }
+
+async function getCustomerId(event: any) {
+  // const session = await authClient.getSession();
+  // console.log({ session });
+  console.log({ event });
+  // const userId = event.locals.user.id;
+  // console.log({ locals: event.locals });
+  // const userRecord = await getUser(userId);
+  // return userRecord?.polarCustomerId || null;
+  return "";
+}
+
+export const GET = CustomerPortal({
+  accessToken: process.env.POLAR_ACCESS_TOKEN!,
+  getCustomerId,
+  server: "sandbox", // Use sandbox if you're testing Polar - omit the parameter or pass 'production' otherwise
+});

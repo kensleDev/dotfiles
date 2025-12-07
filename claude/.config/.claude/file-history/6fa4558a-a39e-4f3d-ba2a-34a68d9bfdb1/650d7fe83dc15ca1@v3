@@ -1,0 +1,97 @@
+import * as fs from 'fs';
+import * as path from 'path';
+import { GameState, Tool } from '../types';
+
+export class StateManager {
+  private static readonly STATE_FILE = path.join(process.cwd(), '.cli-quest-state.json');
+
+  static loadState(): GameState {
+    if (fs.existsSync(this.STATE_FILE)) {
+      try {
+        return JSON.parse(fs.readFileSync(this.STATE_FILE, 'utf-8'));
+      } catch {
+        return this.createNewState();
+      }
+    }
+    return this.createNewState();
+  }
+
+  static createNewState(): GameState {
+    return {
+      currentTool: null,
+      currentChallengeInTool: 0,
+      completedChallenges: [],
+      unlockedTools: ['fd', 'sed', 'awk', 'jq', 'rsync'], // All tools are available from start
+      hintsUsed: {},
+      startTime: Date.now(),
+      toolProgress: {
+        fd: 0,
+        sed: 0,
+        awk: 0,
+        jq: 0,
+        rsync: 0
+      }
+    };
+  }
+
+  static saveState(state: GameState) {
+    fs.writeFileSync(this.STATE_FILE, JSON.stringify(state, null, 2));
+  }
+
+  static resetState() {
+    const newState = this.createNewState();
+    this.saveState(newState);
+    return newState;
+  }
+
+  static cleanup() {
+    const gameDir = path.join(process.cwd(), '.cli-quest-game');
+    if (fs.existsSync(gameDir)) {
+      fs.rmSync(gameDir, { recursive: true, force: true });
+    }
+  }
+
+  static unlockNextTool(state: GameState, tool: Tool): GameState {
+    // Increment the tool progress
+    state.toolProgress[tool]++;
+
+    // Check if this completes a tool
+    if (state.toolProgress[tool] === 1) {
+      // First challenge completed unlocks next tool
+      const toolOrder: Tool[] = ['fd', 'sed', 'awk', 'jq', 'rsync'];
+      const currentIndex = toolOrder.indexOf(tool);
+      if (currentIndex < toolOrder.length - 1) {
+        const nextTool = toolOrder[currentIndex + 1];
+        state.unlockedTools.push(nextTool);
+      }
+    }
+
+    return state;
+  }
+
+  static markChallengeCompleted(state: GameState, challengeId: string, tool: Tool): GameState {
+    state.completedChallenges.push(challengeId);
+    state = this.unlockNextTool(state, tool);
+    this.saveState(state);
+    return state;
+  }
+
+  static markHintUsed(state: GameState, challengeId: string): GameState {
+    state.hintsUsed[challengeId] = (state.hintsUsed[challengeId] || 0) + 1;
+    this.saveState(state);
+    return state;
+  }
+
+  static canAccessChallenge(tool: Tool, challengeIndex: number, state: GameState): boolean {
+    if (state.currentTool && state.currentTool !== tool) {
+      return false;
+    }
+
+    const challengesCompleted = state.toolProgress[tool];
+    return challengeIndex <= challengesCompleted;
+  }
+
+  static isToolUnlocked(tool: Tool, state: GameState): boolean {
+    return state.unlockedTools.includes(tool);
+  }
+}

@@ -1,0 +1,258 @@
+# AGENTS.md
+
+## Memory settings
+
+CRITICAL: Update the docs/memory/progress.md feature update. Add bug reports to docs/memory/bugs.md, log every architectural decision you make to docs/memory/decisions.md. Make sure to include which user story or feature request each decision is related to.
+
+## Tools
+Always use context7 mcp if availeble to you
+
+---
+
+# Console Learning Platform - Phase 1 MVP
+
+## Project Overview
+
+A pure client-side, terminal-first learning platform for bash commands built with SvelteKit 5, WebContainers, and xterm.js. Phase 1 is 100% browser-based with no authentication or server-side sync - just an immersive TUI experience.
+
+## Core Architecture
+
+### Technology Stack
+- **Frontend**: SvelteKit 5 (latest stable) with runes and reactive classes
+- **Terminal**: xterm.js with addons (fit, web-links, search)
+- **Execution**: WebContainers API for Node.js runtime
+- **State Management**: Svelte 5 reactive classes using `$state` runes
+- **Storage**: IndexedDB via Dexie.js for local persistence
+- **Routing**: Shallow routing with URL state sync
+- **Styling**: Minimal CSS with TailwindCSS (light usage)
+- **Build**: Vite with static site generation
+- **Deployment**: CDN hosting (Vercel/Netlify/Cloudflare Pages)
+
+### Key Architectural Patterns
+
+#### 1. Single Terminal Instance
+- One persistent terminal component that never unmounts
+- WebContainer singleton reused across all challenges
+- Terminal always focused and responsive
+
+#### 2. Command-Driven Navigation
+- All routing via terminal commands (`cd`, `ls`, etc.)
+- Shallow routing syncs URL ↔ terminal context
+- Browser back/forward buttons work with terminal history
+- Bookmarkable URLs for every state
+
+#### 3. Pure TUI (Terminal User Interface)
+- Everything happens in the terminal - no GUI distractions
+- ASCII art for UI elements and feedback
+- Command palette (Ctrl+K) for fuzzy search
+- Complete keyboard navigation support
+
+#### 4. Local-First Architecture
+- 100% client-side - no servers, no API calls
+- Progress stored in IndexedDB (persists across sessions)
+- Works offline after initial load
+- Zero backend costs
+
+## Directory Structure
+
+```
+src/
+├── lib/
+│   ├── components/
+│   │   ├── Terminal.svelte          # Single persistent terminal instance
+│   │   ├── CommandPalette.svelte    # Ctrl+K fuzzy search overlay
+│   │   └── TerminalOutput.svelte    # Terminal output rendering
+│   │
+│   ├── commands/                    # Terminal command system
+│   │   ├── CommandRegistry.ts       # Command registration and routing
+│   │   ├── CommandParser.ts         # Parse user input into commands
+│   │   ├── builtins/                # Built-in shell commands
+│   │   └── app/                     # App-specific commands
+│   │
+│   ├── classes/                     # Svelte 5 reactive classes
+│   │   ├── TerminalState.svelte.ts  # Terminal state & history
+│   │   ├── ChallengeState.svelte.ts # Current challenge state
+│   │   ├── ProgressState.svelte.ts  # User progress (IndexedDB)
+│   │   ├── WebContainerState.svelte.ts # WebContainer manager
+│   │   └── RouterState.svelte.ts    # Shallow routing state sync
+│   │
+│   ├── services/
+│   │   ├── webcontainer.ts          # WebContainer initialization
+│   │   ├── validation.ts            # Challenge validation logic
+│   │   ├── storage.ts               # IndexedDB wrapper (Dexie)
+│   │   ├── terminal-renderer.ts     # ANSI rendering utilities
+│   │   └── fuzzy-search.ts          # Command palette search
+│   │
+│   ├── contexts/                    # Context API setup
+│   │   ├── terminal.svelte.ts       # Terminal context
+│   │   ├── challenge.svelte.ts      # Challenge context
+│   │   ├── progress.svelte.ts       # Progress context
+│   │   └── router.svelte.ts         # Router context
+│   │
+│   ├── types/
+│   │   ├── command.ts               # Command type definitions
+│   │   ├── challenge.ts             # Challenge type definitions
+│   │   └── validation.ts            # Validation type definitions
+│   │
+│   └── data/
+│       └── challenges/              # Challenge definitions
+│           ├── index.ts             # Challenge registry
+│           ├── easy/                # 4 easy challenges
+│           ├── medium/               # 4 medium challenges
+│           └── hard/                 # 2 hard challenges
+│
+├── routes/
+│   ├── +page.svelte                 # Main terminal page
+│   ├── +layout.svelte               # Minimal layout
+│   ├── challenges/[id]/+page.svelte  # Shallow routes
+│   └── dashboard/+page.svelte       # Shallow routes
+│
+├── tests/                           # Unit and E2E tests
+└── app.css                          # Minimal global styles
+```
+
+## Core Features
+
+### 1. Challenge System
+- 10 challenges (4 easy, 4 medium, 2 hard)
+- Challenge versioning system (v1.0.0+)
+- Progressive hints (3 per challenge)
+- Local validation in WebContainer
+- Filesystem isolation per challenge
+
+### 2. WebContainer Terminal
+- Full bash shell access
+- Command history with arrow keys
+- Tab completion for files/commands
+- Copy/paste support
+- Command timeout (30 seconds)
+
+### 3. Progress Tracking
+- Local storage in IndexedDB
+- Challenge completion tracking
+- Time/command/hints statistics
+- Export progress as JSON
+- Progress dashboard (ASCII art)
+
+### 4. Command System
+- Navigation: `cd`, `ls`, `pwd`
+- Challenge: `check`, `hint`, `next`, `reset`
+- Progress: `dashboard`, `stats`, `export`
+- Utility: `help`, `clear`, `Ctrl+L`
+- Bash pass-through: All standard commands
+
+### 5. Command Palette (Ctrl+K)
+- Fuzzy search through commands
+- Recent command history
+- Quick actions (next challenge, reset)
+- Keyboard navigation (arrows, enter, escape)
+
+### 6. URL Routing
+- Shallow routing without page reloads
+- Browser back/forward buttons work
+- Direct URL access to any state
+- Shareable URLs for challenges
+
+## User Stories
+
+**120 comprehensive user stories** are documented in `docs/user-stories/phase-1/`:
+
+- **Core Features** (45 stories): Terminal, navigation, challenges, progress, commands
+- **Technical Infrastructure** (45 stories): WebContainer, validation, storage, testing
+- **Performance & UX** (30 stories): Performance, UX, aesthetics, mobile, accessibility
+- **Acceptance Criteria** (45 stories): Verification for all requirements
+
+Key stories to prioritize:
+- US-01-TERMINAL-01: Terminal Initialization (<3s boot)
+- US-01-CHALLENGE-01: Challenge Navigation (cd commands)
+- US-01-TECH-01: WebContainer Initialization (singleton pattern)
+- US-01-PROGRESS-01: Progress Dashboard (local storage)
+- US-01-COMMAND-PALETTE-01: Command Palette (Ctrl+K)
+
+## Performance Targets
+
+- **WebContainer boot**: <3 seconds (p95)
+- **First contentful paint**: <1.5 seconds
+- **Challenge validation**: <1 second
+- **Memory usage**: <512MB during 30min session
+- **Command response**: <50ms
+- **IndexedDB queries**: <50ms
+
+## Phase 1 Scope (In Scope)
+- Pure TUI interface (single terminal)
+- 10 bash challenges (4 easy, 4 medium, 2 hard)
+- WebContainer-powered command execution
+- Shallow routing for URL state sync
+- Local-only progress (browser storage)
+- Command palette (Ctrl+K)
+- Challenge versioning system
+- Offline-first (PWA)
+
+## Phase 2+ (Out of Scope)
+- User authentication
+- Cross-device sync
+- Server-side database
+- vim/nano editors
+- Social features
+- Paid features
+- Multi-language support
+
+## Implementation Plan
+
+### Week 1: Foundation
+- SvelteKit 5 + TypeScript setup
+- xterm.js integration
+- WebContainer initialization
+- Basic routing structure
+
+### Week 2: Command System & State
+- Svelte 5 reactive classes
+- Command registry
+- Shallow routing
+- IndexedDB wrapper
+
+### Week 3: Challenges & Validation
+- Challenge system
+- Validation engine
+- 10 complete challenges
+- Progress persistence
+
+### Week 4: Polish & Features
+- Command palette
+- Dashboard & stats
+- Tutorial & onboarding
+- Testing & fixes
+
+### Week 5: PWA & Deployment
+- Service Worker setup
+- Build optimization
+- Deployment
+- Documentation
+
+## Key Technical Decisions
+
+1. **Pure Client-Side**: No servers, zero backend costs
+2. **Single Terminal**: Never unmounts, persistent experience
+3. **Shallow Routing**: URL sync without page reloads
+4. **WebContainer Singleton**: Reused across challenges
+5. **Svelte 5 Runes**: Reactive classes with `$state`
+6. **IndexedDB**: Local persistence, works offline
+7. **Static Site**: No server required, CDN deployment
+
+## Development Guidelines
+
+- **Terminal-first**: Everything happens in the terminal
+- **User stories**: Map implementation to user stories
+- **Acceptance criteria**: Verify all criteria are met
+- **Performance**: Meet all performance targets
+- **Accessibility**: WCAG 2.1 AA compliance
+- **Testing**: Comprehensive unit and E2E tests
+- **Documentation**: Self-documenting code, no TSDoc
+
+## Success Metrics
+
+- **Engagement**: 90%+ challenge completion rate
+- **Performance**: WebContainer boot <3s
+- **User Experience**: 95%+ tutorial completion
+- **Technical**: App loads <2s on 4G
+- **Business**: 100+ unique users, 15+ min session duration

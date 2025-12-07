@@ -1,0 +1,69 @@
+<script lang="ts">
+	import type { PageWithoutContent } from '@/db/client/triplit/schema';
+	import PageTreeNode from '../PageTreeNode.svelte';
+
+	type Props = {
+		pages: PageWithoutContent[];
+		currentPageId?: string;
+		onRename?: (pageId: string, newTitle: string) => void;
+		onDelete?: (pageId: string) => void;
+	};
+
+	let { pages, currentPageId = '', onRename, onDelete }: Props = $props();
+
+	type NestedPage = PageWithoutContent & {
+		children: NestedPage[];
+		expanded: boolean;
+	};
+
+	function buildPageTree(pages: PageWithoutContent[], currentPageId: string): NestedPage[] {
+		const pagesById = new Map<string, NestedPage>();
+		const roots: NestedPage[] = [];
+
+		// First pass: create all page nodes with empty children arrays
+		pages.forEach((page) => {
+			pagesById.set(page.id, { ...page, children: [], expanded: false });
+		});
+
+		// Second pass: build the tree structure
+		pagesById.forEach((page) => {
+			if (page.parentId && pagesById.has(page.parentId)) {
+				pagesById.get(page.parentId)!.children.push(page);
+			} else {
+				roots.push(page);
+			}
+		});
+
+		// Third pass: find ancestors of current page and mark them as expanded
+		if (currentPageId) {
+			const ancestorIds = new Set<string>();
+			let currentNode = pagesById.get(currentPageId);
+
+			// Walk up the tree to collect all ancestor IDs
+			while (currentNode?.parentId) {
+				ancestorIds.add(currentNode.parentId);
+				currentNode = pagesById.get(currentNode.parentId);
+			}
+
+			// Expand all ancestors
+			ancestorIds.forEach((ancestorId) => {
+				const ancestor = pagesById.get(ancestorId);
+				if (ancestor) {
+					ancestor.expanded = true;
+				}
+			});
+		}
+
+		return roots;
+	}
+
+	let pageTree = $derived(buildPageTree(pages, currentPageId));
+</script>
+
+<div class="p-2">
+	<ul class="min-w-fit">
+		{#each pageTree as page}
+			<PageTreeNode {page} {onRename} {onDelete} />
+		{/each}
+	</ul>
+</div>

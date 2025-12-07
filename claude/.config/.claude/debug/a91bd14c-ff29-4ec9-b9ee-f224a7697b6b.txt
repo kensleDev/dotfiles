@@ -1,0 +1,125 @@
+[DEBUG] Watching for changes in setting files /Users/juliani/repos/svelte5/secure_qr/.claude/settings.local.json...
+[DEBUG] Applying permission update: Adding 15 allow rule(s) to destination 'localSettings': ["Bash(find:*)","Bash(bun run:*)","Bash(pkill:*)","Bash(true)","mcp__chrome-devtools__new_page","Bash(curl:*)","mcp__chrome-devtools__list_pages","Bash(timeout 20 bun run dev)","Bash(mv:*)","Bash(node:*)","Bash(rm:*)","Bash(timeout 30 bun run dev)","Bash(cat:*)","WebSearch","WebFetch(domain:www.better-auth.com)"]
+[DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+[DEBUG] Creating shell snapshot for zsh (/bin/zsh)
+[DEBUG] Looking for shell config file: /Users/juliani/.zshrc
+[DEBUG] Snapshots directory: /Users/juliani/.claude/shell-snapshots
+[DEBUG] Creating snapshot at: /Users/juliani/.claude/shell-snapshots/snapshot-zsh-1760262124720-cic01h.sh
+[DEBUG] Shell binary exists: true
+[DEBUG] Execution timeout: 10000ms
+[DEBUG] Writing to temp file: /Users/juliani/.claude/todos/a91bd14c-ff29-4ec9-b9ee-f224a7697b6b-agent-a91bd14c-ff29-4ec9-b9ee-f224a7697b6b.json.tmp.34506.1760262124721
+[DEBUG] Temp file written successfully, size: 2 bytes
+[DEBUG] Renaming /Users/juliani/.claude/todos/a91bd14c-ff29-4ec9-b9ee-f224a7697b6b-agent-a91bd14c-ff29-4ec9-b9ee-f224a7697b6b.json.tmp.34506.1760262124721 to /Users/juliani/.claude/todos/a91bd14c-ff29-4ec9-b9ee-f224a7697b6b-agent-a91bd14c-ff29-4ec9-b9ee-f224a7697b6b.json
+[DEBUG] File /Users/juliani/.claude/todos/a91bd14c-ff29-4ec9-b9ee-f224a7697b6b-agent-a91bd14c-ff29-4ec9-b9ee-f224a7697b6b.json written atomically
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.34506.1760262124731
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 48089 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.34506.1760262124731 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Registered 0 hooks from 0 plugins
+[DEBUG] Loading skills from directories: managed=/Library/Application Support/ClaudeCode/.claude/skills, user=/Users/juliani/.claude/skills, project=/Users/juliani/repos/svelte5/secure_qr/.claude/skills
+[DEBUG] Loaded 0 skills total (managed: 0, user: 0, project: 0)
+[DEBUG] Total plugin commands loaded: 0
+[DEBUG] Total plugin skills loaded: 0
+[DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=/Users/juliani/.nvm/versions/node/v22.19.0/lib/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/arm64-darwin/rg)
+[DEBUG] Total plugin agents loaded: 0
+[DEBUG] Summarizing last 5 of 87 messages (~146895 tokens)
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.34506.1760262124864
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 48089 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.34506.1760262124864 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.34506.1760262124869
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 48089 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.34506.1760262124869 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] MCP server "chrome-devtools": Starting connection with timeout of 30000ms
+[DEBUG] MCP server "context7": Initializing HTTP transport to https://mcp.context7.com/mcp
+[DEBUG] MCP server "context7": Node version: v22.19.0, Platform: darwin
+[DEBUG] MCP server "context7": Environment: {"NODE_OPTIONS":"not set","UV_THREADPOOL_SIZE":"default","HTTP_PROXY":"not set","HTTPS_PROXY":"not set","NO_PROXY":"not set"}
+[DEBUG] MCP server "context7": MTLS options: default
+[DEBUG] MCP server "context7": HTTP transport options: {"url":"https://mcp.context7.com/mcp","headers":{"User-Agent":"claude-code/2.0.14","CONTEXT7_API_KEY":"ctx7sk-5e8dc899-e2ad-4931-a6e9-28825594977e"},"hasAuthProvider":true,"timeoutMs":60000}
+[DEBUG] MCP server "context7": HTTP transport created successfully
+[DEBUG] MCP server "context7": Client created, setting up request handler
+[DEBUG] MCP server "context7": Starting connection with timeout of 30000ms
+[DEBUG] MCP server "context7": Testing basic HTTP connectivity to https://mcp.context7.com/mcp
+[DEBUG] MCP server "context7": Parsed URL: host=mcp.context7.com, port=default, protocol=https:
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.34506.1760262125592
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 48089 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.34506.1760262125592 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Executing hooks for SessionStart:startup
+[DEBUG] Getting matching hook commands for SessionStart with query: startup
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] MCP server "context7": No token data found
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.34506.1760262125636
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 47984 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.34506.1760262125636 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.34506.1760262125641
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 47984 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.34506.1760262125641 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] performStartupChecks called, ENABLE_PLUGINS=true
+[DEBUG] Starting background plugin installations
+[DEBUG] performBackgroundPluginInstallations called
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.34506.1760262125673
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 48089 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.34506.1760262125673 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Setting installation status: 0 marketplaces, 0 installable plugins, 0 uninstallable plugins
+[DEBUG] Loaded plugins - Enabled: 0, Disabled: 0, Commands: 0, Agents: 0, Errors: 0
+[DEBUG] Shell snapshot created successfully (177802 bytes)
+[DEBUG] MCP server "context7": No token data found
+[DEBUG] MCP server "context7": No token data found
+[DEBUG] MCP server "context7": Successfully connected to http server in 825ms
+[DEBUG] MCP server "context7": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"Context7","version":"1.0.13"}}
+[DEBUG] MCP server "context7": No token data found
+[ERROR] MCP server "chrome-devtools" Server stderr: chrome-devtools-mcp exposes content of the browser instance to the MCP clients allowing them to inspect,
+debug, and modify any data in the browser or DevTools.
+Avoid sharing sensitive or personal information that you do not want to share with MCP clients.
+[DEBUG] MCP server "chrome-devtools": Successfully connected to stdio server in 1433ms
+[DEBUG] MCP server "chrome-devtools": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"chrome_devtools","title":"Chrome DevTools MCP server","version":"0.8.0"}}
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Executing hooks for SessionStart:resume
+[DEBUG] Getting matching hook commands for SessionStart with query: resume
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "resume" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] FileHistory: Copied backup a6e601c9f5837d03@v1 from session 84e90df1-95ea-4d72-9d10-0b2085a6d38f to a91bd14c-ff29-4ec9-b9ee-f224a7697b6b
+[DEBUG] FileHistory: Copied backup a96520d8c0636597@v1 from session 84e90df1-95ea-4d72-9d10-0b2085a6d38f to a91bd14c-ff29-4ec9-b9ee-f224a7697b6b
+[DEBUG] FileHistory: Copied backup a6e601c9f5837d03@v2 from session 84e90df1-95ea-4d72-9d10-0b2085a6d38f to a91bd14c-ff29-4ec9-b9ee-f224a7697b6b
+[DEBUG] FileHistory: Copied backup a96520d8c0636597@v2 from session 84e90df1-95ea-4d72-9d10-0b2085a6d38f to a91bd14c-ff29-4ec9-b9ee-f224a7697b6b
+[DEBUG] FileHistory: Copied backup 39571aed7bd51f09@v1 from session 84e90df1-95ea-4d72-9d10-0b2085a6d38f to a91bd14c-ff29-4ec9-b9ee-f224a7697b6b
+[DEBUG] FileHistory: Copied backup 39571aed7bd51f09@v2 from session 84e90df1-95ea-4d72-9d10-0b2085a6d38f to a91bd14c-ff29-4ec9-b9ee-f224a7697b6b
+[DEBUG] FileHistory: Copied backup a96520d8c0636597@v3 from session 84e90df1-95ea-4d72-9d10-0b2085a6d38f to a91bd14c-ff29-4ec9-b9ee-f224a7697b6b
+[DEBUG] FileHistory: Copied backup 39571aed7bd51f09@v3 from session 84e90df1-95ea-4d72-9d10-0b2085a6d38f to a91bd14c-ff29-4ec9-b9ee-f224a7697b6b
+[DEBUG] FileHistory: Copied backup 571cbec20bd214e0@v1 from session 84e90df1-95ea-4d72-9d10-0b2085a6d38f to a91bd14c-ff29-4ec9-b9ee-f224a7697b6b
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.34506.1760262130324
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 47984 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.34506.1760262130324 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.34506.1760262130332
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 47984 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.34506.1760262130332 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically

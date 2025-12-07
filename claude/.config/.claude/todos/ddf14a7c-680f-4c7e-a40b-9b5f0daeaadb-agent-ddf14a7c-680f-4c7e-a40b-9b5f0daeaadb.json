@@ -1,0 +1,22 @@
+[
+  {
+    "content": "Investigate BlockNote's keyboard event handling",
+    "status": "completed",
+    "id": "1"
+  },
+  {
+    "content": "Find how to prevent editor from intercepting Enter/Space on page links",
+    "status": "completed",
+    "id": "2"
+  },
+  {
+    "content": "Implement proper event handling to stop propagation",
+    "status": "completed",
+    "id": "3"
+  },
+  {
+    "content": "Test the fixed keyboard navigation",
+    "status": "completed",
+    "id": "4"
+  }
+]

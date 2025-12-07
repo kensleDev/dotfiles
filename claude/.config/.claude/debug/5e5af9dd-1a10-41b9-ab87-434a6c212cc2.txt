@@ -1,0 +1,893 @@
+[DEBUG] Watching for changes in setting files /Users/juliani/repos/svelte5/secure_qr/.claude/settings.local.json...
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.6002.1760181755262
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 41063 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.6002.1760181755262 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Applying permission update: Adding 12 allow rule(s) to destination 'localSettings': ["Bash(find:*)","Bash(bun run:*)","Bash(pkill:*)","Bash(true)","mcp__chrome-devtools__new_page","Bash(curl:*)","mcp__chrome-devtools__list_pages","Bash(timeout 20 bun run dev)","Bash(mv:*)","Bash(node:*)","Bash(rm:*)","Bash(timeout 30 bun run dev)"]
+[DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+[DEBUG] Creating shell snapshot for zsh (/bin/zsh)
+[DEBUG] Looking for shell config file: /Users/juliani/.zshrc
+[DEBUG] Snapshots directory: /Users/juliani/.claude/shell-snapshots
+[DEBUG] Creating snapshot at: /Users/juliani/.claude/shell-snapshots/snapshot-zsh-1760181755468-s5y8uc.sh
+[DEBUG] Shell binary exists: true
+[DEBUG] Execution timeout: 10000ms
+[DEBUG] Writing to temp file: /Users/juliani/.claude/todos/5e5af9dd-1a10-41b9-ab87-434a6c212cc2-agent-5e5af9dd-1a10-41b9-ab87-434a6c212cc2.json.tmp.6002.1760181755471
+[DEBUG] Temp file written successfully, size: 2 bytes
+[DEBUG] Renaming /Users/juliani/.claude/todos/5e5af9dd-1a10-41b9-ab87-434a6c212cc2-agent-5e5af9dd-1a10-41b9-ab87-434a6c212cc2.json.tmp.6002.1760181755471 to /Users/juliani/.claude/todos/5e5af9dd-1a10-41b9-ab87-434a6c212cc2-agent-5e5af9dd-1a10-41b9-ab87-434a6c212cc2.json
+[DEBUG] File /Users/juliani/.claude/todos/5e5af9dd-1a10-41b9-ab87-434a6c212cc2-agent-5e5af9dd-1a10-41b9-ab87-434a6c212cc2.json written atomically
+[DEBUG] Registered 0 hooks from 0 plugins
+[DEBUG] Loading skills from directories: managed=/Library/Application Support/ClaudeCode/.claude/skills, user=/Users/juliani/.claude/skills, project=/Users/juliani/repos/svelte5/secure_qr/.claude/skills
+[DEBUG] Loaded 0 skills total (managed: 0, user: 0, project: 0)
+[DEBUG] Total plugin commands loaded: 0
+[DEBUG] Total plugin skills loaded: 0
+[DEBUG] Summarizing all 4 messages (~0 tokens)
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.6002.1760181755547
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 40667 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.6002.1760181755547 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.6002.1760181755630
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 40667 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.6002.1760181755630 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.6002.1760181755656
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 40749 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.6002.1760181755656 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.6002.1760181755660
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 40779 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.6002.1760181755660 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=/Users/juliani/.nvm/versions/node/v22.19.0/lib/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/arm64-darwin/rg)
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.6002.1760181755737
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 40817 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.6002.1760181755737 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Total plugin agents loaded: 0
+[DEBUG] MCP server "chrome-devtools": Starting connection with timeout of 30000ms
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.6002.1760181756187
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 40848 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.6002.1760181756187 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.6002.1760181756192
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 40848 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.6002.1760181756192 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Executing hooks for SessionStart:startup
+[DEBUG] Getting matching hook commands for SessionStart with query: startup
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.6002.1760181756224
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 40848 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.6002.1760181756224 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.6002.1760181756229
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 40848 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.6002.1760181756229 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] performStartupChecks called, ENABLE_PLUGINS=true
+[DEBUG] Starting background plugin installations
+[DEBUG] performBackgroundPluginInstallations called
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.6002.1760181756242
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 40953 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.6002.1760181756242 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Setting installation status: 0 marketplaces, 0 installable plugins, 0 uninstallable plugins
+[DEBUG] Loaded plugins - Enabled: 0, Disabled: 0, Commands: 0, Agents: 0, Errors: 0
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.6002.1760181756307
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 40953 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.6002.1760181756307 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Summarizing last 10 of 105 messages (~136617 tokens)
+[DEBUG] Shell snapshot created successfully (177474 bytes)
+[ERROR] MCP server "chrome-devtools" Server stderr: chrome-devtools-mcp exposes content of the browser instance to the MCP clients allowing them to inspect,
+debug, and modify any data in the browser or DevTools.
+Avoid sharing sensitive or personal information that you do not want to share with MCP clients.
+[DEBUG] MCP server "chrome-devtools": Successfully connected to stdio server in 1188ms
+[DEBUG] MCP server "chrome-devtools": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"chrome_devtools","title":"Chrome DevTools MCP server","version":"0.8.0"}}
+[DEBUG] Summarizing last 3 of 184 messages (~132364 tokens)
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Executing hooks for UserPromptSubmit
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] FileHistory: Added snapshot for b82e199d-e3d1-4d7d-9cac-6de67c7069c5, tracking 0 files
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Executing hooks for PreToolUse:TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing to temp file: /Users/juliani/.claude/todos/5e5af9dd-1a10-41b9-ab87-434a6c212cc2-agent-5e5af9dd-1a10-41b9-ab87-434a6c212cc2.json.tmp.6002.1760181841389
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 323 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude/todos/5e5af9dd-1a10-41b9-ab87-434a6c212cc2-agent-5e5af9dd-1a10-41b9-ab87-434a6c212cc2.json.tmp.6002.1760181841389 to /Users/juliani/.claude/todos/5e5af9dd-1a10-41b9-ab87-434a6c212cc2-agent-5e5af9dd-1a10-41b9-ab87-434a6c212cc2.json
+[DEBUG] File /Users/juliani/.claude/todos/5e5af9dd-1a10-41b9-ab87-434a6c212cc2-agent-5e5af9dd-1a10-41b9-ab87-434a6c212cc2.json written atomically
+[DEBUG] Executing hooks for PostToolUse:TodoWrite
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Executing hooks for PreToolUse:Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Executing hooks for PreToolUse:Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Executing hooks for PostToolUse:Read
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Executing hooks for PostToolUse:Read
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Executing hooks for PreToolUse:Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Executing hooks for PostToolUse:Read
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Executing hooks for PreToolUse:Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "cat:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] Persisting permission update: addRules to source 'localSettings'
+[DEBUG] Persisting 1 allow rule(s) to localSettings
+[DEBUG] Writing to temp file: /Users/juliani/repos/svelte5/secure_qr/.claude/settings.local.json.tmp.6002.1760181851401
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 416 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/repos/svelte5/secure_qr/.claude/settings.local.json.tmp.6002.1760181851401 to /Users/juliani/repos/svelte5/secure_qr/.claude/settings.local.json
+[DEBUG] File /Users/juliani/repos/svelte5/secure_qr/.claude/settings.local.json written atomically
+[DEBUG] Applying permission update: Adding 1 allow rule(s) to destination 'localSettings': ["Bash(cat:*)"]
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Bash tool invoked with command: cat /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/+layout.svelte
+[DEBUG] Bash tool description: Read auth layout file contents
+[DEBUG] Executing hooks for PostToolUse:Bash
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Glob
+[DEBUG] Executing hooks for PreToolUse:Glob
+[DEBUG] Getting matching hook commands for PreToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Executing hooks for PostToolUse:Glob
+[DEBUG] Getting matching hook commands for PostToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Executing hooks for PreToolUse:Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Executing hooks for PostToolUse:Read
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Executing hooks for PreToolUse:TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing to temp file: /Users/juliani/.claude/todos/5e5af9dd-1a10-41b9-ab87-434a6c212cc2-agent-5e5af9dd-1a10-41b9-ab87-434a6c212cc2.json.tmp.6002.1760181866795
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 472 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude/todos/5e5af9dd-1a10-41b9-ab87-434a6c212cc2-agent-5e5af9dd-1a10-41b9-ab87-434a6c212cc2.json.tmp.6002.1760181866795 to /Users/juliani/.claude/todos/5e5af9dd-1a10-41b9-ab87-434a6c212cc2-agent-5e5af9dd-1a10-41b9-ab87-434a6c212cc2.json
+[DEBUG] File /Users/juliani/.claude/todos/5e5af9dd-1a10-41b9-ab87-434a6c212cc2-agent-5e5af9dd-1a10-41b9-ab87-434a6c212cc2.json written atomically
+[DEBUG] Executing hooks for PostToolUse:TodoWrite
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] executePreToolHooks called for tool: Write
+[DEBUG] Executing hooks for PreToolUse:Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Permission suggestions for Write: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+[DEBUG] Applying permission update: Setting mode to 'acceptEdits'
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] FileHistory: Tracked file modification for /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/+layout.svelte
+[DEBUG] Writing to temp file: /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/+layout.svelte.tmp.6002.1760181868939
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 9 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/+layout.svelte.tmp.6002.1760181868939 to /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/+layout.svelte
+[DEBUG] File /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/+layout.svelte written atomically
+[ERROR] Error: Error: Language not supported while highlighting code, falling back to markdown: svelte
+    at file:///Users/juliani/.nvm/versions/node/v22.19.0/lib/node_modules/@anthropic-ai/claude-code/cli.js:833:4217
+    at Object.useMemo (file:///Users/juliani/.nvm/versions/node/v22.19.0/lib/node_modules/@anthropic-ai/claude-code/cli.js:73:25928)
+    at YxQ.useMemo (file:///Users/juliani/.nvm/versions/node/v22.19.0/lib/node_modules/@anthropic-ai/claude-code/cli.js:11:7725)
+    at WE (file:///Users/juliani/.nvm/versions/node/v22.19.0/lib/node_modules/@anthropic-ai/claude-code/cli.js:833:4108)
+    at G$ (file:///Users/juliani/.nvm/versions/node/v22.19.0/lib/node_modules/@anthropic-ai/claude-code/cli.js:73:19415)
+    at ka (file:///Users/juliani/.nvm/versions/node/v22.19.0/lib/node_modules/@anthropic-ai/claude-code/cli.js:75:42814)
+    at S9 (file:///Users/juliani/.nvm/versions/node/v22.19.0/lib/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Wm (file:///Users/juliani/.nvm/versions/node/v22.19.0/lib/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at z$ (file:///Users/juliani/.nvm/versions/node/v22.19.0/lib/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+    at WC (file:///Users/juliani/.nvm/versions/node/v22.19.0/lib/node_modules/@anthropic-ai/claude-code/cli.js:75:35216)
+[DEBUG] Executing hooks for PostToolUse:Write
+[DEBUG] Getting matching hook commands for PostToolUse with query: Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Executing hooks for PreToolUse:TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing to temp file: /Users/juliani/.claude/todos/5e5af9dd-1a10-41b9-ab87-434a6c212cc2-agent-5e5af9dd-1a10-41b9-ab87-434a6c212cc2.json.tmp.6002.1760181878917
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 474 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude/todos/5e5af9dd-1a10-41b9-ab87-434a6c212cc2-agent-5e5af9dd-1a10-41b9-ab87-434a6c212cc2.json.tmp.6002.1760181878917 to /Users/juliani/.claude/todos/5e5af9dd-1a10-41b9-ab87-434a6c212cc2-agent-5e5af9dd-1a10-41b9-ab87-434a6c212cc2.json
+[DEBUG] File /Users/juliani/.claude/todos/5e5af9dd-1a10-41b9-ab87-434a6c212cc2-agent-5e5af9dd-1a10-41b9-ab87-434a6c212cc2.json written atomically
+[DEBUG] Executing hooks for PostToolUse:TodoWrite
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Executing hooks for PreToolUse:Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] FileHistory: Tracked file modification for /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/schema.ts
+[DEBUG] Writing to temp file: /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/schema.ts.tmp.6002.1760181878945
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 546 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/schema.ts.tmp.6002.1760181878945 to /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/schema.ts
+[DEBUG] File /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/schema.ts written atomically
+[DEBUG] Executing hooks for PostToolUse:Edit
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Executing hooks for PreToolUse:Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] FileHistory: Tracked file modification for /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.server.ts
+[DEBUG] Writing to temp file: /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.server.ts.tmp.6002.1760181884049
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 1486 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.server.ts.tmp.6002.1760181884049 to /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.server.ts
+[DEBUG] File /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.server.ts written atomically
+[DEBUG] Executing hooks for PostToolUse:Edit
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Executing hooks for PreToolUse:Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing to temp file: /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.server.ts.tmp.6002.1760181889032
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 1284 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.server.ts.tmp.6002.1760181889032 to /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.server.ts
+[DEBUG] File /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.server.ts written atomically
+[DEBUG] Executing hooks for PostToolUse:Edit
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Executing hooks for PreToolUse:Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] FileHistory: Tracked file modification for /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.svelte
+[DEBUG] Writing to temp file: /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.svelte.tmp.6002.1760181894710
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 3107 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.svelte.tmp.6002.1760181894710 to /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.svelte
+[DEBUG] File /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.svelte written atomically
+[DEBUG] Executing hooks for PostToolUse:Edit
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Executing hooks for PreToolUse:Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Executing hooks for PostToolUse:Read
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Executing hooks for PreToolUse:TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing to temp file: /Users/juliani/.claude/todos/5e5af9dd-1a10-41b9-ab87-434a6c212cc2-agent-5e5af9dd-1a10-41b9-ab87-434a6c212cc2.json.tmp.6002.1760181904488
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 627 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude/todos/5e5af9dd-1a10-41b9-ab87-434a6c212cc2-agent-5e5af9dd-1a10-41b9-ab87-434a6c212cc2.json.tmp.6002.1760181904488 to /Users/juliani/.claude/todos/5e5af9dd-1a10-41b9-ab87-434a6c212cc2-agent-5e5af9dd-1a10-41b9-ab87-434a6c212cc2.json
+[DEBUG] File /Users/juliani/.claude/todos/5e5af9dd-1a10-41b9-ab87-434a6c212cc2-agent-5e5af9dd-1a10-41b9-ab87-434a6c212cc2.json written atomically
+[DEBUG] Executing hooks for PostToolUse:TodoWrite
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] executePreToolHooks called for tool: Glob
+[DEBUG] Executing hooks for PreToolUse:Glob
+[DEBUG] Getting matching hook commands for PreToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Executing hooks for PostToolUse:Glob
+[DEBUG] Getting matching hook commands for PostToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Executing hooks for PreToolUse:Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Executing hooks for PreToolUse:Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Executing hooks for PostToolUse:Read
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Executing hooks for PostToolUse:Read
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Executing hooks for PreToolUse:Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Executing hooks for PostToolUse:Read
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Executing hooks for PreToolUse:Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] FileHistory: Tracked file modification for /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-in/+page.svelte
+[DEBUG] Writing to temp file: /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-in/+page.svelte.tmp.6002.1760181919333
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 2424 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-in/+page.svelte.tmp.6002.1760181919333 to /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-in/+page.svelte
+[DEBUG] File /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-in/+page.svelte written atomically
+[DEBUG] Executing hooks for PostToolUse:Edit
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Executing hooks for PreToolUse:Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Executing hooks for PostToolUse:Read
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Executing hooks for PreToolUse:Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing to temp file: /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-in/+page.svelte.tmp.6002.1760181930576
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 2434 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-in/+page.svelte.tmp.6002.1760181930576 to /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-in/+page.svelte
+[DEBUG] File /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-in/+page.svelte written atomically
+[DEBUG] Executing hooks for PostToolUse:Edit
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Executing hooks for PreToolUse:Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing to temp file: /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.svelte.tmp.6002.1760181935240
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 3117 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.svelte.tmp.6002.1760181935240 to /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.svelte
+[DEBUG] File /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.svelte written atomically
+[DEBUG] Executing hooks for PostToolUse:Edit
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Executing hooks for PreToolUse:TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing to temp file: /Users/juliani/.claude/todos/5e5af9dd-1a10-41b9-ab87-434a6c212cc2-agent-5e5af9dd-1a10-41b9-ab87-434a6c212cc2.json.tmp.6002.1760181942123
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 767 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude/todos/5e5af9dd-1a10-41b9-ab87-434a6c212cc2-agent-5e5af9dd-1a10-41b9-ab87-434a6c212cc2.json.tmp.6002.1760181942123 to /Users/juliani/.claude/todos/5e5af9dd-1a10-41b9-ab87-434a6c212cc2-agent-5e5af9dd-1a10-41b9-ab87-434a6c212cc2.json
+[DEBUG] File /Users/juliani/.claude/todos/5e5af9dd-1a10-41b9-ab87-434a6c212cc2-agent-5e5af9dd-1a10-41b9-ab87-434a6c212cc2.json written atomically
+[DEBUG] Executing hooks for PostToolUse:TodoWrite
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Executing hooks for PreToolUse:Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Bash tool invoked with command: bun run check
+[DEBUG] Bash tool description: Run svelte-check for type checking
+[DEBUG] Bash tool timeout: 60000ms
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Executing hooks for PreToolUse:Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Bash tool invoked with command: cat package.json | grep -A 5 -B 5 "sveltekit-superforms"
+[DEBUG] Bash tool description: Check sveltekit-superforms version
+[DEBUG] Executing hooks for PostToolUse:Bash
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: WebSearch
+[DEBUG] Executing hooks for PreToolUse:WebSearch
+[DEBUG] Getting matching hook commands for PreToolUse with query: WebSearch
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "WebSearch" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Getting matching hook commands for Notification with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Persisting permission update: addRules to source 'localSettings'
+[DEBUG] Persisting 1 allow rule(s) to localSettings
+[DEBUG] Writing to temp file: /Users/juliani/repos/svelte5/secure_qr/.claude/settings.local.json.tmp.6002.1760182008708
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 435 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/repos/svelte5/secure_qr/.claude/settings.local.json.tmp.6002.1760182008708 to /Users/juliani/repos/svelte5/secure_qr/.claude/settings.local.json
+[DEBUG] File /Users/juliani/repos/svelte5/secure_qr/.claude/settings.local.json written atomically
+[DEBUG] Applying permission update: Adding 1 allow rule(s) to destination 'localSettings': ["WebSearch"]
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Stream started - received first chunk
+[DEBUG] Executing hooks for PostToolUse:WebSearch
+[DEBUG] Getting matching hook commands for PostToolUse with query: WebSearch
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "WebSearch" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Executing hooks for PreToolUse:Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Bash tool invoked with command: cat package.json | grep -A 2 -B 2 '"zod"'
+[DEBUG] Bash tool description: Check zod version
+[DEBUG] Executing hooks for PostToolUse:Bash
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Executing hooks for PreToolUse:Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing to temp file: /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.server.ts.tmp.6002.1760182039484
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 1341 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.server.ts.tmp.6002.1760182039484 to /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.server.ts
+[DEBUG] File /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.server.ts written atomically
+[DEBUG] Executing hooks for PostToolUse:Edit
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Executing hooks for PreToolUse:Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing to temp file: /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.server.ts.tmp.6002.1760182044159
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 1357 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.server.ts.tmp.6002.1760182044159 to /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.server.ts
+[DEBUG] File /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.server.ts written atomically
+[DEBUG] Executing hooks for PostToolUse:Edit
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Executing hooks for PreToolUse:Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing to temp file: /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.svelte.tmp.6002.1760182050722
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 3302 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.svelte.tmp.6002.1760182050722 to /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.svelte
+[DEBUG] File /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-up/+page.svelte written atomically
+[DEBUG] Executing hooks for PostToolUse:Edit
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Executing hooks for PreToolUse:Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] FileHistory: Tracked file modification for /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-in/+page.server.ts
+[DEBUG] Writing to temp file: /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-in/+page.server.ts.tmp.6002.1760182057431
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 1510 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-in/+page.server.ts.tmp.6002.1760182057431 to /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-in/+page.server.ts
+[DEBUG] File /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-in/+page.server.ts written atomically
+[DEBUG] Executing hooks for PostToolUse:Edit
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Executing hooks for PreToolUse:Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing to temp file: /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-in/+page.svelte.tmp.6002.1760182064933
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 2564 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-in/+page.svelte.tmp.6002.1760182064933 to /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-in/+page.svelte
+[DEBUG] File /Users/juliani/repos/svelte5/secure_qr/src/routes/auth/sign-in/+page.svelte written atomically
+[DEBUG] Executing hooks for PostToolUse:Edit
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Executing hooks for PreToolUse:TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing to temp file: /Users/juliani/.claude/todos/5e5af9dd-1a10-41b9-ab87-434a6c212cc2-agent-5e5af9dd-1a10-41b9-ab87-434a6c212cc2.json.tmp.6002.1760182070302
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 2 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude/todos/5e5af9dd-1a10-41b9-ab87-434a6c212cc2-agent-5e5af9dd-1a10-41b9-ab87-434a6c212cc2.json.tmp.6002.1760182070302 to /Users/juliani/.claude/todos/5e5af9dd-1a10-41b9-ab87-434a6c212cc2-agent-5e5af9dd-1a10-41b9-ab87-434a6c212cc2.json
+[DEBUG] File /Users/juliani/.claude/todos/5e5af9dd-1a10-41b9-ab87-434a6c212cc2-agent-5e5af9dd-1a10-41b9-ab87-434a6c212cc2.json written atomically
+[DEBUG] Executing hooks for PostToolUse:TodoWrite
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.6002.1760182083189
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 40992 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.6002.1760182083189 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Executing hooks for Stop
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.6002.1760182083202
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 41032 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.6002.1760182083202 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.6002.1760182083213
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 41679 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.6002.1760182083213 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Getting matching hook commands for Notification with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Getting matching hook commands for SessionEnd with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)

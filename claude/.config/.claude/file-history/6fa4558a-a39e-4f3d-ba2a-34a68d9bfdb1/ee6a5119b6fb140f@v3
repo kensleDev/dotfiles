@@ -1,0 +1,56 @@
+import { Challenge, Tool } from '../types';
+import * as fs from 'fs';
+import * as path from 'path';
+
+// Import all challenges
+import { challenges as fdChallenges } from './fd';
+import { challenges as sedChallenges } from './sed';
+import { challenges as awkChallenges } from './awk';
+import { challenges as jqChallenges } from './jq';
+import { challenges as rsyncChallenges } from './rsync';
+
+export const challengesByTool: { [tool in Tool]: Challenge[] } = {
+  fd: fdChallenges,
+  sed: sedChallenges,
+  awk: awkChallenges,
+  jq: jqChallenges,
+  rsync: rsyncChallenges
+};
+
+export const allChallenges: Challenge[] = [
+  ...fdChallenges,
+  ...sedChallenges,
+  ...awkChallenges,
+  ...jqChallenges,
+  ...rsyncChallenges
+];
+
+export function getChallenge(id: string): Challenge | null {
+  return allChallenges.find(challenge => challenge.id === id) || null;
+}
+
+export function getChallengesForTool(tool: Tool): Challenge[] {
+  return challengesByTool[tool];
+}
+
+export function getNextChallengeForTool(tool: Tool, completedCount: number): Challenge | null {
+  const challenges = getChallengesForTool(tool);
+  const challengeIndex = Math.min(completedCount, challenges.length - 1);
+  return challenges[challengeIndex] || null;
+}
+
+export function getUnlockedTools(toolProgress: { [tool in Tool]: number }): Tool[] {
+  // Ensure toolProgress is properly initialized
+  if (!toolProgress) {
+    return ['fd'];
+  }
+
+  const tools: Tool[] = ['fd']; // fd is always unlocked
+
+  if (toolProgress.fd >= 1) tools.push('sed');
+  if (toolProgress.sed >= 1) tools.push('awk');
+  if (toolProgress.awk >= 1) tools.push('jq');
+  if (toolProgress.jq >= 1) tools.push('rsync');
+
+  return tools;
+}

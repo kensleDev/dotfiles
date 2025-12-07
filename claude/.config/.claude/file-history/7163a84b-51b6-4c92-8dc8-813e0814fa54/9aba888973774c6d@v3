@@ -1,0 +1,144 @@
+import { authClient } from "./auth.client";
+
+/**
+ * Refresh the session to get the latest user data from the database
+ * Call this after subscription changes to ensure fresh data
+ */
+export async function refreshSession(): Promise<void> {
+  try {
+    await authClient.getSession({
+      // @ts-expect-error - disableCookieCache exists but may not be in types
+      disableCookieCache: true,
+    });
+    console.log("Session refreshed successfully");
+  } catch (error) {
+    console.error("Error refreshing session:", error);
+  }
+}
+
+/**
+ * Check if user has an active subscription
+ * Uses local database subscription_status (synced via webhooks)
+ * to avoid unnecessary Polar API calls
+ */
+export async function hasActiveSubscription(): Promise<boolean> {
+  try {
+    // Get the current session to access user data
+    const session = await authClient.getSession();
+
+    if (!session.data?.user) {
+      return false;
+    }
+
+    const user = session.data.user;
+
+    // Check subscription status from database (synced via webhooks)
+    // @ts-expect-error - subscription_status exists but may not be in types
+    const subscriptionStatus = user.subscription_status;
+    // @ts-expect-error - polar_customer_id exists but may not be in types
+    const polarCustomerId = user.polar_customer_id;
+
+    // Active statuses include 'active' and 'trialing'
+    const isActive = subscriptionStatus === "active" || subscriptionStatus === "trialing";
+
+    console.log("Subscription check:", {
+      userId: user.id,
+      email: user.email,
+      subscriptionStatus,
+      polarCustomerId,
+      isActive,
+    });
+
+    return isActive;
+  } catch (error) {
+    console.error("Error checking subscription:", error);
+    return false;
+  }
+}
+
+/**
+ * Check if user is authenticated
+ */
+export async function isAuthenticated(): Promise<boolean> {
+  try {
+    const session = await authClient.getSession();
+    return session.data !== null;
+  } catch (error) {
+    console.error("Error checking authentication:", error);
+    return false;
+  }
+}
+
+export async function isSubscribed(): Promise<boolean> {
+  const [authenticated, hasSubscription] = await Promise.all([
+    isAuthenticated(),
+    hasActiveSubscription(),
+  ]);
+
+  return authenticated && hasSubscription;
+}
+
+export async function getAuthState(): Promise<
+  "anon" | "unsubscribed" | "subscribed"
+> {
+  try {
+    const loggedIn = await isAuthenticated();
+    const hasSub = await isSubscribed();
+    const isReady = loggedIn && hasSub;
+
+    console.log({ loggedIn, hasSub, isReady });
+
+    if (loggedIn && !hasSub) return "unsubscribed";
+    if (isReady) return "subscribed";
+    return "anon";
+  } catch (error) {
+    console.error("Error getting auth state:", error);
+    return "anon";
+  }
+}
+
+/**
+ * Guard for premium features - requires active subscription
+ */
+export async function requireSubscription(): Promise<boolean> {
+  const [authenticated, hasSubscription] = await Promise.all([
+    isAuthenticated(),
+    hasActiveSubscription(),
+  ]);
+
+  return authenticated && hasSubscription;
+}
+
+/**
+ * Svelte store for subscription status
+ */
+export function createSubscriptionStore() {
+  let subscriptionStatus = $state<"unknown" | "active" | "inactive">("unknown");
+  let isLoading = $state(true);
+
+  async function checkStatus() {
+    isLoading = true;
+    try {
+      const hasSubscription = await hasActiveSubscription();
+      subscriptionStatus = hasSubscription ? "active" : "inactive";
+    } catch (error) {
+      console.error("Error checking subscription status:", error);
+      subscriptionStatus = "inactive";
+    } finally {
+      isLoading = false;
+    }
+  }
+
+  // Check status on creation
+  checkStatus();
+
+  return {
+    get status() {
+      return subscriptionStatus;
+    },
+    get isLoading() {
+      return isLoading;
+    },
+    refresh: checkStatus,
+  };
+}

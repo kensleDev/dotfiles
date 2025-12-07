@@ -1,0 +1,65 @@
+<script lang="ts">
+	import type { PageWithoutContent } from '@/db/client/triplit/schema';
+	import { pagesStore } from '@/state/pages.store.svelte';
+	import Backdrop from './Backdrop.svelte';
+	import Header from './Header.svelte';
+	import Toggle from './Toggle.svelte';
+	import Tree from './Tree.svelte';
+
+	type Props = {
+		pages: PageWithoutContent[];
+		onCreatePage: (title: string, parentPageId?: string) => void;
+		workspaceId: string;
+		currentPageId?: string;
+		onRename?: (pageId: string, newTitle: string) => void;
+		onDelete?: (pageId: string) => void;
+	};
+
+	let {
+		pages,
+		onCreatePage,
+		workspaceId,
+		currentPageId = '',
+		onRename,
+		onDelete
+	}: Props = $props();
+
+	let isOpen = $state(false);
+	let isLargeScreen = $state(false);
+
+	function checkScreenSize() {
+		const wasLargeScreen = isLargeScreen;
+		isLargeScreen = window.innerWidth > 650;
+
+		if (!wasLargeScreen && isLargeScreen) {
+			isOpen = true;
+		} else if (wasLargeScreen && !isLargeScreen) {
+			isOpen = false;
+		}
+	}
+	// Expose functions for parent
+	export const toggleSidebar = () => {
+		isOpen = !isOpen;
+	};
+	export const getSidebarState = () => isOpen;
+
+	$effect(() => {
+		checkScreenSize();
+		window.addEventListener('resize', checkScreenSize);
+		return () => window.removeEventListener('resize', checkScreenSize);
+	});
+</script>
+
+<Toggle {isOpen} {isLargeScreen} {toggleSidebar} />
+
+<!-- <div class="h-full {isLargeScreen ? '' : isOpen ? 'fixed top-0 left-0' : ''} z-40 border-r"> -->
+<nav
+	class="h-full w-full overflow-y-auto border-r border-gray-200 bg-white transition-transform duration-300
+           ease-in-out {isOpen ? 'translate-x-0' : '!h-0 -translate-x-full'}"
+>
+	<Header {isLargeScreen} {isOpen} {toggleSidebar} {onCreatePage} />
+	<Tree {pages} {currentPageId} {onRename} {onDelete} />
+</nav>
+<!-- </div> -->
+
+<Backdrop {isOpen} {isLargeScreen} {toggleSidebar} />

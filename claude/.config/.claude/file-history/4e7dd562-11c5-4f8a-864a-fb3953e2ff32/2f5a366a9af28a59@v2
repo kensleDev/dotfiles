@@ -1,0 +1,104 @@
+<script lang="ts">
+	// import type { PageWithoutContent } from '@/triplit/schema';
+
+	type Page = {
+		id: string;
+		parentId: string | null;
+		createdAt: Date;
+		updatedAt: Date;
+		title: string;
+		content: string;
+	};
+
+	type PageWithoutContent = Pick<Page, 'id' | 'parentId' | 'createdAt' | 'updatedAt' | 'title'>;
+	import { createEventDispatcher } from 'svelte';
+	import PageTreeItemMenu from './PageTreeItemMenu.svelte';
+
+	type NestedPage = PageWithoutContent & {
+		children: NestedPage[];
+		expanded: boolean;
+	};
+
+	type Props = {
+		page: NestedPage;
+		onRename?: (pageId: string, newTitle: string) => void;
+		onDelete?: (pageId: string) => void;
+	};
+
+	let { page, onRename, onDelete } = $props();
+	let expanded = $state(page.expanded);
+
+	// Load expanded state from local storage if not already expanded by tree
+	if (typeof localStorage !== 'undefined' && !page.expanded) {
+		const storedExpanded = localStorage.getItem(`page-${page.id}-expanded`);
+		if (storedExpanded) {
+			expanded = storedExpanded === 'true';
+		}
+	}
+
+	// Sync with page.expanded when it changes
+	$effect(() => {
+		if (page.expanded && !expanded) {
+			expanded = true;
+		}
+	});
+
+	function toggleExpanded() {
+		expanded = !expanded;
+		// Save expanded state to local storage
+		if (typeof localStorage !== 'undefined') {
+			localStorage.setItem(`page-${page.id}-expanded`, String(expanded));
+		}
+	}
+
+	const dispatch = createEventDispatcher();
+
+	function handleClick() {
+		dispatch('select', page.id);
+	}
+</script>
+
+<li>
+	<div class="flex items-center justify-between">
+		<div class="flex items-center flex-1">
+			{#if page.children.length > 0}
+				<button class="mr-2 hover:text-blue-500" onclick={toggleExpanded}>
+					{#if expanded}
+						<span>▼</span>
+					{:else}
+						<span class="hover:font-bold">▶</span>
+					{/if}
+				</button>
+			{/if}
+			<a href={`/e?pg=${page.id}`} class="block hover:text-blue-500" onclick={handleClick}>
+				{page.title}
+			</a>
+		</div>
+		<div class="flex items-center space-x-1">
+			{#if onRename || onDelete}
+				<PageTreeItemMenu
+					{page}
+					{onRename}
+					{onDelete}
+				/>
+			{/if}
+		</div>
+	</div>
+	{#if page.children.length > 0 && expanded}
+		<ul class="ml-4">
+			{#each page.children as child}
+				<svelte:self page={child} {onRename} {onDelete} />
+			{/each}
+		</ul>
+	{/if}
+</li>
+
+<style>
+	button {
+		background: none;
+		border: none;
+		padding: 0;
+		cursor: pointer;
+		outline: none;
+	}
+</style>

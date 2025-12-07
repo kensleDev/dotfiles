@@ -1,0 +1,51 @@
+import { redirect } from "@sveltejs/kit";
+import { db } from "@/db/server";
+import { user as userSchema } from "@/db/server/schema.server";
+import { eq } from "drizzle-orm";
+import { auth } from "@/auth/auth.server";
+import type { ServerLoad } from "@sveltejs/kit";
+
+export const load: ServerLoad = async ({ params }) => {
+  const token = params.token;
+
+  if (!token) {
+    throw redirect(302, "/auth/sign-in?error=invalid_token");
+  }
+
+  try {
+    // Find user with this activation token
+    const userResult = await db
+      .select()
+      .from(userSchema)
+      .where(eq(userSchema.activationToken, token))
+      .limit(1);
+
+    if (userResult.length === 0) {
+      throw redirect(302, "/auth/sign-in?error=invalid_token");
+    }
+
+    const user = userResult[0];
+
+    // Check if token is still valid (optional: add expiration check)
+    // For now, we'll just check if the user exists and has the token
+
+    // Clear the activation token (one-time use)
+    await db
+      .update(userSchema)
+      .set({
+        activationToken: null,
+        emailVerified: true,
+        updatedAt: new Date(),
+      })
+      .where(eq(userSchema.id, user.id));
+
+    // For now, we'll redirect to sign-in page with a success message
+    // The user will need to set a password or use social login
+    // In a full implementation, you'd create a session directly here
+    
+    throw redirect(302, "/?welcome=true&subscription=active");
+  } catch (error) {
+    console.error("Error activating account:", error);
+    throw redirect(302, "/auth/sign-in?error=activation_failed");
+  }
+};

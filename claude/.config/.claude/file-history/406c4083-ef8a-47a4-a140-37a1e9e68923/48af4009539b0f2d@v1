@@ -1,0 +1,51 @@
+<script lang="ts">
+  import { pushState } from "$app/navigation";
+  import { authClient } from "@/auth/auth.client.js";
+  import { useQrScanner } from "@/hooks/useQrScanner.svelte";
+  import CameraSheet from "@/scan/components/QrScanner/CameraSheet.svelte";
+  import ScanPageNavigation from "@/scan/components/ScanPageNavigation.svelte";
+  import { scanRepo } from "@/scan/scans.repo.svelte";
+
+  let { children, data } = $props();
+
+  let cameraSheetOpen = $state(false);
+
+  const qrScan = useQrScanner(onScanEvent);
+
+  function onScanEvent(event: {
+    success: boolean;
+    url?: string;
+    isSafe?: boolean;
+    error?: string;
+  }) {
+    qrScan.stop();
+
+    console.log("📨 OnScanEvent", { event });
+
+    if (event.success && event.url) {
+      const newScan = scanRepo.addScan(event.url, event.isSafe ?? false);
+
+      // Use shallow routing to preserve modal animations for newly scanned QR code
+      newScan.then((scan) => {
+        pushState(`/scan/${scan.id}`, { replaceState: false, keepfocus: true });
+        // setSelectedScanFallback(scan);
+        // isDetailsOpen = true;
+      });
+    }
+
+    // After a successful scan, show the sheet or dialog with the result
+    // isScanning = false;
+  }
+</script>
+
+<ScanPageNavigation {qrScan} signOut={authClient.signOut} />
+
+<div
+  class="pt-20 overflow-auto min-h-screen"
+  style="padding: 10px;"
+  data-testid="scroll-container"
+>
+  {@render children()}
+</div>
+
+<CameraSheet bind:open={cameraSheetOpen} {qrScan} />

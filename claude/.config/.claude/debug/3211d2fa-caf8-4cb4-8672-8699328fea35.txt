@@ -1,0 +1,22 @@
+[DEBUG] Executing hooks for SessionStart:clear
+[DEBUG] Getting matching hook commands for SessionStart with query: clear
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "clear" (0 before deduplication)
+[DEBUG] Found 0 hook commands to execute
+[DEBUG] FileHistory: Added snapshot for 9f6fe249-db32-403b-a83e-28fbfccd7701, tracking 0 files
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.22368.1760369567881
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 55609 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.22368.1760369567881 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.22368.1760369567891
+[DEBUG] Preserving file permissions: 100644
+[DEBUG] Temp file written successfully, size: 55693 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/juliani/.claude.json.tmp.22368.1760369567891 to /Users/juliani/.claude.json
+[DEBUG] File /Users/juliani/.claude.json written atomically
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Getting matching hook commands for SessionEnd with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)

@@ -1,0 +1,52 @@
+<script lang="ts">
+  import { pushState } from "$app/navigation";
+  import { useQrScanner } from "@/hooks/useQrScanner.svelte";
+  import PageContainer from "@/shell/PageContainer.svelte";
+  import type { ScanDisplay } from "@/types";
+  import { scanRepo } from "../scans.repo.svelte";
+  import QrScanHistory from "./QrScanHistory/QrScanHistory.svelte";
+  import QrScanner from "./QrScanner/QrScanner.svelte";
+
+  // let isScanning = $state<boolean>(false);
+  let isDetailsOpen = $state(false);
+  let selectedScan = $state<ScanDisplay | null>(null);
+
+  const setSelectedScanFallback = (scan: ScanDisplay) => {
+    selectedScan = scan;
+  };
+
+  const qrScan = useQrScanner(onScanEvent);
+
+  function onScanEvent(event: {
+    success: boolean;
+    url?: string;
+    isSafe?: boolean;
+    error?: string;
+  }) {
+    qrScan.stop();
+
+    console.log("📨 OnScanEvent", { event });
+
+    if (event.success && event.url) {
+      const newScan = scanRepo.addScan(event.url, event.isSafe ?? false);
+
+      // Use shallow routing to preserve modal animations for newly scanned QR code
+      newScan.then((scan) => {
+        pushState(`/scan/${scan.id}`, { replaceState: false, keepfocus: true });
+        setSelectedScanFallback(scan);
+        // isDetailsOpen = true;
+      });
+    }
+
+    // After a successful scan, show the sheet or dialog with the result
+    // isScanning = false;
+  }
+</script>
+
+<PageContainer title="Scan History" isScanning>
+  <QrScanner {qrScan} bind:isDetailsOpen />
+
+  {#if !qrScan.isScanning}
+    <QrScanHistory bind:isDetailsOpen bind:selectedScan />
+  {/if}
+</PageContainer>

@@ -1,0 +1,100 @@
+import { Challenge } from '../..';
+import * as fs from 'fs';
+import * as path from 'path';
+
+export const challenges: Challenge[] = [
+  {
+    id: 'jq-1',
+    title: "API Response Analysis",
+    tool: 'jq',
+    story: `📊 Debug the API
+
+A bug report came in: "Some users have null emails!"
+
+You have an API response in .cli-quest-game/users.json
+Your task:
+1. Use 'jq' to extract all users where email is null
+2. Save just their IDs (one per line) to .cli-quest-game/null-email-ids.txt`,
+
+    setup: () => {
+      // This will be handled by the game runner
+    },
+
+    validation: () => {
+      const resultFile = path.join(process.cwd(), '.cli-quest-game/null-email-ids.txt');
+      if (!fs.existsSync(resultFile)) return false;
+
+      const content = fs.readFileSync(resultFile, 'utf-8').trim();
+      const ids = content.split('\n').map(l => l.trim()).filter(l => l);
+
+      // Should have IDs 2, 4, and 6
+      return ids.length === 3 &&
+             ids.includes('2') &&
+             ids.includes('4') &&
+             ids.includes('6');
+    },
+
+    hints: [
+      "Use jq to filter JSON. Try: jq '.users[]' to see all users",
+      "Filter with select: jq '.users[] | select(.email == null)'",
+      "Try: jq -r '.users[] | select(.email == null) | .id' .cli-quest-game/users.json > .cli-quest-game/null-email-ids.txt"
+    ],
+
+    solution: "jq -r '.users[] | select(.email == null) | .id' .cli-quest-game/users.json > .cli-quest-game/null-email-ids.txt",
+    difficulty: 1,
+    estimatedTime: 5
+  }
+];
+
+// Placeholder functions for other jq challenges
+export const challenge2: Challenge = {
+  id: 'jq-2',
+  title: "Array Manipulation",
+  tool: 'jq',
+  story: "Placeholder for jq challenge 2",
+  setup: () => {},
+  validation: () => false,
+  hints: [],
+  solution: "echo 'placeholder'",
+  difficulty: 2,
+  estimatedTime: 5
+};
+
+export const challenge3: Challenge = {
+  id: 'jq-3',
+  title: "Nested Processing",
+  tool: 'jq',
+  story: "Placeholder for jq challenge 3",
+  setup: () => {},
+  validation: () => false,
+  hints: [],
+  solution: "echo 'placeholder'",
+  difficulty: 3,
+  estimatedTime: 5
+};
+
+export const challenge4: Challenge = {
+  id: 'jq-4',
+  title: "Data Transformation",
+  tool: 'jq',
+  story: "Placeholder for jq challenge 4",
+  setup: () => {},
+  validation: () => false,
+  hints: [],
+  solution: "echo 'placeholder'",
+  difficulty: 4,
+  estimatedTime: 5
+};
+
+export const challenge5: Challenge = {
+  id: 'jq-5',
+  title: "Advanced Reporting",
+  tool: 'jq',
+  story: "Placeholder for jq challenge 5",
+  setup: () => {},
+  validation: () => false,
+  hints: [],
+  solution: "echo 'placeholder'",
+  difficulty: 5,
+  estimatedTime: 5
+};
