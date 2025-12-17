@@ -2,36 +2,6 @@
   "$schema": "https://opencode.ai/config.json",
   "theme": "opencode",
   "model": "anthropic/claude-sonnet-4-20250514",
-  "$schema": "https://opencode.ai/config.json",
-  "theme": "opencode",
-  "model": "anthropic/claude-sonnet-4-20250514",
-  "provider": {
-    "openrouter": {
-      "name": "OpenRouter",
-      "models": {
-        "moonshotai/kimi-k2": {
-          "name": "Kimi K2"
-        }
-      }
-    }
-  },
-  "provider": {
-    "openrouter": {
-      "name": "OpenRouter",
-      "models": {
-        "moonshotai/kimi-k2": {
-          "name": "Kimi K2"
-        }
-      }
-    }
-  },
-  "instructions": [
-    "CONTRIBUTING.md",
-    "docs/*.md",
-    ".cursor/rules/*.md",
-    ".roo/rules-code/*.md",
-    "AGENTS.md"
-  ],
   "instructions": [
     "CONTRIBUTING.md",
     "docs/*.md",
@@ -40,89 +10,253 @@
     "AGENTS.md"
   ],
   "mcp": {
-    "gh_grep": {
+    "context7": {
+      "type": "local",
+      "command": ["npx", "-y", "@upstash/context7-mcp"],
+      "enabled": true
+    },
+    "react-native-guide": {
+      "type": "local",
+      "command": ["npx", "@mrnitro360/react-native-mcp-guide@1.1.0"]
+    },
+    // "react-native-debugger": {
+    //   "type": "local",
+    //   "command": ["npx", "-y", "@twodoorsdev/react-native-debugger-mcp"],
+    //   "environment": {}
+    // },
+    // "mobile-automation": {
+    //   "type": "local",
+    //   "command": ["npx", "-y", "@mobilenext/mobile-mcp@latest"],
+    //   "environment": {}
+    // },
+    "web-reader": {
       "type": "remote",
-      "url": "https://mcp.grep.app"
-    }
-  },
-  "mcp": {
-    "gh_grep": {
-      "type": "remote",
-      "url": "https://mcp.grep.app"
-    }
-  },
-  // ===== Agents =====
-  "agent": {
-    // 1) Planner – strategic intent & acceptance criteria
-    "planner": {
-      "mode": "primary",
-      "model": "github-copilot/gpt-5-mini",
-      // Burst rule: if plan requires >1 service boundary change or >200 lines of code touched across 4+ files, upshift once to gpt-5 for the planning pass only.
-      "prompt": "{file:./prompts/planner.txt}",
-      "policies": {
-        "canWriteFiles": true,
-        "canRunCommands": false
+      "url": "https://api.z.ai/api/mcp/web_reader/mcp",
+      "headers": {
+        "Authorization": "Bearer 5b282d20d4ee4f6fa38c1aa916737609.yYMFdoe4vJVviNYc"
       }
     },
-    // 2) Builder – implementation
-    "builder": {
-      "mode": "primary",
-      "model": "github-copilot/grok-code-fast-1",
-      // Burst rule: if compile/test fails twice on the same ticket or diff >500 LOC, temporarily switch to gpt-5-codex for one generation cycle, then fall back to Grok
-      "prompt": "{file:./prompts/builder.txt}",
+    "web-search-prime": {
+      "type": "remote",
+      "url": "https://api.z.ai/api/mcp/web_search_prime/mcp",
+      "headers": {
+        "Authorization": "Bearer 5b282d20d4ee4f6fa38c1aa916737609.yYMFdoe4vJVviNYc"
+      }
+    }
+    // "zai-mcp-server": {
+    //   "type": "local",
+    //   "command": ["npx", "-y", "@z_ai/mcp-server"],
+    //   // "env": {
+    //   //   "Z_AI_API_KEY": "your_api_key",
+    //   //   "Z_AI_MODE": "ZAI"
+    //   // }
+    // }
+    // "expo-server": {
+    //   "type": "local",
+    //   "command": ["npx", "-y", "expo-mcp-server"],
+    //   "environment": {}
+    // }
+  },
+
+  "agent": {
+    // ============================================================================
+    // DISTILLED AGENT FRAMEWORK
+    // 11 specialized agents for fullstack web development
+    // React, Next.js, Svelte, SvelteKit + Node.js + PostgreSQL
+    // ============================================================================
+
+    // ============================================================================
+    // CORE DEVELOPMENT AGENTS (5)
+    // Use these for implementation and feature development
+    // ============================================================================
+
+    // 1) FULLSTACK SPECIALIST – End-to-end feature development
+    // Use when: Building complete features (database → API → UI)
+    // Expertise: Node.js backend, API design, database, authentication, WebSockets
+    "fullstack-specialist": {
+      "mode": "subagent",
+      "prompt": "{file:./agent/fullstack-specialist.md}",
       "policies": {
         "canWriteFiles": true,
         "canRunCommands": true
       }
     },
-    // 3) Architect – systems lens (structure, coupling, evolution)
-    "architect": {
+
+    // 2) SVELTE/SVELTEKIT.JS SPECIALIST
+    // Use when: Building Svelte components and pages
+    "svelte-specialist": {
       "mode": "subagent",
-      "model": "github-copilot/claude-haiku-4.5",
-      // Burst rule: if repo context >80k tokens or cross-module review needed, upshift to claude-sonnet-4.5 (one pass)
-      "prompt": "{file:./prompts/architect.txt}",
-      "maxTokens": 1024,
+      "prompt": "{file:./agent/svelte-specialist.md}",
       "policies": {
-        "canWriteFiles": false,
+        "canWriteFiles": true,
+        "canRunCommands": true
+      }
+    },
+
+    // 2) REACT/NEXT.JS SPECIALIST – Frontend implementation
+    // Use when: Building React/Next.js/Svelte components and pages
+    // Expertise: React 18+, Next.js 14+ App Router, SSR/SSG, performance, SEO
+    "react-nextjs-specialist": {
+      "mode": "subagent",
+      "prompt": "{file:./agent/react-nextjs-specialist.md}",
+      "policies": {
+        "canWriteFiles": true,
+        "canRunCommands": true
+      }
+    },
+
+    // 3) TYPESCRIPT EXPERT – Type safety and advanced types
+    // Use when: Designing type-safe APIs, complex types, build optimization
+    // Expertise: TypeScript 5+, full-stack type safety, tRPC, generics
+    "typescript-expert": {
+      "mode": "subagent",
+      "prompt": "{file:./agent/typescript-expert.md}",
+      "policies": {
+        "canWriteFiles": true,
+        "canRunCommands": true
+      }
+    },
+
+    // 4) DATABASE SPECIALIST – Schema design and query optimization
+    // Use when: Database design, slow queries, migrations, N+1 problems
+    // Expertise: PostgreSQL, MySQL, Prisma, Drizzle, query optimization
+    "database-specialist": {
+      "mode": "subagent",
+      "prompt": "{file:./agent/database-specialist.md}",
+      "policies": {
+        "canWriteFiles": true,
+        "canRunCommands": true
+      }
+    },
+
+    // 5) UI/UX DESIGNER – Design systems and component specs
+    // Use when: Creating design systems, component specifications, responsive design
+    // Expertise: Design systems, accessibility (WCAG), responsive design, Figma
+    "ui-ux-designer": {
+      "mode": "subagent",
+      "prompt": "{file:./agent/ui-ux-designer.md}",
+      "policies": {
+        "canWriteFiles": true,
         "canRunCommands": false
       }
     },
-    // 3) Craftsman - code level quality (clarity, error handling, performance, testability)
-    "craftsman": {
+
+    // ============================================================================
+    // QUALITY & OPERATIONS AGENTS (4)
+    // Use these for testing, deployment, security, and performance
+    // ============================================================================
+
+    // 6) QA/TEST SPECIALIST – Testing and code review
+    // Use when: Writing tests, code review, achieving coverage goals
+    // Expertise: Jest/Vitest, React Testing Library, Playwright, code review
+    "qa-test-specialist": {
       "mode": "subagent",
-      "model": "github-copilot/gpt-5-mini",
-      // Burst rule: if performance micro-optimisation or tricky generics arise, one pass with gpt-5-codex
-      "prompt": "{file:./prompts/craftsmans.txt}",
-      "maxTokens": 1024,
-      "temperature": 0.2,
+      "prompt": "{file:./agent/qa-test-specialist.md}",
       "policies": {
-        "canWriteFiles": false,
-        "canRunCommands": true // may run tests/lint
+        "canWriteFiles": true,
+        "canRunCommands": true
       }
     },
-    // 4) Ux – user experience (accessibility, API ergonomics, performance, responsiveness)
-    "ux": {
+
+    // 7) DEVOPS SPECIALIST – CI/CD and deployment
+    // Use when: Setting up deployments, CI/CD pipelines, Docker, environment config
+    // Expertise: Vercel, Netlify, GitHub Actions, Docker, environment management
+    "devops-specialist": {
       "mode": "subagent",
-      "model": "github-copilot/claude-haiku-4.5",
-      // Burst rule: if reviewing large design token systems or multi-brand theming, one pass with claude-sonnet-4.5
-      "prompt": "{file:./prompts/ux.txt}",
-      "maxTokens": 1024,
+      "prompt": "{file:./agent/devops-specialist.md}",
       "policies": {
-        "canWriteFiles": false,
-        "canRunCommands": false
+        "canWriteFiles": true,
+        "canRunCommands": true
       }
     },
-    // 5) Error Handler - error handling specialist
-    "error-handler": {
+
+    // 8) SECURITY SPECIALIST – Security audits and authentication
+    // Use when: Security audits, implementing auth, OWASP Top 10, securing APIs
+    // Expertise: OWASP Top 10, OAuth/JWT, NextAuth, input validation, XSS/CSRF
+    "security-specialist": {
       "mode": "subagent",
-      "model": "github-copilot/gpt-5-mini",
-      // Burst rule: if it flags ambiguous propagation chains across services, one arbitration pass with gpt-5
-      "prompt": "{file:./prompts/error_handler.txt}",
+      "prompt": "{file:./agent/security-specialist.md}",
       "policies": {
         "canWriteFiles": false,
-        "canRunCommands": false
+        "canRunCommands": true
+      }
+    },
+
+    // 9) PERFORMANCE SPECIALIST – Performance optimization
+    // Use when: Improving page load, Core Web Vitals, bundle size, slow queries
+    // Expertise: Core Web Vitals, bundle optimization, React optimization, caching
+    "performance-specialist": {
+      "mode": "subagent",
+      "prompt": "{file:./agent/performance-specialist.md}",
+      "policies": {
+        "canWriteFiles": false,
+        "canRunCommands": true
+      }
+    },
+
+    // ============================================================================
+    // SPECIALIZED SUPPORT AGENTS (2)
+    // Use these for investigation and accessibility
+    // ============================================================================
+
+    // 10) ACCESSIBILITY SPECIALIST – WCAG compliance and inclusive design
+    // Use when: Accessibility audits, WCAG compliance, screen reader testing
+    // Expertise: WCAG 2.1 AA/AAA, screen readers, keyboard navigation, ARIA
+    "accessibility-specialist": {
+      "mode": "subagent",
+      "prompt": "{file:./agent/accessibility-specialist.md}",
+      "policies": {
+        "canWriteFiles": false,
+        "canRunCommands": true
+      }
+    },
+
+    // 11) RESEARCHER – Technical investigation and documentation research
+    // Use when: Investigating bugs, evaluating libraries, finding best practices
+    // Expertise: Multi-source research, root cause analysis, library evaluation
+    // Tools: MCP documentation (Context7, Svelte, shadcn/ui), web search
+    "researcher": {
+      "mode": "subagent",
+      "prompt": "{file:./agent/researcher.md}",
+      "policies": {
+        "canWriteFiles": false,
+        "canRunCommands": true
       }
     }
+
+    // ============================================================================
+    // RECOMMENDED WORKFLOWS
+    // ============================================================================
+    //
+    // NEW FEATURE DEVELOPMENT:
+    // 1. fullstack-specialist → Design API and data model
+    // 2. database-specialist → Optimize schema and queries
+    // 3. typescript-expert → Create shared types
+    // 4. react-nextjs-specialist → Implement UI
+    // 5. qa-test-specialist → Write tests
+    // 6. security-specialist → Review security
+    // 7. devops-specialist → Deploy
+    //
+    // INVESTIGATING A BUG:
+    // 1. researcher → Investigate error, find root cause
+    // 2. fullstack-specialist → Implement fix
+    // 3. qa-test-specialist → Add regression tests
+    // 4. security-specialist → Review (if applicable)
+    //
+    // PERFORMANCE OPTIMIZATION:
+    // 1. performance-specialist → Identify bottlenecks
+    // 2. researcher → Research optimization techniques
+    // 3. database-specialist → Optimize queries
+    // 4. react-nextjs-specialist → Optimize components
+    // 5. devops-specialist → Configure CDN/caching
+    //
+    // EVALUATING NEW LIBRARY:
+    // 1. researcher → Compare options, recommend solution
+    // 2. typescript-expert → Set up types and configuration
+    // 3. react-nextjs-specialist → Integrate into application
+    // 4. qa-test-specialist → Test integration
+    //
+    // ============================================================================
   }
 }
 /*

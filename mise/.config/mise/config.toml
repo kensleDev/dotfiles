@@ -13,6 +13,8 @@ ripgrep = "latest"
 xh = "latest"
 # zig = "latest"
 zoxide = "latest"
-"npm:opencode-ai" = { version = "latest" }
+# "npm:opencode-ai" = { version = "latest" }
 "npm:@anthropic-ai/claude-code" = { version = "latest" }
 "npm:bun" = { version = "latest" }
+pipx = "latest"
+"pipx:sqlit" = "latest"
