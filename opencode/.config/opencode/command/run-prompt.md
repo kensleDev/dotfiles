@@ -1,5 +1,5 @@
 <objective>
-Execute one or more prompts from `./prompts/` as delegated sub-tasks with fresh context. Supports single prompt execution, parallel execution of multiple independent prompts, and sequential execution of dependent prompts.
+Execute one or more prompts from `.agent/prompts/` as delegated sub-tasks with fresh context. Supports single prompt execution, parallel execution of multiple independent prompts, and sequential execution of dependent prompts.
 </objective>
 
 <input>
@@ -35,15 +35,17 @@ Parse $ARGUMENTS to extract:
 <step2_resolve_files>
 For each prompt number/name:
 
-- If empty or "last": Find with `!ls -t ./prompts/*.md | head -1`
-- If a number: Find file matching that zero-padded number (e.g., "5" matches "005-_.md", "42" matches "042-_.md")
-- If text: Find files containing that string in the filename
+- Detect current git branch: `!git branch --show-current` (fallback to "main")
+- If empty or "last": Find with `!ls -t .agent/prompts/[current-branch]/*.md | head -1`
+- If a number: Find file matching that zero-padded number in current branch folder (e.g., "5" matches ".agent/prompts/[current-branch]/005-_.md", "42" matches ".agent/prompts/[current-branch]/042-_.md")
+- If text: Find files containing that string in the filename within current branch folder
+- If contains "/" (e.g., "feature-auth/005"): Treat as explicit branch path and search in that specific branch folder
 
 <matching_rules>
 
 - If exactly one match found: Use that file
 - If multiple matches found: List them and ask user to choose
-- If no matches found: Report error and list available prompts
+- If no matches found in current branch: Check root .agent/prompts/ for backward compatibility, then report error and list available prompts
   </matching_rules>
   </step2_resolve_files>
 
@@ -136,9 +138,9 @@ By delegating to a sub-task with the appropriate agent context, the actual imple
 
 <output>
 <research_first_output>
-🔍 Research Phase Completed: ./prompts/005-implement-auth.md
+🔍 Research Phase Completed: .agent/prompts/feature-auth/005-implement-auth.md
 🛠️ Implementation Phase Completed with fullstack-specialist
-✓ Archived to: ./prompts/completed/005-implement-auth.md
+✓ Archived to: .agent/prompts/feature-auth/completed/005-implement-auth.md
 
 <research_findings>
 [Summary of key research insights from researcher agent]
@@ -154,8 +156,8 @@ By delegating to a sub-task with the appropriate agent context, the actual imple
 </research_first_output>
 
 <single_prompt_output>
-✓ Executed: ./prompts/005-implement-feature.md with [agent-name]
-✓ Archived to: ./prompts/completed/005-implement-feature.md
+✓ Executed: .agent/prompts/feature-auth/005-implement-feature.md with [agent-name]
+✓ Archived to: .agent/prompts/feature-auth/completed/005-implement-feature.md
 
 <results>
 [Summary of what the specialist agent accomplished]
@@ -165,11 +167,11 @@ By delegating to a sub-task with the appropriate agent context, the actual imple
 <parallel_output>
 ✓ Executed in PARALLEL:
 
-- ./prompts/005-implement-auth.md with security-specialist
-- ./prompts/006-implement-api.md with fullstack-specialist
-- ./prompts/007-implement-ui.md with react-nextjs-specialist
+- .agent/prompts/feature-auth/005-implement-auth.md with security-specialist
+- .agent/prompts/feature-auth/006-implement-api.md with fullstack-specialist
+- .agent/prompts/feature-auth/007-implement-ui.md with react-nextjs-specialist
 
-✓ All archived to ./prompts/completed/
+✓ All archived to .agent/prompts/feature-auth/completed/feature-auth/
 
 <results>
 [Consolidated summary of all specialist agent results]
@@ -180,11 +182,11 @@ By delegating to a sub-task with the appropriate agent context, the actual imple
 <sequential_output>
 ✓ Executed SEQUENTIALLY:
 
-1. ./prompts/005-setup-database.md with database-specialist → Success
-2. ./prompts/006-create-migrations.md with database-specialist → Success
-3. ./prompts/007-seed-data.md with database-specialist → Success
+1. .agent/prompts/feature-auth/005-setup-database.md with database-specialist → Success
+2. .agent/prompts/feature-auth/006-create-migrations.md with database-specialist → Success
+3. .agent/prompts/feature-auth/007-seed-data.md with database-specialist → Success
 
-✓ All archived to ./prompts/completed/
+✓ All archived to .agent/prompts/feature-auth/completed/feature-auth/
 
 <results>
 [Consolidated summary showing progression through each step]
@@ -197,7 +199,8 @@ By delegating to a sub-task with the appropriate agent context, the actual imple
 
 - For parallel execution: ALL Task tool calls MUST be in a single message
 - For sequential execution: Wait for each Task to complete before starting next
-- Archive prompts only after successful completion
+- Archive prompts only after successful completion to `.agent/prompts/[branch-name]/completed/`
+- Ensure completed folder exists before archiving: `!mkdir -p .agent/prompts/[branch-name]/completed/` (fail gracefully if mkdir fails)
 - If any prompt fails, stop sequential execution and report error
 - Provide clear, consolidated results for multiple prompt execution
 - Agent-specific: Always load agent context from agents directory
@@ -205,4 +208,6 @@ By delegating to a sub-task with the appropriate agent context, the actual imple
 - Agent tools: Restrict tool access to agent's defined toolset
 - Agent handoffs: Include relevant outputs as context for next agent
 - Research-first: Always complete research phase before implementation
+- Branch context: Default to current git branch, support explicit branch paths for cross-branch execution
+- Backward compatibility: Check root .agent/prompts/ if no files found in current branch folder
   </critical_notes>
