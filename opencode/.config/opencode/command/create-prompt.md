@@ -32,6 +32,7 @@ Analyze the user's request to determine:
    - Is research needed? (researcher agent)
    - Is it fullstack development? (fullstack-specialist)
    - Is it TypeScript-focused? (typescript-expert)
+   - Is it Svelte/Sveltekit specific? (svelte-specialist)
    - Is it React/Next.js specific? (react-nextjs-specialist)
    - Is it database work? (database-specialist)
    - Is it security-related? (security-specialist)
@@ -99,13 +100,13 @@ Create the prompt(s) and save to the prompts folder.
 **For single prompts:**
 
 - Generate one prompt file following the patterns below
-- Save as `./prompts/[number]-[name].md`
+- Detect current git branch and save as `.agent/prompts/[branch-name]/[number]-[name].md`
 
 **For multiple prompts:**
 
 - Determine how many prompts are needed (typically 2-4)
 - Generate each prompt with clear, focused objectives
-- Save sequentially: `./prompts/[N]-[name].md`, `./prompts/[N+1]-[name].md`, etc.
+- Save sequentially: `.agent/prompts/[branch-name]/[N]-[name].md`, `.agent/prompts/[branch-name]/[N+1]-[name].md`, etc.
 - Each prompt should be self-contained and executable independently
 
 ## Agent-Aware Prompt Construction Rules
@@ -180,11 +181,12 @@ Workflow: [sequential|parallel|research-first]
 ### Output Format
 
 1. Generate prompt content with XML structure
-2. Save to: `./prompts/[number]-[descriptive-name].md`
-   - Number format: 001, 002, 003, etc. (check existing files in ./prompts/ to determine next number)
+2. Detect current git branch: `!git branch --show-current` (fallback to "main")
+3. Save to: `.agent/prompts/[branch-name]/[number]-[descriptive-name].md`
+   - Number format: 001, 002, 003, etc. (check existing files in .agent/prompts/[branch-name]/ to determine next number)
    - Name format: lowercase, hyphen-separated, max 5 words describing the task
-   - Example: `./prompts/001-implement-user-authentication.md`
-3. File should contain ONLY the prompt, no explanations or metadata
+   - Example: `.agent/prompts/feature-auth/001-implement-user-authentication.md`
+4. File should contain ONLY the prompt, no explanations or metadata
 
 ## Agent-Aware Prompt Patterns
 
@@ -368,6 +370,7 @@ Each agent should verify their work:
    - Research needed? → Start with researcher
    - Fullstack development? → fullstack-specialist
    - TypeScript focus? → typescript-expert
+   - Svelte/Sveltekit specific? → svelte-specialist
    - React/Next.js specific? → react-nextjs-specialist
    - Database work? → database-specialist
    - Security implementation? → security-specialist
@@ -417,10 +420,10 @@ After saving the prompt(s), present this decision tree to the user:
 **Prompt(s) created successfully!**
 
 <single_prompt_scenario>
-If you created ONE prompt (e.g., `./prompts/005-implement-feature.md`):
+If you created ONE prompt (e.g., `.agent/prompts/feature-auth/005-implement-feature.md`):
 
 <presentation>
-✓ Saved prompt to ./prompts/005-implement-feature.md
+✓ Saved prompt to .agent/prompts/feature-auth/005-implement-feature.md
 
 What's next?
 
@@ -429,7 +432,7 @@ What's next?
 3. Save for later
 4. Other
 
-Choose (1-4): \_
+Choose (1-4): _
 </presentation>
 
 <action>
@@ -442,9 +445,9 @@ If you created MULTIPLE prompts that CAN run in parallel (e.g., independent modu
 
 <presentation>
 ✓ Saved prompts:
-  - ./prompts/005-implement-auth.md
-  - ./prompts/006-implement-api.md
-  - ./prompts/007-implement-ui.md
+  - .agent/prompts/feature-auth/005-implement-auth.md
+  - .agent/prompts/feature-auth/006-implement-api.md
+  - .agent/prompts/feature-auth/007-implement-ui.md
 
 Execution strategy: These prompts can run in PARALLEL (independent tasks, no shared files)
 
@@ -455,7 +458,7 @@ What's next?
 3. Review/edit prompts first
 4. Other
 
-Choose (1-4): \_
+Choose (1-4): _
 </presentation>
 
 <actions>
@@ -469,9 +472,9 @@ If you created MULTIPLE prompts that MUST run sequentially (e.g., dependencies, 
 
 <presentation>
 ✓ Saved prompts:
-  - ./prompts/005-setup-database.md
-  - ./prompts/006-create-migrations.md
-  - ./prompts/007-seed-data.md
+  - .agent/prompts/feature-auth/005-setup-database.md
+  - .agent/prompts/feature-auth/006-create-migrations.md
+  - .agent/prompts/feature-auth/007-seed-data.md
 
 Execution strategy: These prompts must run SEQUENTIALLY (dependencies: 005 → 006 → 007)
 
@@ -482,7 +485,7 @@ What's next?
 3. Review/edit prompts first
 4. Other
 
-Choose (1-4): \_
+Choose (1-4): _
 </presentation>
 
 <actions>
@@ -498,14 +501,17 @@ If user chooses #2, invoke via SlashCommand tool: `/run-prompt 005`
 ## Meta Instructions
 
 - First, check if clarification is needed before generating the prompt
-- Read `!ls ./prompts/ 2>/dev/null | sort -V | tail -1` to determine the next number in sequence
-- If ./prompts/ doesn't exist, create it with `!mkdir -p ./prompts/` before saving
+- Detect current git branch: `!git branch --show-current` (fallback to "main" if fails)
+- Create branch-specific folder structure: `!mkdir -p .agent/prompts/[branch-name]/completed/` (creates both branch and completed folders)
+- Read `!ls .agent/prompts/[branch-name]/ 2>/dev/null | grep -E '^[0-9]+' | sort -V | tail -1 || echo "000"` to determine the next number in sequence for that branch (excludes completed folder, defaults to 000 for 001)
+- If branch folder doesn't exist, create it with `!mkdir -p .agent/prompts/[branch-name]/completed/` before saving (fail gracefully if mkdir fails)
 - Keep prompt filenames descriptive but concise
 - Adapt the XML structure to fit the task - not every tag is needed every time
 - Consider the user's working directory as the root for all relative paths
 - Each prompt file should contain ONLY the prompt content, no preamble or explanation
 - After saving, present the appropriate decision tree based on what was created
 - Use the SlashCommand tool to invoke /run-prompt when user makes their choice
+- Prompts are kept permanently even if branches are deleted
 
 ## Examples of When to Ask for Clarification
 
