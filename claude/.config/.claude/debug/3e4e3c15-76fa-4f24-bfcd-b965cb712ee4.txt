@@ -1,7 +1,0 @@
-[DEBUG] Watching for changes in setting files /Users/juliani/repos/svelte5/secure_qr/.claude/settings.local.json...
-[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.34403.1760262119007
-[DEBUG] Preserving file permissions: 100644
-[DEBUG] Temp file written successfully, size: 48506 bytes
-[DEBUG] Applied original permissions to temp file
-[DEBUG] Renaming /Users/juliani/.claude.json.tmp.34403.1760262119007 to /Users/juliani/.claude.json
-[DEBUG] File /Users/juliani/.claude.json written atomically

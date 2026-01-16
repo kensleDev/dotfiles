@@ -1,8 +1,0 @@
-[DEBUG] Watching for changes in setting files /Users/juliani/.claude/settings.json, /Users/juliani/repos/svelte5/wiki/.claude/settings.local.json...
-[ERROR] Failed to backup config: Error: EACCES: permission denied, copyfile '/Users/juliani/.claude.json' -> '/Users/juliani/.claude.json.backup'
-[DEBUG] Writing to temp file: /Users/juliani/.claude.json.tmp.87335.1761915996938
-[DEBUG] Preserving file permissions: 100644
-[DEBUG] Temp file written successfully, size: 42946 bytes
-[DEBUG] Applied original permissions to temp file
-[DEBUG] Renaming /Users/juliani/.claude.json.tmp.87335.1761915996938 to /Users/juliani/.claude.json
-[DEBUG] File /Users/juliani/.claude.json written atomically

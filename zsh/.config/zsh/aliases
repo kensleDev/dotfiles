@@ -118,3 +118,15 @@ alias sl=nvimGoToLine
 alias sf=nvimGoToFiles
 
 
+alias cl='claude --dangerously-skip-permissions'
+
+function glm() {
+  ANTHROPIC_AUTH_TOKEN="701b5d74894b44408535504935056ac4.gFgQiBPyOEvWDHqG" \
+  ANTHROPIC_BASE_URL="https://api.z.ai/api/anthropic" \
+  ANTHROPIC_API_TIMEOUT_MS="3000000" \
+  CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC="1" \
+  ANTHROPIC_DEFAULT_HAIKU_MODEL="glm-4.5-air" \
+  ANTHROPIC_DEFAULT_SONNET_MODEL="glm-4.7" \
+  ANTHROPIC_DEFAULT_OPUS_MODEL="glm-4.7" \
+  claude --dangerously-skip-permissions
+}

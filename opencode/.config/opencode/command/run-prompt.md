@@ -16,7 +16,7 @@ The user will specify which prompt(s) to run via $ARGUMENTS, which can be:
 - Multiple numbers (e.g., "005 006 007")
 - With execution flag: "005 006 007 --parallel" or "005 006 007 --sequential"
 - If no flag specified with multiple prompts, default to --sequential for safety
-  </input>
+</input>
 
 <process>
 <step1_parse_arguments>
@@ -46,8 +46,8 @@ For each prompt number/name:
 - If exactly one match found: Use that file
 - If multiple matches found: List them and ask user to choose
 - If no matches found in current branch: Check root .agent/prompts/ for backward compatibility, then report error and list available prompts
-  </matching_rules>
-  </step2_resolve_files>
+</matching_rules>
+</step2_resolve_files>
 
 <step3_execute_with_agents>
 <agent_resolution>
@@ -60,137 +60,153 @@ For each prompt file:
 
 <agent_resolution_rules>
 
-- If <agent_allocation> exists: Use specified agents
-- If no allocation: Default to general-purpose for simple tasks
-- If researcher is primary: Check for secondary agent in workflow
-- If multiple agents: Determine execution order (sequential/parallel)
-  </agent_resolution_rules>
+- If <agent_allocation> specifies "researcher": Use researcher agent
+- If <agent_allocation> specifies "fullstack-developer": Use fullstack-developer agent
+- If no allocation: Default to fullstack-developer for implementation tasks
+- If researcher workflow: Researcher creates implementation prompt, then fullstack-developer executes it
+</agent_resolution_rules>
 
 <agent_loading>
 Load agent definition from agents directory:
 
-1. Read agent file (e.g., `agents/agents/[agent-name].md`)
+1. Read agent file (e.g., `agents/fullstack-developer.md` or `agents/researcher.md`)
 2. Extract agent capabilities, tools, and workflow patterns
 3. Prepare context with agent's specific expertise and constraints
 4. Configure tool access based on agent's defined toolset
-   </agent_loading>
-   </agent_resolution>
+</agent_loading>
+</agent_resolution>
 
 <execution_by_agent>
 <researcher_agent>
 
 1. Load researcher.md agent definition
 2. Execute with researcher's toolset (including MCP tools)
-3. Research phase outputs saved to `./research/` directory
-4. If prompt includes implementation phase:
-   - Pass research findings as context to next agent
-   - Follow specified workflow (sequential/parallel)
-5. Archive prompt with research phase metadata
-   </researcher_agent>
+3. Research phase creates implementation prompt at `.agent/prompts/[branch-name]/[number]-[name].md`
+4. Archive research task prompt to `.agent/prompts/[branch-name]/completed/`
+5. Return the path to the created implementation prompt
 
-<specialist_agents>
+<researcher_workflow>
+Researcher agent's job is to:
+- Investigate the topic using MCP tools (Context7, web-search-prime, web-reader)
+- Create a well-structured implementation prompt for fullstack-developer
+- Save the implementation prompt with the next sequential number
+- Include XML structure, requirements, success criteria
+</researcher_workflow>
+</researcher_agent>
 
-1. Load appropriate specialist agent definition
-2. Execute with specialist's toolset
-3. Apply any research findings if available
-4. Implement the specific task requirements
-5. Archive prompt with implementation metadata
-   </specialist_agents>
+<fullstack_developer_agent>
 
-<multi_agent_workflows>
+1. Load fullstack-developer.md agent definition
+2. Execute with fullstack-developer's toolset and skills
+3. Implement the specific task requirements
+4. Archive prompt to `.agent/prompts/[branch-name]/completed/`
+5. Return implementation results
+</fullstack_developer_agent>
+
 <research_first_workflow>
+When researcher creates an implementation prompt:
 
-1. Execute researcher agent first
-2. Capture research findings and recommendations
-3. Pass findings to secondary specialist agent
-4. Specialist agent implements based on research
+1. Execute researcher agent on research task prompt
+2. Researcher creates implementation prompt at `[number]-[name].md`
+3. Prompt user: "Researcher created implementation prompt at .agent/prompts/[branch]/[number]-[name].md. Run fullstack-developer to execute it?"
+4. If user confirms, execute fullstack-developer on the new implementation prompt
 5. Return consolidated results from both phases
-   </research_first_workflow>
+</research_first_workflow>
 
-<parallel_specialist_workflow>
+<parallel_workflow>
+For multiple independent prompts (same agent type):
 
-1. Identify independent specialist agents
+1. Verify prompts are truly independent (no shared file modifications)
 2. **Spawn all Task tools in a SINGLE MESSAGE** (critical for parallel):
-   - Use Task tool for each specialist with their agent context
+   - Use Task tool for each prompt with fullstack-developer context
    - All agents work simultaneously on different aspects
-3. Wait for ALL specialists to complete
-4. Integrate outputs from all specialists
-5. Archive all prompts with consolidated metadata
-   </parallel_specialist_workflow>
+3. Wait for ALL agents to complete
+4. Integrate outputs from all agents
+5. Archive all prompts to completed folder
+</parallel_workflow>
 
-<sequential_specialist_workflow>
+<sequential_workflow>
+For dependent prompts:
 
-1. Determine agent execution order from dependencies
-2. Execute first specialist agent
+1. Determine execution order from dependencies
+2. Execute first prompt with appropriate agent
 3. Wait for completion
-4. Pass output as context to next agent
-5. Repeat until all agents complete
+4. Pass output as context to next prompt
+5. Repeat until all prompts complete
 6. Return consolidated results showing progression
-   </sequential_specialist_workflow>
-   </multi_agent_workflows>
-   </execution_by_agent>
-   </step3_execute_with_agents>
-   </process>
+</sequential_workflow>
+</execution_by_agent>
+</step3_execute_with_agents>
+</process>
 
 <context_strategy>
-By delegating to a sub-task with the appropriate agent context, the actual implementation work happens in fresh context while the main conversation stays lean for orchestration and iteration. Agent specialization ensures tasks are handled by experts in their respective domains.
+By delegating to a sub-task with the appropriate agent context, the actual implementation work happens in fresh context while the main conversation stays lean for orchestration and iteration.
 </context_strategy>
 
 <output>
-<research_first_output>
-🔍 Research Phase Completed: .agent/prompts/feature-auth/005-implement-auth.md
-🛠️ Implementation Phase Completed with fullstack-specialist
-✓ Archived to: .agent/prompts/feature-auth/completed/005-implement-auth.md
+<researcher_output>
+✓ Research task executed: .agent/prompts/[branch]/[number]-research-[topic].md
 
-<research_findings>
-[Summary of key research insights from researcher agent]
-</research_findings>
+Researcher created implementation prompt:
+.agent/prompts/[branch]/[number]-[name].md
 
-<implementation_results>
-[Summary of what the specialist accomplished based on research]
-</implementation_results>
+<research_summary>
+[Summary of research findings]
+</research_summary>
 
-<consolidated_outcome>
-[End-to-end results showing research-informed implementation]
-</consolidated_outcome>
-</research_first_output>
+<next_action>
+Run fullstack-developer to execute the implementation prompt?
+</next_action>
+</researcher_output>
 
-<single_prompt_output>
-✓ Executed: .agent/prompts/feature-auth/005-implement-feature.md with [agent-name]
-✓ Archived to: .agent/prompts/feature-auth/completed/005-implement-feature.md
+<fullstack_developer_output>
+✓ Executed: .agent/prompts/[branch]/[number]-[name].md with fullstack-developer
+✓ Archived to: .agent/prompts/[branch]/completed/[number]-[name].md
 
 <results>
-[Summary of what the specialist agent accomplished]
+[Summary of what fullstack-developer accomplished]
 </results>
-</single_prompt_output>
+</fullstack_developer_output>
+
+<research_first_output>
+🔍 Research Phase Completed: .agent/prompts/[branch]/[number]-research-[topic].md
+🛠️ Implementation Prompt Created: .agent/prompts/[branch]/[number]-[name].md
+✓ Archived research task to: .agent/prompts/[branch]/completed/[number]-research-[topic].md
+
+<research_summary>
+[Summary of key research insights]
+</research_summary>
+
+<implementation_prompt_ready>
+The implementation prompt is ready for fullstack-developer to execute.
+</implementation_prompt_ready>
+</research_first_output>
 
 <parallel_output>
 ✓ Executed in PARALLEL:
 
-- .agent/prompts/feature-auth/005-implement-auth.md with security-specialist
-- .agent/prompts/feature-auth/006-implement-api.md with fullstack-specialist
-- .agent/prompts/feature-auth/007-implement-ui.md with react-nextjs-specialist
+- .agent/prompts/[branch]/005-implement-auth.md with fullstack-developer
+- .agent/prompts/[branch]/006-implement-api.md with fullstack-developer
+- .agent/prompts/[branch]/007-implement-ui.md with fullstack-developer
 
-✓ All archived to .agent/prompts/feature-auth/completed/feature-auth/
+✓ All archived to .agent/prompts/[branch]/completed/
 
 <results>
-[Consolidated summary of all specialist agent results]
-[Agent collaboration summary]
+[Consolidated summary of all results]
 </results>
 </parallel_output>
 
 <sequential_output>
 ✓ Executed SEQUENTIALLY:
 
-1. .agent/prompts/feature-auth/005-setup-database.md with database-specialist → Success
-2. .agent/prompts/feature-auth/006-create-migrations.md with database-specialist → Success
-3. .agent/prompts/feature-auth/007-seed-data.md with database-specialist → Success
+1. .agent/prompts/[branch]/005-setup-database.md with fullstack-developer → Success
+2. .agent/prompts/[branch]/006-create-migrations.md with fullstack-developer → Success
+3. .agent/prompts/[branch]/007-seed-data.md with fullstack-developer → Success
 
-✓ All archived to .agent/prompts/feature-auth/completed/feature-auth/
+✓ All archived to .agent/prompts/[branch]/completed/
 
 <results>
 [Consolidated summary showing progression through each step]
-[Agent handoffs and context passing]
 </results>
 </sequential_output>
 </output>
@@ -204,10 +220,9 @@ By delegating to a sub-task with the appropriate agent context, the actual imple
 - If any prompt fails, stop sequential execution and report error
 - Provide clear, consolidated results for multiple prompt execution
 - Agent-specific: Always load agent context from agents directory
-- Agent workflows: Respect agent allocation tags and workflow patterns
-- Agent tools: Restrict tool access to agent's defined toolset
-- Agent handoffs: Include relevant outputs as context for next agent
-- Research-first: Always complete research phase before implementation
+- Researcher workflow: Researcher creates prompts, fullstack-developer executes them
+- Researcher output: Creates implementation prompts at `.agent/prompts/[branch-name]/[number]-[name].md`
+- Fullstack-developer: Handles all SvelteKit, Next.js, and general implementation tasks
 - Branch context: Default to current git branch, support explicit branch paths for cross-branch execution
 - Backward compatibility: Check root .agent/prompts/ if no files found in current branch folder
-  </critical_notes>
+</critical_notes>
