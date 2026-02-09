@@ -88,6 +88,11 @@ set("n", "<leader>y", "<Plug>OSCYankOperator", { desc = "yank to system" })
 -- vim.keymap.set('n', '<leader>cc', '<leader>c_', {remap = true})
 set("v", "<leader>y", "<Plug>OSCYankVisual", { desc = "yank to system" })
 
+-- Make visual mode yank default to OSCYankVisual (system clipboard)
+-- This overrides the default 'y' operator in visual mode
+vim.keymap.set({"v", "x"}, "y", "<Plug>OSCYankVisual", { desc = "yank to system clipboard", noremap = true, silent = true })
+vim.keymap.set("n", "yy", "<Plug>OSCYankOperator", { desc = "yank line to system clipboard", noremap = true, silent = true })
+
 set("x", "<leader>;", [["_dP]])
 
 M = {}
