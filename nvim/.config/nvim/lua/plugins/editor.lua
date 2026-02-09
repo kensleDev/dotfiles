@@ -42,6 +42,17 @@ return {
   },
 
   {
+    "folke/snacks.nvim",
+    ---@type snacks.Config
+    opts = {
+      notifier = {
+        enable = true,
+        top_down = false,
+      },
+    },
+  },
+
+  {
     "nvim-neo-tree/neo-tree.nvim",
     branch = "v3.x",
     cmd = "Neotree",
