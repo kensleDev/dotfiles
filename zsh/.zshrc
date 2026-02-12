@@ -36,5 +36,13 @@ source ~/.config/zsh/aliases
 
 theme=agnoster
 
-eval "$(mise activate zsh)"
+# eval "$(mise activate zsh)"
 
+
+# OpenClaw Completion
+# source <(openclaw completion --shell zsh)
+source <(NODE_NO_WARNINGS=1 openclaw completion --shell zsh 2>/dev/null)
+
+
+# opencode
+export PATH=/home/kd/.opencode/bin:$PATH
