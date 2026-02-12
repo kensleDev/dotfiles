@@ -10,11 +10,11 @@
     "AGENTS.md"
   ],
   "mcp": {
-    "context7": {
-      "type": "local",
-      "command": ["npx", "-y", "@upstash/context7-mcp"],
-      "enabled": true
-    },
+    // "context7": {
+    //   "type": "local",
+    //   "command": ["npx", "-y", "@upstash/context7-mcp"],
+    //   "enabled": true
+    // },
     // "react-native-guide": {
     //   "type": "local",
     //   "command": ["npx", "@mrnitro360/react-native-mcp-guide@1.1.0"]
@@ -29,20 +29,20 @@
     //   "command": ["npx", "-y", "@mobilenext/mobile-mcp@latest"],
     //   "environment": {}
     // },
-    "web-reader": {
-      "type": "remote",
-      "url": "https://api.z.ai/api/mcp/web_reader/mcp",
-      "headers": {
-        "Authorization": "Bearer 5b282d20d4ee4f6fa38c1aa916737609.yYMFdoe4vJVviNYc"
-      }
-    },
-    "web-search-prime": {
-      "type": "remote",
-      "url": "https://api.z.ai/api/mcp/web_search_prime/mcp",
-      "headers": {
-        "Authorization": "Bearer 5b282d20d4ee4f6fa38c1aa916737609.yYMFdoe4vJVviNYc"
-      }
-    },
+    // "web-reader": {
+    //   "type": "remote",
+    //   "url": "https://api.z.ai/api/mcp/web_reader/mcp",
+    //   "headers": {
+    //     "Authorization": "Bearer 5b282d20d4ee4f6fa38c1aa916737609.yYMFdoe4vJVviNYc"
+    //   }
+    // },
+    // "web-search-prime": {
+    //   "type": "remote",
+    //   "url": "https://api.z.ai/api/mcp/web_search_prime/mcp",
+    //   "headers": {
+    //     "Authorization": "Bearer 5b282d20d4ee4f6fa38c1aa916737609.yYMFdoe4vJVviNYc"
+    //   }
+    // },
     "zai-vision": {
       "type": "local",
       "command": ["npx", "-y", "@z_ai/mcp-server"],
@@ -51,17 +51,16 @@
         "Z_AI_API_KEY": "e2419083b6f64de885a102aa2bd4a05e.EInxt7Yr0CpTCyLy",
         "Z_AI_MODE": "ZAI"
       }
-    },
-
-    "sqlite": {
-      "type": "local",
-      "command": [
-        "npx",
-        "-y",
-        "@modelcontextprotocol/server-sqlite",
-        "/Users/kd/repos/print/print-farm/print-farm.db"
-      ]
     }
+    // "sqlite": {
+    //   "type": "local",
+    //   "command": [
+    //     "npx",
+    //     "-y",
+    //     "@modelcontextprotocol/server-sqlite",
+    //     "/Users/kd/repos/print/print-farm/print-farm.db"
+    //   ]
+    // }
     // "zai-mcp-server": {
     //   "type": "local",
     //   "command": ["npx", "-y", "@z_ai/mcp-server"],
