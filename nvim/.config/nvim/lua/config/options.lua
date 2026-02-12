@@ -12,7 +12,7 @@ vim.opt.breakindent = true -- Indent wrapped lines
 vim.opt.showbreak = "⤷ " -- Add visual indicator for wrapped lines
 
 local function set_buffer_options(wrapwidth, tabwidth, expandtab)
-  vim.cmd("Wrapwidth " .. wrapwidth)
+  pcall(vim.cmd, "Wrapwidth " .. wrapwidth)
   vim.wo.colorcolumn = tostring(wrapwidth + 1) -- Automatically set colorcolumn to wrapwidth + 1
   vim.o.tabstop = tabwidth -- A TAB character looks like `tabwidth` spaces
   vim.o.shiftwidth = tabwidth -- Number of spaces inserted when indenting
