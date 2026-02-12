@@ -1,7 +1,14 @@
-local keymaps = require("config.keymaps")
-
 return {
   "nickjvandyke/opencode.nvim",
+  keys = {
+    { "<C-a>", mode = { "n", "x" }, desc = "Ask opencode…" },
+    { "<C-x>", mode = { "n", "x" }, desc = "Execute opencode action…" },
+    { "<C-.>", mode = { "n", "t" }, desc = "Toggle opencode" },
+    { "go", desc = "Add range to opencode" },
+    { "goo", desc = "Add line to opencode" },
+    { "<S-C-u>", desc = "Scroll opencode up" },
+    { "<S-C-d>", desc = "Scroll opencode down" },
+  },
   dependencies = {
     { "folke/snacks.nvim", opts = { input = {}, picker = {}, terminal = {} } },
   },
