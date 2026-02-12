@@ -2,10 +2,6 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 
--- Keymaps are automatically loaded on the VeryLazy event
--- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
--- Add any additional keymaps here
---
 vim.g.neovide_input_macos_option_key_is_meta = true
 
 local opts = {
@@ -95,7 +91,7 @@ vim.keymap.set("n", "yy", "<Plug>OSCYankOperator", { desc = "yank line to system
 
 set("x", "<leader>;", [["_dP]])
 
-M = {}
+local M = {}
 
 M.copilot = {
   {

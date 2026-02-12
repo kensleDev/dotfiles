@@ -21,16 +21,18 @@ local function set_buffer_options(wrapwidth, tabwidth, expandtab)
 end
 
 -- General settings for all files
-vim.api.nvim_create_autocmd("BufEnter", {
-  pattern = "*",
+vim.api.nvim_create_autocmd("BufReadPost", {
   callback = function()
-    set_buffer_options(80, 2, true)
+    local ft = vim.bo.filetype
+    if ft ~= "cs" and ft ~= "rust" then
+      set_buffer_options(80, 2, true)
+    end
   end,
 })
 
 -- Specific settings for C# and Rust files
-vim.api.nvim_create_autocmd("BufEnter", {
-  pattern = { "*.cs", "*.rs" },
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "cs", "rust" },
   callback = function()
     set_buffer_options(100, 4, true)
   end,

@@ -12,33 +12,35 @@ return {
 
   {
     "alexghergh/nvim-tmux-navigation",
-    config = function()
-      require("nvim-tmux-navigation").setup({
-        disable_when_zoomed = true, -- defaults to false
-        keybindings = {
-          left = "<M-m>",
-          down = "<M-,>",
-          up = "<M-.>",
-          right = "<M-.>",
-          last_active = "<C-\\>",
-          next = "<C-Space>",
-        },
-      })
-    end,
+    keys = {
+      { "<M-m>", function() require("nvim-tmux-navigation").NvimTmuxNavigateLeft() end, desc = "Tmux Left" },
+      { "<M-,>", function() require("nvim-tmux-navigation").NvimTmuxNavigateDown() end, desc = "Tmux Down" },
+      { "<M-.>", function() require("nvim-tmux-navigation").NvimTmuxNavigateUp() end, desc = "Tmux Up" },
+      { "<M-/>", function() require("nvim-tmux-navigation").NvimTmuxNavigateRight() end, desc = "Tmux Right" },
+      { "<C-\\>", function() require("nvim-tmux-navigation").NvimTmuxNavigateLastActive() end, desc = "Tmux Last" },
+      { "<C-Space>", function() require("nvim-tmux-navigation").NvimTmuxNavigateNext() end, desc = "Tmux Next" },
+    },
+    opts = {
+      disable_when_zoomed = true,
+    },
   },
 
   {
     "ojroques/vim-oscyank",
+    event = "TextYankPost",
   },
 
   {
     "rickhowe/wrapwidth",
+    event = "BufReadPost",
+    init = function()
+      vim.g.wrapwidth_default = 80
+    end,
   },
 
   {
     "marklcrns/vim-smartq",
-    event = "BufEnter",
-    keys = keymaps.smartq,
+    event = "BufReadPost",
   },
 
   {
