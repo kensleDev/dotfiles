@@ -5,6 +5,13 @@
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
+---- Performance Optimizations
+vim.opt.synmaxcol = 300
+vim.opt.updatetime = 250
+vim.opt.redrawtime = 1500
+vim.opt.ttimeoutlen = 10
+vim.opt.lazyredraw = true
+
 ---- Wrapping
 vim.opt.wrap = true
 vim.wo.linebreak = true -- Avoid breaking mid-word

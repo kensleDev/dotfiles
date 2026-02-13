@@ -51,6 +51,10 @@ return {
         enable = true,
         top_down = false,
       },
+      bigfile = {
+        size = 2 * 1024 * 1024,
+        notify = true,
+      },
     },
   },
 
