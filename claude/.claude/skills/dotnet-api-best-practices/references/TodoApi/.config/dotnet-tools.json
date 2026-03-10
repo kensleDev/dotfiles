@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "nswag.consolecore": {
+      "version": "14.0.7",
+      "commands": ["nswag"]
+    },
+    "swashbuckle.aspnetcore.cli": {
+      "version": "6.9.0",
+      "commands": ["swagger"]
+    }
+  }
+}

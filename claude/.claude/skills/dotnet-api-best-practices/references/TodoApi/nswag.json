@@ -1,0 +1,21 @@
+{
+  "runtime": "Net80",
+  "documentGenerator": {
+    "aspNetCoreToOpenApi": {
+      "project": "TodoApi.csproj",
+      "configuration": "Debug",
+      "noBuild": false,
+      "aspNetCoreEnvironment": "Development"
+    }
+  },
+  "codeGenerators": {
+    "openApiToTypeScriptClient": {
+      "template": "fetch",
+      "className": "ApiClient",
+      "typeScriptVersion": 4.9,
+      "generateClientInterfaces": true,
+      "useAbortSignal": true,
+      "output": "Client/client.ts"
+    }
+  }
+}
