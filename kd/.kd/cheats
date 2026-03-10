@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+
+CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/cheats"
+CACHE_FILE="$CACHE_DIR/cheatsheet_index.txt"
+
+# Search paths for normal refresh
+SEARCH_PATHS=("$HOME/.config" "$HOME/.kd")
+
+# Create cache dir if it doesn't exist
+mkdir -p "$CACHE_DIR"
+
+# Show spinner during refresh
+spinner() {
+	local pid=$1
+	local message=$2
+	local frames='⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏'
+	local i=0
+
+	printf "\r%s " "$message"
+
+	while kill -0 "$pid" 2>/dev/null; do
+		printf "\r%s %s" "$message" "${frames:i++%${#frames}:1}"
+		sleep 0.08
+	done
+
+	printf "\r%s \n" "$message"
+}
+
+# Sync refresh with spinner (for --refresh/--all flags)
+sync_refresh() {
+	local search_target="$1"
+
+	if [[ "$search_target" == "all" ]]; then
+		local paths=("$HOME")
+		local msg="Re-indexing cheatsheets (full home)..."
+	else
+		local paths=("${SEARCH_PATHS[@]}")
+		local msg="Re-indexing cheatsheets..."
+	fi
+
+	(
+		new_files=$(find -L "${paths[@]}" -maxdepth 6 -name "CHEATSHEET.md" 2>/dev/null | sort)
+		echo "$new_files" > "$CACHE_FILE"
+	) &
+	local refresh_pid=$!
+	spinner $refresh_pid "  $msg"
+	wait $refresh_pid
+}
+
+# Handle flags
+case "$1" in
+	--all)
+		sync_refresh "all"
+		;;
+	*)
+		# Always refresh subset on launch (fast)
+		sync_refresh "normal"
+		;;
+esac
+
+# Load immediately from cache (skip if no cache on first run)
+if [[ -f "$CACHE_FILE" ]]; then
+	selected=$(cat "$CACHE_FILE" | fzf --preview 'bat --color=always {}' --preview-window=right:70%)
+
+	if [[ -n "$selected" ]]; then
+		bat "$selected"
+	fi
+fi
