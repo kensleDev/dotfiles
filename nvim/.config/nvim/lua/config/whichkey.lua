@@ -1,7 +1,7 @@
 local which_key = require("which-key")
 
 which_key.setup({
-  preset = "modern",
+  preset = "helix",
   delay = 250,
   filter = function(mapping)
     return mapping.desc and mapping.desc ~= ""
@@ -16,4 +16,3 @@ which_key.setup({
     { "<leader>s", group = "search / sessions" },
   },
 })
-

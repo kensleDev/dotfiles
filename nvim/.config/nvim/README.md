@@ -1,27 +1,26 @@
 # Julian's lean Neovim 0.12 configuration
 
 This is a purpose-built replacement for the LazyVim configuration in
-`kensledev/dotfiles`. It keeps the unusual movement layout, OpenCode workflow,
+`kensledev/dotfiles`. It keeps the unusual movement layout,
 tmux navigation, remote clipboard, fuzzy finding, Git signs, formatting,
 Treesitter and the language coverage from the enabled LazyVim extras, while
-cutting the managed plugin set from 51 to 12.
+cutting the managed plugin set from 51 to 11.
 
 ## What remains a plugin
 
-| Plugin | Why it stays |
-| --- | --- |
-| `catppuccin` | The existing colour scheme |
-| `fzf-lua` | Fast `.gitignore`-aware files, grep, buffers and symbols |
-| `nvim-treesitter` | Parser/query installation for modern highlighting |
-| `conform.nvim` | Reliable format-on-save and formatter fallback |
-| `gitsigns.nvim` | Inline Git state and hunk actions |
-| `snacks.nvim` | Required UI/terminal provider for OpenCode |
-| `opencode.nvim` | The existing AI editing workflow |
-| `render-markdown.nvim` | The existing rendered Markdown workflow |
-| `which-key.nvim` | The existing modern mapping-discovery popup |
-| `mason.nvim` | Installs language-server executables inside Neovim's data directory |
-| `mason-lspconfig.nvim` | Automatically installs and enables the configured servers |
-| `nvim-lspconfig` | Maintained server definitions for native Neovim LSP |
+| Plugin                 | Why it stays                                                        |
+| ---------------------- | ------------------------------------------------------------------- |
+| `catppuccin`           | The existing colour scheme                                          |
+| `fzf-lua`              | Fast `.gitignore`-aware files, grep, buffers, symbols and keymaps   |
+| `nvim-treesitter`      | Parser/query installation for modern highlighting                   |
+| `conform.nvim`         | Reliable format-on-save and formatter fallback                      |
+| `gitsigns.nvim`        | Inline Git state and hunk actions                                   |
+| `flash.nvim`           | Fast native jump and search motions                                 |
+| `render-markdown.nvim` | The existing rendered Markdown workflow                             |
+| `which-key.nvim`       | The existing modern mapping-discovery popup                         |
+| `mason.nvim`           | Installs language-server executables inside Neovim's data directory |
+| `mason-lspconfig.nvim` | Automatically installs and enables the configured servers           |
+| `nvim-lspconfig`       | Maintained server definitions for native Neovim LSP                 |
 
 Native Neovim replaces Lazy.nvim/LazyVim, Blink, Neo-tree,
 Lualine, Trouble, persistence, vim-oscyank, tmux-navigation, wrapwidth and the
@@ -56,7 +55,7 @@ ln -s /path/to/lean-nvim ~/.config/nvim
 nvim
 ```
 
-The first launch installs the twelve plugins, configured language servers and
+The first launch installs the eleven plugins, configured language servers and
 Treesitter parsers. Neovim
 0.12, Git, `rg`, `fzf`, a C compiler, `tar`, `curl`, and tree-sitter-cli 0.26.1+
 must already be available.
@@ -80,25 +79,24 @@ refresh the registry and `:LspInfo` or `:checkhealth vim.lsp` to inspect the
 server attached to the current buffer.
 
 Formatters and standalone tools are still external. Install the ones you use:
-`prettier`, `stylua`, `csharpier`, `shfmt`, `yazi`, `lazyworktree` and
-`opencode`. Conform falls back to LSP formatting when an external formatter is
+`prettier`, `stylua`, `csharpier`, `shfmt`, `yazi`, `lazyworktree`. Conform falls back to LSP formatting when an external formatter is
 not available.
 
 ## Important mappings retained
 
-| Mapping | Action |
-| --- | --- |
-| `j / k / l / ;` | left / down / up / right |
-| `h` | original `;` motion |
-| `Alt-m/,/./` | move across Neovim splits and tmux panes |
-| `<leader>p`, `<leader>P`, `<leader>/` | files, recent files, live grep |
-| `<leader>e` | native explorer |
-| `<leader>d` | diagnostics in quickfix |
-| `<leader>cf` | format |
-| `<C-a>`, `<C-x>`, `<C-.>` | ask, action and toggle OpenCode |
-| `go`, `goo` | send range or line to OpenCode |
-| `<leader>fy`, `<leader>gw` | Yazi and Lazyworktree floats |
-| `<leader>ss`, `<leader>sl` | save/load the default native session |
+| Mapping                               | Action                                   |
+| ------------------------------------- | ---------------------------------------- |
+| `j / k / l / ;`                       | left / down / up / right                 |
+| `h`                                   | original `;` motion                      |
+| `Alt-m/,/./`                          | move across Neovim splits and tmux panes |
+| `<leader>p`, `<leader>/`              | files, live grep                         |
+| `<leader>P`, `<leader>fc`              | recent files, config files              |
+| `<leader>fk`                           | filterable keymap list                   |
+| `<leader>e`                           | native explorer                          |
+| `<leader>d`                           | diagnostics in quickfix                  |
+| `<leader>cf`                          | format                                   |
+| `<leader>fy`, `<leader>gw`            | Yazi and Lazyworktree floats             |
+| `<leader>ss`, `<leader>sl`            | save/load the default native session     |
 
 ## Intentional differences from LazyVim
 

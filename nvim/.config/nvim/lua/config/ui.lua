@@ -66,3 +66,61 @@ vim.api.nvim_create_user_command("Lazyworktree", function()
 end, {})
 vim.keymap.set("n", "<leader>fy", "<cmd>Yazi<cr>", { desc = "Yazi" })
 vim.keymap.set("n", "<leader>gw", "<cmd>Lazyworktree<cr>", { desc = "Lazyworktree" })
+
+vim.api.nvim_create_autocmd("VimEnter", {
+	group = vim.api.nvim_create_augroup("lean_welcome", { clear = true }),
+	callback = function()
+		if vim.fn.argc() ~= 0 then
+			return
+		end
+
+		local buf = vim.api.nvim_get_current_buf()
+		local fzf = require("fzf-lua")
+		local session = vim.fn.stdpath("state") .. "/sessions/default.vim"
+		local lines = {
+			"",
+			"  Julian's Neovim",
+			"",
+			"  f  Find file",
+			"  n  New file",
+			"  g  Find text",
+			"  r  Recent files",
+			"  c  Config",
+			"  s  Restore session",
+			"  q  Quit",
+			"",
+		}
+
+		vim.bo[buf].buftype = "nofile"
+		vim.bo[buf].bufhidden = "wipe"
+		vim.bo[buf].buflisted = false
+		vim.bo[buf].swapfile = false
+		vim.bo[buf].modifiable = true
+		vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+		vim.bo[buf].modifiable = false
+		vim.bo[buf].filetype = "lean-welcome"
+		vim.wo.number = false
+		vim.wo.relativenumber = false
+		vim.wo.cursorline = false
+		vim.wo.signcolumn = "no"
+
+		local function map(key, action, desc)
+			vim.keymap.set("n", key, action, { buffer = buf, desc = desc, silent = true })
+		end
+		map("f", fzf.files, "Find file")
+		map("n", vim.cmd.enew, "New file")
+		map("g", fzf.live_grep, "Find text")
+		map("r", fzf.oldfiles, "Recent files")
+		map("c", function()
+			fzf.files({ cwd = vim.fn.stdpath("config") })
+		end, "Config")
+		map("s", function()
+			if vim.fn.filereadable(session) == 1 then
+				vim.cmd.source(vim.fn.fnameescape(session))
+			else
+				vim.notify("No saved session", vim.log.levels.WARN)
+			end
+		end, "Restore session")
+		map("q", vim.cmd.quitall, "Quit")
+	end,
+})
