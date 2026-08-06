@@ -1,42 +1,65 @@
--- Autocmds are automatically loaded on the VeryLazy event
--- Default autocmds that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
---
--- Add any additional autocmds here
--- with `vim.api.nvim_create_autocmd`
---
--- Or remove existing autocmds by their group name (which is prefixed with `lazyvim_` for the defaults)
--- e.g. vim.api.nvim_del_augroup_by_name("lazyvim_wrap_spell")
+local group = vim.api.nvim_create_augroup("lean_nvim", { clear = true })
 
--- Performance: Disable treesitter for specific filetypes
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "log", "json", "yaml" },
+vim.api.nvim_create_autocmd("TextYankPost", {
+  group = group,
+  desc = "Highlight yanked text",
   callback = function()
-    pcall(vim.treesitter.stop)
+    vim.highlight.on_yank({ timeout = 200 })
   end,
-  desc = "Disable treesitter for large file types",
-})
-
--- Performance: Optimize large files (>2MB)
-vim.api.nvim_create_autocmd("BufReadPre", {
-  callback = function()
-    local filepath = vim.fn.expand("<afile>:p")
-    local ok, stats = pcall(vim.uv.fs_stat, filepath)
-    if ok and stats and stats.size > 2 * 1024 * 1024 then
-      vim.b.bigfile = true
-      vim.opt_local.foldmethod = "manual"
-      vim.opt_local.foldenable = false
-      vim.opt_local.swapfile = false
-      vim.opt_local.list = false
-    end
-  end,
-  desc = "Optimize settings for large files",
 })
 
 vim.api.nvim_create_autocmd("BufReadPost", {
-  callback = function()
-    if vim.b.bigfile then
-      pcall(vim.treesitter.stop)
+  group = group,
+  desc = "Restore the last cursor position",
+  callback = function(args)
+    local mark = vim.api.nvim_buf_get_mark(args.buf, '"')
+    if mark[1] > 0 and mark[1] <= vim.api.nvim_buf_line_count(args.buf) then
+      pcall(vim.api.nvim_win_set_cursor, 0, mark)
     end
   end,
-  desc = "Disable treesitter for large files",
 })
+
+vim.api.nvim_create_autocmd("BufReadPre", {
+  group = group,
+  desc = "Reduce work for files larger than 2 MiB",
+  callback = function(args)
+    local stat = vim.uv.fs_stat(args.file)
+    if stat and stat.size > 2 * 1024 * 1024 then
+      vim.b[args.buf].bigfile = true
+      vim.bo[args.buf].swapfile = false
+      vim.bo[args.buf].undofile = false
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  group = group,
+  pattern = "*",
+  desc = "Start Treesitter where a parser exists",
+  callback = function(args)
+    if vim.b[args.buf].bigfile then return end
+    pcall(vim.treesitter.start, args.buf)
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  group = group,
+  pattern = { "cs", "rust" },
+  callback = function()
+    vim.opt_local.tabstop = 4
+    vim.opt_local.shiftwidth = 4
+    vim.opt_local.softtabstop = 4
+    vim.opt_local.textwidth = 100
+    vim.opt_local.colorcolumn = "101"
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  group = group,
+  pattern = { "lua", "javascript", "javascriptreact", "typescript", "typescriptreact", "svelte", "json", "yaml", "markdown" },
+  callback = function()
+    vim.opt_local.textwidth = 80
+    vim.opt_local.colorcolumn = "81"
+  end,
+})
+
