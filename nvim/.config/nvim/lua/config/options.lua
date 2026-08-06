@@ -27,6 +27,8 @@ opt.shiftwidth = 2
 opt.softtabstop = 2
 opt.expandtab = true
 opt.smartindent = true
+opt.list = true
+opt.listchars = { tab = " ┊", leadtab = " ┊", leadmultispace = " ┊" }
 
 opt.undofile = true
 opt.swapfile = false
@@ -35,6 +37,8 @@ opt.updatetime = 250
 opt.timeoutlen = 400
 opt.ttimeoutlen = 10
 opt.completeopt = { "menu", "menuone", "noselect", "fuzzy", "popup" }
+opt.pumborder = "rounded"
+opt.winborder = "rounded"
 opt.autocomplete = true
 
 opt.splitbelow = true
@@ -53,4 +57,3 @@ if vim.env.SSH_TTY or vim.env.SSH_CONNECTION then
     paste = { ["+"] = osc52.paste("+"), ["*"] = osc52.paste("*") },
   }
 end
-

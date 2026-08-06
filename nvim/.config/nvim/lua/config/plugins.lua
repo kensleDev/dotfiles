@@ -10,6 +10,9 @@ local plugins = {
 	{ src = "https://github.com/neovim/nvim-lspconfig" },
 	{ src = "https://github.com/mason-org/mason-lspconfig.nvim" },
 	{ src = "https://github.com/folke/flash.nvim" },
+	{ src = "https://github.com/nvim-mini/mini.pairs", version = "stable" },
+	{ src = "https://github.com/rickhowe/wrapwidth" },
 }
 
 vim.pack.add(plugins, { confirm = false, load = true })
+require("mini.pairs").setup()

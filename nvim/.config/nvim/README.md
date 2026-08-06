@@ -4,7 +4,7 @@ This is a purpose-built replacement for the LazyVim configuration in
 `kensledev/dotfiles`. It keeps the unusual movement layout,
 tmux navigation, remote clipboard, fuzzy finding, Git signs, formatting,
 Treesitter and the language coverage from the enabled LazyVim extras, while
-cutting the managed plugin set from 51 to 11.
+cutting the managed plugin set from 51 to 13.
 
 ## What remains a plugin
 
@@ -21,9 +21,11 @@ cutting the managed plugin set from 51 to 11.
 | `mason.nvim`           | Installs language-server executables inside Neovim's data directory |
 | `mason-lspconfig.nvim` | Automatically installs and enables the configured servers           |
 | `nvim-lspconfig`       | Maintained server definitions for native Neovim LSP                 |
+| `mini.pairs`           | Smart insertion of matching quotes and brackets                     |
+| `wrapwidth`            | Visual wrapping toggle for selected code buffers                    |
 
 Native Neovim replaces Lazy.nvim/LazyVim, Blink, Neo-tree,
-Lualine, Trouble, persistence, vim-oscyank, tmux-navigation, wrapwidth and the
+Lualine, Trouble, persistence, vim-oscyank, tmux-navigation and the
 external-TUI wrapper.
 
 ## Install
@@ -55,7 +57,7 @@ ln -s /path/to/lean-nvim ~/.config/nvim
 nvim
 ```
 
-The first launch installs the eleven plugins, configured language servers and
+The first launch installs the thirteen plugins, configured language servers and
 Treesitter parsers. Neovim
 0.12, Git, `rg`, `fzf`, a C compiler, `tar`, `curl`, and tree-sitter-cli 0.26.1+
 must already be available.
@@ -79,7 +81,7 @@ refresh the registry and `:LspInfo` or `:checkhealth vim.lsp` to inspect the
 server attached to the current buffer.
 
 Formatters and standalone tools are still external. Install the ones you use:
-`prettier`, `stylua`, `csharpier`, `shfmt`, `yazi`, `lazyworktree`. Conform falls back to LSP formatting when an external formatter is
+`prettier`, `stylua`, `csharpier`, `shfmt`, `lazyworktree`. Conform falls back to LSP formatting when an external formatter is
 not available.
 
 ## Important mappings retained
@@ -95,7 +97,8 @@ not available.
 | `<leader>e`                           | native explorer                          |
 | `<leader>d`                           | diagnostics in quickfix                  |
 | `<leader>cf`                          | format                                   |
-| `<leader>fy`, `<leader>gw`            | Yazi and Lazyworktree floats             |
+| `<leader>tw`                          | toggle 100-column visual wrapping        |
+| `<leader>gw`                          | Lazyworktree float                       |
 | `<leader>ss`, `<leader>sl`            | save/load the default native session     |
 
 ## Intentional differences from LazyVim

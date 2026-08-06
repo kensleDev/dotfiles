@@ -1,5 +1,15 @@
 local group = vim.api.nvim_create_augroup("lean_nvim", { clear = true })
 
+vim.api.nvim_create_autocmd("VimLeavePre", {
+  group = group,
+  desc = "Save the default session on exit",
+  callback = function()
+    local dir = vim.fn.stdpath("state") .. "/sessions"
+    vim.fn.mkdir(dir, "p")
+    pcall(vim.cmd.mksession, { args = { dir .. "/default.vim" }, bang = true })
+  end,
+})
+
 vim.api.nvim_create_autocmd("TextYankPost", {
   group = group,
   desc = "Highlight yanked text",
@@ -63,3 +73,22 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+vim.api.nvim_create_autocmd("FileType", {
+  group = group,
+  pattern = { "typescript", "typescriptreact", "svelte" },
+  desc = "Visually wrap code at 100 columns",
+  callback = function(args)
+    vim.opt_local.colorcolumn = "101"
+
+    local function set_wrap(enabled)
+      vim.opt_local.wrap = enabled
+      vim.cmd("Wrapwidth " .. (enabled and 100 or 0))
+      vim.b[args.buf].wrapwidth_enabled = enabled
+    end
+
+    set_wrap(true)
+    vim.keymap.set("n", "<leader>tw", function()
+      set_wrap(not vim.b[args.buf].wrapwidth_enabled)
+    end, { buffer = args.buf, desc = "Toggle 100-column wrap" })
+  end,
+})

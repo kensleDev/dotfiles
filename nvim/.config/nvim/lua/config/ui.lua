@@ -58,28 +58,23 @@ local function floating_terminal(command)
 	vim.cmd.startinsert()
 end
 
-vim.api.nvim_create_user_command("Yazi", function()
-	floating_terminal({ "yazi" })
-end, {})
 vim.api.nvim_create_user_command("Lazyworktree", function()
 	floating_terminal({ "lazyworktree" })
 end, {})
-vim.keymap.set("n", "<leader>fy", "<cmd>Yazi<cr>", { desc = "Yazi" })
 vim.keymap.set("n", "<leader>gw", "<cmd>Lazyworktree<cr>", { desc = "Lazyworktree" })
 
-vim.api.nvim_create_autocmd("VimEnter", {
-	group = vim.api.nvim_create_augroup("lean_welcome", { clear = true }),
-	callback = function()
-		if vim.fn.argc() ~= 0 then
-			return
-		end
-
+local function show_welcome()
 		local buf = vim.api.nvim_get_current_buf()
 		local fzf = require("fzf-lua")
 		local session = vim.fn.stdpath("state") .. "/sessions/default.vim"
 		local lines = {
 			"",
-			"  Julian's Neovim",
+			"  ▗▖ ▗▖▗▞▀▚▖▄▄▄▄   ▄▄▄ █ ▗▞▀▚▖▗▄▄▄  ▗▞▀▚▖▄   ▄  ▄▄▄     ▗▖  ▗▖▗▞▀▚▖ ▄▄▄  ▄   ▄ ▄ ▄▄▄▄",
+			"  ▐▌▗▞▘▐▛▀▀▘█   █ ▀▄▄  █ ▐▛▀▀▘▐▌  █ ▐▛▀▀▘█   █ ▀▄▄      ▐▛▚▖▐▌▐▛▀▀▘█   █ █   █ ▄ █ █ █",
+			"  ▐▛▚▖ ▝▚▄▄▖█   █ ▄▄▄▀ █ ▝▚▄▄▖▐▌  █ ▝▚▄▄▖ ▀▄▀  ▄▄▄▀     ▐▌ ▝▜▌▝▚▄▄▖▀▄▄▄▀  ▀▄▀  █ █   █",
+			"  ▐▌ ▐▌                █      ▐▙▄▄▀                     ▐▌  ▐▌                 █",
+			"",
+			"  ───────────────────────────────────────────────────────────────────────────────────────",
 			"",
 			"  f  Find file",
 			"  n  New file",
@@ -122,5 +117,18 @@ vim.api.nvim_create_autocmd("VimEnter", {
 			end
 		end, "Restore session")
 		map("q", vim.cmd.quitall, "Quit")
+end
+
+vim.api.nvim_create_autocmd("VimEnter", {
+	group = vim.api.nvim_create_augroup("lean_welcome", { clear = true }),
+	callback = function()
+		if vim.fn.argc() == 0 then
+			show_welcome()
+		end
 	end,
 })
+
+vim.keymap.set("n", "<leader>h", function()
+	vim.cmd.enew()
+	show_welcome()
+end, { desc = "Welcome" })
