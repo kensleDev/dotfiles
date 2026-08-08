@@ -1,5 +1,5 @@
 vim.diagnostic.config({
-  virtual_text = { current_line = true },
+  virtual_text = false,
   severity_sort = true,
   float = { border = "rounded", source = true },
   signs = {
@@ -68,7 +68,14 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map("gd", vim.lsp.buf.definition, "Go to definition")
     map("gr", vim.lsp.buf.references, "References")
     map("gI", vim.lsp.buf.implementation, "Go to implementation")
-    map("K", vim.lsp.buf.hover, "Hover documentation")
+    map("K", function()
+      local line = vim.fn.line(".") - 1
+      if #vim.diagnostic.get(0, { lnum = line }) > 0 then
+        vim.diagnostic.open_float({ scope = "cursor" })
+      else
+        vim.lsp.buf.hover()
+      end
+    end, "Diagnostic or hover")
     map("<leader>cr", vim.lsp.buf.rename, "Rename symbol")
     map("<leader>ca", vim.lsp.buf.code_action, "Code action")
     map("[d", function() vim.diagnostic.jump({ count = -1, float = true }) end, "Previous diagnostic")

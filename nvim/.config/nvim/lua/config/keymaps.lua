@@ -16,6 +16,7 @@ set("n", "<M-p>", "G", silent)
 set("n", "<M-u>", "gg", silent)
 set("n", "<M-i>", "<C-d>", silent)
 set("n", "<M-o>", "<C-u>", silent)
+set({ "n", "x" }, "<Esc>", "<Esc><cmd>nohlsearch<cr>", silent)
 
 set("i", "jj", "<Esc>", silent)
 set("i", "jk", "<Esc><C-w>w", silent)

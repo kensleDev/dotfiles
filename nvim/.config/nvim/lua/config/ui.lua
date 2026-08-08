@@ -60,6 +60,8 @@ vim.opt.statusline = "%!v:lua.LeanStatusline()"
 
 local function floating_terminal(command)
 	local buf = vim.api.nvim_create_buf(false, true)
+	local job_id
+	local closed = false
 	local width = math.floor(vim.o.columns * 0.9)
 	local height = math.floor(vim.o.lines * 0.85)
 	local win = vim.api.nvim_open_win(buf, true, {
@@ -71,7 +73,20 @@ local function floating_terminal(command)
 		col = math.floor((vim.o.columns - width) / 2),
 		row = math.floor((vim.o.lines - height) / 2),
 	})
-	vim.fn.jobstart(command, {
+	local function close_terminal()
+		if closed then
+			return
+		end
+		closed = true
+		if job_id and job_id > 0 then
+			vim.fn.jobstop(job_id)
+		end
+		if vim.api.nvim_win_is_valid(win) then
+			vim.api.nvim_win_close(win, true)
+		end
+	end
+	vim.keymap.set({ "n", "t" }, "<Esc><Esc>", close_terminal, { buffer = buf, silent = true })
+	job_id = vim.fn.jobstart(command, {
 		term = true,
 		on_exit = function()
 			if vim.api.nvim_win_is_valid(win) then
@@ -86,6 +101,7 @@ vim.api.nvim_create_user_command("Lazyworktree", function()
 	floating_terminal({ "lazyworktree" })
 end, {})
 vim.keymap.set("n", "<leader>gw", "<cmd>Lazyworktree<cr>", { desc = "Lazyworktree" })
+vim.keymap.set("n", "<leader>gg", function() floating_terminal({ "lazygit" }) end, { desc = "Lazygit" })
 
 local function show_welcome()
 		local buf = vim.api.nvim_get_current_buf()

@@ -16,3 +16,9 @@ which_key.setup({
     { "<leader>s", group = "search / sessions" },
   },
 })
+
+vim.keymap.set("n", "<leader><leader>", function()
+  if vim.bo.filetype == "neo-tree" then
+    vim.cmd("wincmd h")
+  end
+end, { desc = "WhichKey" })

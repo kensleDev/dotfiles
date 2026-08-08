@@ -120,9 +120,9 @@ alias sf=nvimGoToFiles
 
 alias cl='claude --dangerously-skip-permissions'
 
-function codex() {
-  command /Users/kd/.local/bin/codex-headroom "$@"
-}
+# function codex() {
+#   command /Users/kd/.local/bin/codex-headroom "$@"
+# }
 
 function glm() {
   ANTHROPIC_AUTH_TOKEN="701b5d74894b44408535504935056ac4.gFgQiBPyOEvWDHqG" \
