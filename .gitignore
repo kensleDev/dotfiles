@@ -15,6 +15,7 @@ keyboard/.config/keyboard/klfc/klfc
 nvim/.config/coc/extensions/coc-tabnine-data/binaries/
 new_nvim/.config/coc/extensions/coc-tabnine-data/binaries/
 nvim/.config/nvim/nvim.appimage
+get-pip.py
 
 # Generated or bundled non-source assets
 claude/.claude/debug/
