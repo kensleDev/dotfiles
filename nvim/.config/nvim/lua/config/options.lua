@@ -1,46 +1,59 @@
--- Options are automatically loaded before lazy.nvim startup
--- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
--- Add any additional options here
+local opt = vim.opt
 
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
+opt.number = true
+opt.relativenumber = true
+opt.cursorline = true
+opt.signcolumn = "yes"
+opt.termguicolors = true
+opt.laststatus = 3
+opt.cmdheight = 0
+opt.showmode = false
 
----- Performance Optimizations
-vim.opt.synmaxcol = 300
-vim.opt.updatetime = 250
-vim.opt.redrawtime = 1500
-vim.opt.ttimeoutlen = 10
-vim.opt.lazyredraw = true
+opt.ignorecase = true
+opt.smartcase = true
+opt.inccommand = "split"
+opt.grepprg = "rg --vimgrep --smart-case --hidden --glob=!.git"
+opt.grepformat = "%f:%l:%c:%m"
 
----- Wrapping
-vim.opt.wrap = true
-vim.wo.linebreak = true -- Avoid breaking mid-word
-vim.opt.breakindent = true -- Indent wrapped lines
-vim.opt.showbreak = "⤷ " -- Add visual indicator for wrapped lines
+opt.wrap = true
+opt.linebreak = true
+opt.breakindent = true
+opt.showbreak = "⤷ "
+opt.scrolloff = 5
+opt.sidescrolloff = 5
 
-local function set_buffer_options(wrapwidth, tabwidth, expandtab)
-  pcall(vim.cmd, "Wrapwidth " .. wrapwidth)
-  vim.wo.colorcolumn = tostring(wrapwidth + 1) -- Automatically set colorcolumn to wrapwidth + 1
-  vim.o.tabstop = tabwidth -- A TAB character looks like `tabwidth` spaces
-  vim.o.shiftwidth = tabwidth -- Number of spaces inserted when indenting
-  vim.o.softtabstop = tabwidth -- Spaces inserted instead of a TAB character
-  vim.o.expandtab = expandtab -- true: TAB key inserts spaces
+opt.tabstop = 2
+opt.shiftwidth = 2
+opt.softtabstop = 2
+opt.expandtab = true
+opt.smartindent = true
+opt.list = true
+opt.listchars = { tab = " ┊", leadtab = " ┊", leadmultispace = " ┊" }
+
+opt.undofile = true
+opt.swapfile = false
+opt.autoread = true
+opt.updatetime = 250
+opt.timeoutlen = 400
+opt.ttimeoutlen = 10
+opt.completeopt = { "menu", "menuone", "noselect", "fuzzy", "popup" }
+opt.pumborder = "rounded"
+opt.winborder = "rounded"
+opt.autocomplete = true
+
+opt.splitbelow = true
+opt.splitright = true
+opt.confirm = true
+opt.mouse = "a"
+opt.clipboard = "unnamedplus"
+
+-- Native OSC52 clipboard for SSH/tmux sessions. Local sessions continue to use
+-- the platform clipboard provider discovered by :checkhealth.
+if vim.env.SSH_TTY or vim.env.SSH_CONNECTION then
+  local osc52 = require("vim.ui.clipboard.osc52")
+  vim.g.clipboard = {
+    name = "OSC 52",
+    copy = { ["+"] = osc52.copy("+"), ["*"] = osc52.copy("*") },
+    paste = { ["+"] = osc52.paste("+"), ["*"] = osc52.paste("*") },
+  }
 end
-
--- General settings for all files
-vim.api.nvim_create_autocmd("BufReadPost", {
-  callback = function()
-    local ft = vim.bo.filetype
-    if ft ~= "cs" and ft ~= "rust" then
-      set_buffer_options(80, 2, true)
-    end
-  end,
-})
-
--- Specific settings for C# and Rust files
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "cs", "rust" },
-  callback = function()
-    set_buffer_options(100, 4, true)
-  end,
-})
