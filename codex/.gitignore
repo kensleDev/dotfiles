@@ -1,0 +1,15 @@
+.config/.codex/auth.json
+.config/.codex/installation_id
+.config/.codex/version.json
+.config/.codex/.sandbox_migration
+.config/.codex/history.jsonl
+.config/.codex/sessions/
+.config/.codex/shell_snapshots/
+.config/.codex/tmp/
+.config/.codex/.tmp/
+.config/.codex/cache/
+.config/.codex/plugins/
+.config/.codex/*.sqlite
+.config/.codex/*.sqlite-*
+.config/.codex/models_cache.json
+.config/.codex/skills/.system/

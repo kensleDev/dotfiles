@@ -1,0 +1,21 @@
+model = "gpt-5.6-terra"
+model_reasoning_effort = "medium"
+plan_mode_reasoning_effort = "xhigh"
+[tui]
+status_line = ["model-with-reasoning", "current-dir", "context-used", "weekly-limit"]
+status_line_use_colors = true
+notifications = ["agent-turn-complete", "approval-requested"]
+notification_method = "auto"
+notification_condition = "always"
+
+[marketplaces.ponytail]
+source_type = "git"
+source = "https://github.com/DietrichGebert/ponytail.git"
+ref = "main"
+
+[plugins."ponytail@ponytail"]
+enabled = true
+
+[agents]
+enabled = true
+max_concurrent_threads_per_session = 4
