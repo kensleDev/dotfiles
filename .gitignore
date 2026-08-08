@@ -5,6 +5,7 @@
 opencode/.config/opencode/logs/
 opencode/.config/opencode/tmp/
 opencode/.config/opencode/node_modules/
+node_modules/
 
 # Claude runtime artifacts
 claude/.claude/projects/
