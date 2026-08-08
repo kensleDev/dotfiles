@@ -1,0 +1,102 @@
+import { Hono } from 'hono';
+import { tryPromise } from '@julian-i/try-error';
+import { createLogger } from '../lib/shared/utils/logger';
+import { healthService } from '../lib/monitoring/services/health';
+import { metricsService } from '../lib/monitoring/services/metrics';
+import { systemResourcesService } from '../lib/monitoring/services/system-resources';
+
+const logger = createLogger('routes:health');
+const app = new Hono();
+
+// GET /api/health - Full health check
+app.get('/', async (c) => {
+	const type = c.req.query('type');
+
+	if (type === 'live') {
+		const [isLive, error] = await tryPromise(healthService.checkLiveness());
+
+		if (error) {
+			return c.json({ status: 'unhealthy' }, 500);
+		}
+
+		return c.json({ status: isLive ? 'alive' : 'dead' }, isLive ? 200 : 503);
+	}
+
+	if (type === 'ready') {
+		const [isReady, error] = await tryPromise(healthService.checkReadiness());
+
+		if (error) {
+			return c.json({ status: 'not_ready' }, 500);
+		}
+
+		return c.json({ status: isReady ? 'ready' : 'not_ready' }, isReady ? 200 : 503);
+	}
+
+	// Full health check
+	const [health, error] = await tryPromise(healthService.checkHealth());
+
+	if (error) {
+		return c.json({ status: 'unhealthy', error: error.message }, 500);
+	}
+
+	const statusCode = health.status === 'healthy' ? 200 :
+		health.status === 'degraded' ? 200 : 503;
+
+	return c.json(health, statusCode);
+});
+
+// GET /api/metrics - Prometheus metrics
+app.get('/metrics', async (c) => {
+	const metrics = metricsService.getPrometheusMetrics();
+	return c.text(metrics, 200, {
+		'Content-Type': 'text/plain; version=0.0.4; charset=utf-8'
+	});
+});
+
+// GET /api/system/resources - System resources
+app.get('/system/resources', async (c) => {
+	const [resources, error] = await tryPromise(systemResourcesService.getResources());
+
+	if (error) {
+		logger.error('Failed to get system resources', { error: error.message });
+		return c.json({ error: 'Failed to get system resources', status: 'error' }, 500);
+	}
+
+	return c.json(resources);
+});
+
+// GET /api/docs - OpenAPI documentation
+app.get('/docs', async (c) => {
+	// TODO: Generate OpenAPI specification
+	const openApiSpec = {
+		openapi: '3.0.0',
+		info: {
+			title: 'Print Farm API',
+			version: '1.0.0',
+			description: 'REST API for Print Farm Management System'
+		},
+		paths: {
+			'/api/printers': {
+				get: {
+					summary: 'List all printers',
+					tags: ['Printers']
+				},
+				post: {
+					summary: 'Create printer',
+					tags: ['Printers']
+				}
+			},
+			// ... more paths
+		},
+		tags: [
+			{ name: 'Printers', description: 'Printer management' },
+			{ name: 'Jobs', description: 'Job management' },
+			{ name: 'Queue', description: 'Print queue' },
+			{ name: 'Health', description: 'Health checks' }
+		]
+	};
+
+	return c.json(openApiSpec);
+});
+
+export default app;

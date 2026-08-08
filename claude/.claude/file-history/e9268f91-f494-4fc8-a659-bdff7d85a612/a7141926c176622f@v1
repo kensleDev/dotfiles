@@ -1,0 +1,70 @@
+// Configuration
+switch_cutout_size = 14;
+key_spacing = 19.05;
+plate_thickness = 1.5;
+edge_margin = 2;
+
+rows = 5;
+cols = 3;
+
+// Calculate plate dimensions
+plate_width = ((cols + 1) * key_spacing) + (2 * edge_margin);
+plate_height = (rows * key_spacing) + (2 * edge_margin);
+
+// Bridge configuration
+
+is_full_height = true;
+user_height = 20;
+
+bridge_length = 55;  // Distance between the two halves
+bridge_height = is_full_height ? (plate_height - key_spacing) : user_height;
+
+// Module for one half of the keyboard
+module keyboard_half() {
+    difference() {
+        // Base plate - simple square
+        cube([plate_width, plate_height, plate_thickness]);
+
+        // Main 3x5 grid cutouts
+        for (row = [0:rows-1]) {
+            for (col = [0:cols-1]) {
+                translate([
+                    edge_margin + (col * key_spacing) + (key_spacing/2) - (switch_cutout_size/2),
+                    edge_margin + (row * key_spacing) + (key_spacing/2) - (switch_cutout_size/2),
+                    -0.1
+                ])
+                cube([switch_cutout_size, switch_cutout_size, plate_thickness + 0.2]);
+            }
+        }
+
+        // Thumb cluster
+        for (thumb_row = [2:4]) {
+            translate([
+                edge_margin + (cols * key_spacing) + (key_spacing/2) - (switch_cutout_size/2),
+                edge_margin + (thumb_row * key_spacing) + (key_spacing/2) - (switch_cutout_size/2),
+                -0.1
+            ])
+            cube([switch_cutout_size, switch_cutout_size, plate_thickness + 0.2]);
+        }
+    }
+}
+
+// Assemble the full keyboard
+module keyboard_plate() {
+    union() {
+        // Left half
+        keyboard_half();
+
+        // Bridge piece
+        translate([(plate_width - bridge_height) / 2, plate_height, 0])
+        cube([bridge_height, bridge_length, plate_thickness]);
+
+        // Right half (mirrored)
+        translate([0, plate_height + bridge_length + plate_height, 0])
+        mirror([0, 1, 0])
+        keyboard_half();
+    }
+}
+
+// Render the plate by default
+keyboard_plate();

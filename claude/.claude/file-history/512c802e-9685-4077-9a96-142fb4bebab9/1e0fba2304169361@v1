@@ -1,0 +1,46 @@
+# Phase 4: Sort Command - Context
+
+**Gathered:** 2026-02-07
+**Status:** Ready for planning
+
+## Phase Boundary
+
+Manual sort command that users invoke via CLI to trigger one-time reorganization of their watch folders. The command defaults to dry-run mode (preview only) and requires an explicit `--execute` flag to actually move files.
+
+## Implementation Decisions
+
+### Command name and invocation
+- Subcommand: `sort` (e.g., `tidydown sort`)
+- Target folder: Optional with default from config, `--folder` flag to override
+- Help output: Include examples at the bottom
+
+### Dry-run output format
+- Shows summary by category (e.g., "Documents: 5 files, Images: 12 files")
+- Path format: Basename only (e.g., `report.pdf → Documents/`)
+- Action indicators: Include arrows/icons for clarity
+- Confirmation message: Implied by default (no explicit "dry-run mode" message needed)
+
+### Concurrent sort behavior
+- Lock detected: Exit immediately with message "Sort in progress. Try again later."
+- Wait behavior: Auto-start when lock clears (if wait option added)
+- Force override: No override - locks are always respected
+- Stale locks (>30 min): Prompt with warning "Lock appears abandoned. Continue? (y/n)"
+
+### Claude's Discretion
+- Verbosity flags: Choose appropriate -v/-vv/--quiet behavior
+- Exit code semantics: Define success/error codes following CLI best practices
+- Specific arrow/icon characters for action indicators
+- Exact wording of error messages
+
+## Specific Ideas
+
+No specific requirements — open to standard CLI approaches.
+
+## Deferred Ideas
+
+None — discussion stayed within phase scope.
+
+---
+
+*Phase: 04-sort-command*
+*Context gathered: 2026-02-07*

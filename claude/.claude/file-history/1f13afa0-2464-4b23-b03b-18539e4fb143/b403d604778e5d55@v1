@@ -1,0 +1,80 @@
+import { Hono } from 'hono';
+import * as v from 'valibot';
+import { tryPromise } from '@julian-i/try-error';
+import { createLogger } from '../lib/shared/utils/logger';
+import { queueProcessor } from '../lib/queue/services/queue-processor';
+import { getNextPendingJob } from '../lib/job/services/job-manager';
+import type { Job } from '../lib/job/types/job';
+
+const logger = createLogger('routes:queue');
+const app = new Hono();
+
+// GET /api/queue/status - Get queue status
+app.get('/status', async (c) => {
+	const detailed = c.req.query('detailed') === 'true';
+
+	if (detailed) {
+		// Return detailed queue status
+		const [status, error] = await tryPromise(queueProcessor.getStatus());
+
+		if (error) {
+			logger.error('Failed to get queue status', { error: error.message });
+			return c.json({ error: 'Failed to get queue status', status: 'error' }, 500);
+		}
+
+		// Get next pending job
+		const [nextJob, nextError] = await tryPromise(getNextPendingJob());
+
+		return c.json({
+			...status,
+			nextJob: nextJob || null
+		});
+	}
+
+	// Simple status
+	const running = queueProcessor.isRunning();
+	const currentJob = queueProcessor.getCurrentJob();
+
+	return c.json({
+		running,
+		currentJob: currentJob || null
+	});
+});
+
+// POST /api/queue/control - Control queue processor
+const ControlSchema = v.object({
+	action: v.union([v.literal('start'), v.literal('stop')])
+});
+
+app.post('/control', async (c) => {
+	const body = await c.req.json();
+	const [parsed, parseError] = v.safeParse(ControlSchema, body);
+
+	if (!parsed.success) {
+		return c.json({ error: 'Invalid input', issues: parseError.issues, status: 'error' }, 400);
+	}
+
+	const { action } = parsed.output;
+
+	if (action === 'start') {
+		const [_, error] = await tryPromise(queueProcessor.start());
+
+		if (error) {
+			logger.error('Failed to start queue processor', { error: error.message });
+			return c.json({ error: 'Failed to start queue processor', status: 'error' }, 500);
+		}
+
+		return c.json({ success: true, status: 'started' });
+	} else {
+		const [_, error] = await tryPromise(queueProcessor.stop());
+
+		if (error) {
+			logger.error('Failed to stop queue processor', { error: error.message });
+			return c.json({ error: 'Failed to stop queue processor', status: 'error' }, 500);
+		}
+
+		return c.json({ success: true, status: 'stopped' });
+	}
+});
+
+export default app;

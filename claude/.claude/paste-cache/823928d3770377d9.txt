@@ -1,0 +1,52 @@
+➜  tidydown git:(dev) ✗   npm install --save-dev @types/node @types/yargs
+
+
+added 22 packages, and audited 93 packages in 3s
+
+28 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+➜  tidydown git:(dev) ✗ npm run type-check
+
+> tidydown@1.0.0 type-check
+> tsc --noEmit
+
+src/core/watcher.ts:25:22 - error TS2503: Cannot find namespace 'chokidar'.
+
+25   private fsWatcher: chokidar.FSWatcher | null = null;
+                        ~~~~~~~~
+
+src/core/watcher.ts:59:39 - error TS7006: Parameter 'filePath' implicitly has an 'any' type.
+
+59       this.fsWatcher.on("add", async (filePath) => {
+                                         ~~~~~~~~
+
+src/core/watcher.ts:82:35 - error TS7006: Parameter 'error' implicitly has an 'any' type.
+
+82       this.fsWatcher.on("error", (error) => {
+                                     ~~~~~
+
+src/progress/task-runner.ts:4:30 - error TS2459: Module '"./summary.js"' declares 'SortStatistics' locally, but it is not exported.
+
+4 import { formatSummary, type SortStatistics } from './summary.js';
+                               ~~~~~~~~~~~~~~
+
+  src/progress/summary.ts:3:15
+    3 import type { SortStatistics } from './statistics.js';
+                    ~~~~~~~~~~~~~~
+    'SortStatistics' is declared here.
+
+src/progress/task-runner.ts:68:48 - error TS2345: Argument of type '{ silentRendererCondition: boolean; renderer: string; fallbackRendererCondition: boolean; forceTTY: boolean; forceColor: boolean; exitOnError: boolean; }' is not assignable to parameter of type 'ListrBaseClassOptions<TaskContext, "default", "simple">'.
+  Types of property 'renderer' are incompatible.
+    Type 'string' is not assignable to type '"default"'.
+
+68     this.listr = new Listr<TaskContext>(tasks, this.getRendererOptions(verbosity));
+                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Found 5 errors in 2 files.
+
+Errors  Files
+     3  src/core/watcher.ts:25
+     2  src/progress/task-runner.ts:4

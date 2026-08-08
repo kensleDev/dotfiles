@@ -1,0 +1,149 @@
+import { Listr } from 'listr2';
+import type { VerbosityConfig } from './verbosity.js';
+import { isTTY } from './verbosity.js';
+import { formatSummary, type SortStatistics } from './summary.js';
+
+/**
+ * Task context shared across all tasks in the sort operation.
+ *
+ * This context is passed to each task and holds:
+ * - Total file count (for progress counters)
+ * - Files processed counter (updated during operation)
+ * - Current file being processed (for "Moving: X -> Y" display)
+ *
+ * Context type is generic — Listr uses this for type-safe task access.
+ */
+export interface TaskContext {
+  totalFiles: number;
+  filesProcessed: number;
+  currentFile?: string;
+  currentDestination?: string;
+  errors: Array<{ file: string; error: string }>;
+}
+
+/**
+ * Task definition for listr2 integration.
+ *
+ * Wraps listr2's ListrTask with our context type for type safety.
+ * Tasks receive the TaskContext and can update it during execution.
+ */
+export interface Task {
+  title: string;
+  task: (ctx: TaskContext, task: any) => Promise<void> | void;
+  options?: {
+    // Show persistent output bar below task title
+    rendererOptions?: {
+      outputBar?: boolean;
+      // Show bottom bar for current file display
+      bottomBar?: boolean;
+    };
+  };
+}
+
+// Type for Listr options that works with both default and verbose renderers
+type ListrOptions = {
+  silentRendererCondition?: boolean;
+  renderer?: 'default' | 'verbose';
+  fallbackRendererCondition?: boolean;
+  forceTTY?: boolean;
+  forceColor?: boolean;
+  exitOnError?: boolean;
+};
+
+/**
+ * Creates and configures a Listr instance for progress display.
+ *
+ * Per user decisions in CONTEXT.md:
+ * - Multi-task list view (not single bar)
+ * - Phase-level tasks: "Scanning", "Categorizing", "Moving"
+ * - Always-visible counter separate from title
+ *
+ * Renderer selection:
+ * - Silent mode -> silentRendererCondition (no TUI)
+ * - Verbose mode -> verbose renderer (with log panel)
+ * - Normal mode + TTY -> default renderer
+ * - Normal mode + non-TTY -> verbose renderer (simple output)
+ *
+ * @param tasks - Array of task definitions
+ * @param verbosity - Verbosity level from CLI flags
+ * @returns Configured Listr instance ready to run
+ */
+export class TaskRunner {
+  private listr: Listr<TaskContext, ListrOptions, 'default' | 'verbose'>;
+  private verbosity: VerbosityConfig;
+  private stats?: import('./statistics.js').StatisticsCollector;
+
+  constructor(tasks: Task[], verbosity: VerbosityConfig) {
+    this.verbosity = verbosity;
+    this.listr = new Listr<TaskContext>(tasks, this.getRendererOptions(verbosity) as any);
+  }
+
+  /**
+   * Attach a statistics collector to this runner.
+   *
+   * The collector is updated during task execution and used
+   * to print the summary in silent mode.
+   *
+   * @param collector - StatisticsCollector instance
+   */
+  attachStatistics(collector: import('./statistics.js').StatisticsCollector): void {
+    this.stats = collector;
+  }
+
+  /**
+   * Execute all tasks and return final context.
+   *
+   * In silent mode, prints summary after completion.
+   * In normal/verbose mode, summary is handled by TUI.
+   *
+   * @returns Final TaskContext after all tasks complete
+   */
+  async run(): Promise<TaskContext> {
+    const context = await this.listr.run();
+
+    // Silent mode: print summary after tasks complete
+    if (this.verbosity.silent && this.stats) {
+      const stats: SortStatistics = this.stats.complete();
+      console.log(formatSummary(stats));
+    }
+
+    return context;
+  }
+
+  /**
+   * Determine listr2 renderer options based on verbosity and TTY detection.
+   *
+   * Per CONTEXT.md decisions:
+   * - Silent: no TUI, summary only (will be added in 03-03)
+   * - Verbose: verbose renderer with detailed output
+   * - Normal: TTY if available, simple output otherwise
+   *
+   * @param verbosity - Verbosity level from detectVerbosity()
+   * @returns Listr options object
+   */
+  private getRendererOptions(verbosity: VerbosityConfig): ListrOptions {
+    const useVerbose = verbosity.verbose || !isTTY();
+
+    return {
+      // Silent: suppress all TUI output (summary printed separately)
+      silentRendererCondition: verbosity.silent,
+
+      // Verbose: verbose renderer with log panel
+      // Normal: use default if TTY, otherwise verbose for piped output
+      renderer: useVerbose ? 'verbose' : 'default',
+
+      // Fallback for CI/piped output (non-TTY environments)
+      // This ensures readable output when stdout is not a terminal
+      fallbackRendererCondition: !isTTY(),
+
+      // Force TTY mode for testing (respect FORCE_TTY env var)
+      forceTTY: process.env.FORCE_TTY === '1',
+
+      // Force color output for testing (respect FORCE_COLOR env var)
+      forceColor: process.env.FORCE_COLOR === '1',
+
+      // Exit on error (don't continue if a task fails)
+      exitOnError: false, // Changed to false to collect all errors before exit
+    };
+  }
+}

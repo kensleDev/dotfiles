@@ -1,0 +1,73 @@
+# Phase 1 Context: Core Scanner
+
+**Created:** 2026-02-07 via `/gsd:discuss-phase 1`
+
+---
+
+## Decisions (Locked)
+
+These decisions were made by the user during phase discussion. **DO NOT revisit or suggest alternatives.**
+
+### Category Detection
+- **Decision:** Skip all except root
+- **Rationale:** Matches existing `Watcher` behavior (`depth: 0`)
+- Only scan files directly in `watchPath` root, never enter subdirectories
+
+### Directory Iteration
+- **Decision:** Native `fs.opendir()`
+- **Rationale:** Efficient streaming, no new dependencies
+- Use Node.js `fs.opendir()` with `async` iteration
+
+### Symlink Handling
+- **Decision:** Use `fs.lstat()`
+- Check with `stats.isSymbolicLink()` and skip symlinks
+
+### Scanner Output
+- **Decision:** File paths only (strings)
+- Generator yields absolute file paths as strings
+- Consumer (FileMover) handles further processing
+
+### Error Handling
+- **Decision:** Log and skip
+- Log errors internally via Logger
+- Generator only yields valid file paths
+- Continue iteration on individual file errors (graceful degradation)
+
+---
+
+## Claude's Discretion
+
+Implementation details within these decisions are yours to choose:
+
+- How to structure the DirectoryScanner class
+- Whether to use static methods or instance methods
+- Internal helper methods for filtering logic
+- Exact patterns for exclude matching (glob vs regex)
+
+---
+
+## Deferred Ideas (Out of Scope)
+
+Do NOT include in Phase 1:
+
+- Recursive directory scanning (deferred to v2)
+- File filtering by age/size (v2 enhancement)
+- Real-time progress during scan (Phase 3 concern)
+- Caching/memoization of scan results
+
+---
+
+## Technical Context
+
+**Existing patterns to follow:**
+- `Watcher.ts` shows exclude pattern handling
+- `FileMover.ts` shows the categorizer/mover pipeline
+- `Logger` utility exists for consistent logging
+- `ResolvedConfig` has `excludePatterns` and `ignoreHiddenFiles`
+
+**Success Criteria (from ROADMAP.md):**
+1. Scanner discovers all files in watch folder root (not subdirectories)
+2. Scanner skips files already in category folders
+3. Scanner respects exclude patterns from config
+4. Scanner safely skips symbolic links without dereferencing
+5. Scanner uses async generators to stream files (memory-efficient)

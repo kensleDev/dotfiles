@@ -1,0 +1,26 @@
+
+> tidydown@1.0.0 type-check
+> tsc --noEmit
+
+src/core/watcher.ts:85:34 - error TS2345: Argument of type '(error: Error) => void' is not assignable to parameter of type '(err: unknown) => void'.
+  Types of parameters 'error' and 'err' are incompatible.
+    Type 'unknown' is not assignable to type 'Error'.
+
+85       this.fsWatcher.on("error", (error: Error) => {
+                                    ~~~~~~~~~~~~~~~~~~~
+
+src/progress/task-runner.ts:68:48 - error TS2345: Argument of type '{ silentRendererCondition: boolean; renderer: "default" | "verbose"; fallbackRendererCondition: boolean; forceTTY: boolean; forceColor: boolean; exitOnError: boolean; }' is not assignable to parameter of type 'ListrBaseClassOptions<TaskContext, "default", "simple">'.
+  Types of property 'renderer' are incompatible.
+    Type '"default" | "verbose"' is not assignable to type '"default" | undefined'.
+      Type '"verbose"' is not assignable to type '"default"'.
+
+68     this.listr = new Listr<TaskContext>(tasks, this.getRendererOptions(verbosity));
+                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Found 2 errors in 2 files.
+
+Errors  Files
+     1  src/core/watcher.ts:85
+     1  src/progress/task-runner.ts:68
+➜  tidydown git:(dev) ✗

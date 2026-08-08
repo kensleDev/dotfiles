@@ -1,0 +1,701 @@
+import { db, getDB, jobs, printers } from '../../db';
+import { eq, desc, asc, and, inArray, sql, count } from 'drizzle-orm';
+import { eventBus } from '../../shared/services/event-bus';
+import { deleteFile } from '../../shared/services/file-handler';
+import { tryPromise, tryCatch } from '@julian-i/try-error';
+import { createLogger } from '../../shared/utils/logger';
+import type {
+  Job,
+  JobWithPrinter,
+  CreateJobInput,
+  UpdateJobInput,
+  JobFilter,
+  JobStatus
+} from '../types/job';
+import type { FilamentComparison } from '../../printer/types/filament';
+import { compareFilament } from '../../printer/services/filament-comparator';
+import { mqttManager } from '../../printer/services/mqtt-manager';
+
+const logger = createLogger('job-manager');
+
+const MAX_JOBS = 100;
+
+/**
+ * Get total count of jobs
+ */
+export async function getJobCount(): Promise<number> {
+  const [result, error] = await tryPromise(getDB().select({ count: count() }).from(jobs));
+  if (error) {
+    logger.error('Failed to get job count:', { error: error.message, stack: error.stack });
+    return 0;
+  }
+  return result[0]?.count ?? 0;
+}
+
+/**
+ * Get all jobs with optional filters
+ */
+export async function getJobs(filter?: JobFilter): Promise<JobWithPrinter[]> {
+  const conditions = [];
+
+  if (filter?.status) {
+    if (Array.isArray(filter.status)) {
+      conditions.push(inArray(jobs.status, filter.status));
+    } else {
+      conditions.push(eq(jobs.status, filter.status));
+    }
+  }
+
+  if (filter?.printer_id) {
+    conditions.push(eq(jobs.assigned_printer, filter.printer_id));
+  }
+
+  const query = db
+    .select({
+      id: jobs.id,
+      display_name: jobs.display_name,
+      file_path: jobs.file_path,
+      assigned_printer: jobs.assigned_printer,
+      status: jobs.status,
+      loop_count: jobs.loop_count,
+      current_loop: jobs.current_loop,
+      priority: jobs.priority,
+      error_message: jobs.error_message,
+      retry_count: jobs.retry_count,
+      thumbnail: jobs.thumbnail,
+      file_size: jobs.file_size,
+      print_time_estimate: jobs.print_time_estimate,
+      clearing_method: jobs.clearing_method,
+      processing_options: jobs.processing_options,
+      cooldown_time: jobs.cooldown_time,
+      scheduled_at: jobs.scheduled_at,
+      created_at: jobs.created_at,
+      updated_at: jobs.updated_at,
+      started_at: jobs.started_at,
+      completed_at: jobs.completed_at,
+      printer_name: printers.name
+    })
+    .from(jobs)
+    .leftJoin(printers, eq(jobs.assigned_printer, printers.id))
+    .orderBy(asc(jobs.priority), desc(jobs.created_at));
+
+  const [result, queryError] = await tryPromise(
+    conditions.length > 0 ? query.where(and(...conditions)) : query
+  );
+  if (queryError) {
+    logger.error('Failed to query jobs:', { error: queryError.message, stack: queryError.stack });
+    return [];
+  }
+
+  // Apply limit and offset
+  let slicedResult = result;
+  if (filter?.offset !== undefined) {
+    slicedResult = slicedResult.slice(filter.offset);
+  }
+  if (filter?.limit !== undefined) {
+    slicedResult = slicedResult.slice(0, filter.limit);
+  }
+
+  return slicedResult.map((row) => {
+    const [processingOptions, parseError] = tryCatch(() =>
+      row.processing_options ? JSON.parse(row.processing_options) : ['process_gcode']
+    );
+    if (parseError) {
+      logger.warn('Failed to parse processing options for job:', {
+        jobId: row.id,
+        error: parseError.message
+      });
+    }
+
+    return {
+      id: row.id,
+      display_name: row.display_name,
+      file_path: row.file_path,
+      assigned_printer: row.assigned_printer,
+      status: row.status as JobStatus,
+      loop_count: row.loop_count,
+      current_loop: row.current_loop,
+      priority: row.priority,
+      error_message: row.error_message,
+      retry_count: row.retry_count,
+      thumbnail: row.thumbnail,
+      file_size: row.file_size,
+      print_time_estimate: row.print_time_estimate,
+      clearing_method: row.clearing_method as 'actuator' | 'gcode' | null,
+      processing_options: processingOptions ?? ['process_gcode'],
+      cooldown_time: row.cooldown_time,
+      scheduled_at: row.scheduled_at,
+      created_at: row.created_at,
+      updated_at: row.updated_at,
+      started_at: row.started_at,
+      completed_at: row.completed_at,
+      printer_name: row.printer_name
+    };
+  });
+}
+
+/**
+ * Get a single job by ID
+ */
+export async function getJob(id: number): Promise<JobWithPrinter | null> {
+  const [result, error] = await tryPromise(
+    db
+      .select({
+        id: jobs.id,
+        display_name: jobs.display_name,
+        file_path: jobs.file_path,
+        assigned_printer: jobs.assigned_printer,
+        status: jobs.status,
+        loop_count: jobs.loop_count,
+        current_loop: jobs.current_loop,
+        priority: jobs.priority,
+        error_message: jobs.error_message,
+        retry_count: jobs.retry_count,
+        thumbnail: jobs.thumbnail,
+        file_size: jobs.file_size,
+        print_time_estimate: jobs.print_time_estimate,
+        clearing_method: jobs.clearing_method,
+        processing_options: jobs.processing_options,
+        cooldown_time: jobs.cooldown_time,
+        scheduled_at: jobs.scheduled_at,
+        created_at: jobs.created_at,
+        updated_at: jobs.updated_at,
+        started_at: jobs.started_at,
+        completed_at: jobs.completed_at,
+        printer_name: printers.name
+      })
+      .from(jobs)
+      .leftJoin(printers, eq(jobs.assigned_printer, printers.id))
+      .where(eq(jobs.id, id))
+      .limit(1)
+  );
+
+  if (error) {
+    logger.error('Failed to get job:', { jobId: id, error: error.message, stack: error.stack });
+    return null;
+  }
+
+  if (result.length === 0) {
+    return null;
+  }
+
+  const row = result[0];
+  const [processingOptions, parseError] = tryCatch(() =>
+    row.processing_options ? JSON.parse(row.processing_options) : ['process_gcode']
+  );
+  if (parseError) {
+    logger.warn('Failed to parse processing options for job:', {
+      jobId: row.id,
+      error: parseError.message
+    });
+  }
+
+  return {
+    id: row.id,
+    display_name: row.display_name,
+    file_path: row.file_path,
+    assigned_printer: row.assigned_printer,
+    status: row.status as JobStatus,
+    loop_count: row.loop_count,
+    current_loop: row.current_loop,
+    priority: row.priority,
+    error_message: row.error_message,
+    retry_count: row.retry_count,
+    thumbnail: row.thumbnail,
+    file_size: row.file_size,
+    print_time_estimate: row.print_time_estimate,
+    clearing_method: row.clearing_method as 'actuator' | 'gcode' | null,
+    processing_options: processingOptions ?? ['process_gcode'],
+    cooldown_time: row.cooldown_time,
+    scheduled_at: row.scheduled_at,
+    created_at: row.created_at,
+    updated_at: row.updated_at,
+    started_at: row.started_at,
+    completed_at: row.completed_at,
+    printer_name: row.printer_name
+  };
+}
+
+/**
+ * Create a new job
+ */
+export async function createJob(
+  input: CreateJobInput,
+  options?: {
+    modelMaterialType?: string | null;
+    modelMaterialColor?: string | null;
+    skipFilamentCheck?: boolean;
+  }
+): Promise<Job & { filamentComparison?: FilamentComparison }> {
+  // Check max jobs limit
+  const currentCount = await getJobCount();
+  if (currentCount >= MAX_JOBS) {
+    throw new Error(`Maximum job limit (${MAX_JOBS}) reached. Please delete some jobs.`);
+  }
+
+  // Validate printer if assigned
+  let filamentComparison: FilamentComparison | undefined;
+
+  if (input.assigned_printer) {
+    const [printer, printerError] = await tryPromise(
+      getDB().select().from(printers).where(eq(printers.id, input.assigned_printer)).limit(1)
+    );
+
+    if (printerError) {
+      logger.error('Failed to validate printer:', {
+        printerId: input.assigned_printer,
+        error: printerError.message,
+        stack: printerError.stack
+      });
+      throw new Error('Unable to validate assigned printer.');
+    }
+
+    if (printer.length === 0) {
+      throw new Error('Assigned printer does not exist.');
+    }
+
+    // Check filament compatibility if printer is assigned and model data is provided
+    if (
+      !options?.skipFilamentCheck &&
+      (options?.modelMaterialType || options?.modelMaterialColor)
+    ) {
+      const printerState = mqttManager.getPrinterStatus(input.assigned_printer);
+
+      if (printerState?.filament?.activeFilament) {
+        filamentComparison = compareFilament(
+          options.modelMaterialType ?? null,
+          options.modelMaterialColor ?? null,
+          printerState.filament.activeFilament.filament
+        );
+
+        if (!filamentComparison.matches) {
+          logger.warn('Filament mismatch detected', {
+            printerId: input.assigned_printer,
+            warnings: filamentComparison.warnings
+          });
+        }
+      }
+    }
+  }
+
+  // Validate loop count
+  const loopCount = input.loop_count ?? 1;
+  if (loopCount < 1 || loopCount > 100) {
+    throw new Error('Loop count must be between 1 and 100.');
+  }
+
+  // Get current max priority for pending jobs to add at end of queue
+  const [maxPriorityResult, priorityError] = await tryPromise(
+    db
+      .select({ maxPriority: sql<number>`MAX(${jobs.priority})` })
+      .from(jobs)
+      .where(eq(jobs.status, 'pending'))
+  );
+
+  if (priorityError) {
+    logger.error('Failed to get max priority:', {
+      error: priorityError.message,
+      stack: priorityError.stack
+    });
+    throw new Error('Unable to determine job priority.');
+  }
+
+  const nextPriority = (maxPriorityResult[0]?.maxPriority ?? 0) + 1;
+
+  const [processingOptionsJson, stringifyError] = tryCatch(() =>
+    input.processing_options
+      ? JSON.stringify(input.processing_options)
+      : JSON.stringify(['process_gcode'])
+  );
+  if (stringifyError) {
+    logger.error('Failed to stringify processing options:', { error: stringifyError.message });
+    throw new Error('Invalid processing options format.');
+  }
+
+  const [result, insertError] = await tryPromise(
+    db
+      .insert(jobs)
+      .values({
+        display_name: input.display_name,
+        file_path: input.file_path,
+        assigned_printer: input.assigned_printer ?? null,
+        loop_count: loopCount,
+        priority: input.priority ?? nextPriority,
+        thumbnail: input.thumbnail ?? null,
+        file_size: input.file_size ?? null,
+        print_time_estimate: input.print_time_estimate ?? null,
+        clearing_method: input.clearing_method ?? 'actuator',
+        processing_options: processingOptionsJson,
+        cooldown_time: input.cooldown_time ?? null,
+        scheduled_at: input.scheduled_at ?? null
+      })
+      .returning()
+  );
+
+  if (insertError) {
+    logger.error('Failed to create job:', { error: insertError.message, stack: insertError.stack });
+    throw new Error('Failed to create job in database.');
+  }
+
+  const rawJob = result[0];
+  const [parsedOptions, parseError] = tryCatch(() =>
+    rawJob.processing_options ? JSON.parse(rawJob.processing_options) : ['process_gcode']
+  );
+  if (parseError) {
+    logger.warn('Failed to parse processing options after create:', {
+      jobId: rawJob.id,
+      error: parseError.message
+    });
+  }
+
+  const job: Job = {
+    ...rawJob,
+    status: rawJob.status as JobStatus,
+    clearing_method: rawJob.clearing_method as 'actuator' | 'gcode' | null,
+    processing_options: parsedOptions ?? ['process_gcode']
+  };
+
+  // Add filament comparison to result if available
+  const jobResult = (filamentComparison ? { ...job, filamentComparison } : job) as Job & {
+    filamentComparison?: FilamentComparison;
+  };
+
+  // Emit event
+  eventBus.emit('job:created', job);
+
+  return jobResult;
+}
+
+/**
+ * Update a job
+ */
+export async function updateJob(id: number, input: UpdateJobInput): Promise<Job | null> {
+  // Validate printer if being assigned
+  if (input.assigned_printer !== undefined && input.assigned_printer !== null) {
+    const [printer, printerError] = await tryPromise(
+      getDB().select().from(printers).where(eq(printers.id, input.assigned_printer)).limit(1)
+    );
+
+    if (printerError) {
+      logger.error('Failed to validate printer for update:', {
+        printerId: input.assigned_printer,
+        error: printerError.message,
+        stack: printerError.stack
+      });
+      throw new Error('Unable to validate assigned printer.');
+    }
+
+    if (printer.length === 0) {
+      throw new Error('Assigned printer does not exist.');
+    }
+  }
+
+  // Validate loop count if being updated
+  if (input.loop_count !== undefined) {
+    if (input.loop_count < 1 || input.loop_count > 100) {
+      throw new Error('Loop count must be between 1 and 100.');
+    }
+  }
+
+  const updateData: Record<string, unknown> = {
+    updated_at: new Date()
+  };
+
+  if (input.display_name !== undefined) updateData.display_name = input.display_name;
+  if (input.assigned_printer !== undefined) updateData.assigned_printer = input.assigned_printer;
+  if (input.status !== undefined) updateData.status = input.status;
+  if (input.loop_count !== undefined) updateData.loop_count = input.loop_count;
+  if (input.current_loop !== undefined) updateData.current_loop = input.current_loop;
+  if (input.priority !== undefined) updateData.priority = input.priority;
+  if (input.error_message !== undefined) updateData.error_message = input.error_message;
+  if (input.clearing_method !== undefined) updateData.clearing_method = input.clearing_method;
+  if (input.processing_options !== undefined) {
+    const [processingOptionsJson, stringifyError] = tryCatch(() =>
+      input.processing_options
+        ? JSON.stringify(input.processing_options)
+        : JSON.stringify(['process_gcode'])
+    );
+    if (stringifyError) {
+      logger.error('Failed to stringify processing options for update:', {
+        error: stringifyError.message
+      });
+      throw new Error('Invalid processing options format.');
+    }
+    updateData.processing_options = processingOptionsJson;
+  }
+  if (input.cooldown_time !== undefined) updateData.cooldown_time = input.cooldown_time;
+  if (input.scheduled_at !== undefined) updateData.scheduled_at = input.scheduled_at;
+
+  // Update timestamps based on status changes
+  if (input.status === 'printing') {
+    updateData.started_at = new Date();
+  } else if (input.status === 'complete' || input.status === 'failed') {
+    updateData.completed_at = new Date();
+  }
+
+  const [result, updateError] = await tryPromise(
+    getDB().update(jobs).set(updateData).where(eq(jobs.id, id)).returning()
+  );
+
+  if (updateError) {
+    logger.error('Failed to update job:', {
+      jobId: id,
+      error: updateError.message,
+      stack: updateError.stack
+    });
+    throw new Error('Failed to update job in database.');
+  }
+
+  if (result.length === 0) {
+    return null;
+  }
+
+  const rawJob = result[0];
+  const [parsedOptions, parseError] = tryCatch(() =>
+    rawJob.processing_options ? JSON.parse(rawJob.processing_options) : ['process_gcode']
+  );
+  if (parseError) {
+    logger.warn('Failed to parse processing options after update:', {
+      jobId: rawJob.id,
+      error: parseError.message
+    });
+  }
+
+  const job: Job = {
+    ...rawJob,
+    status: rawJob.status as JobStatus,
+    clearing_method: rawJob.clearing_method as 'actuator' | 'gcode' | null,
+    processing_options: parsedOptions ?? ['process_gcode']
+  };
+
+  // Emit event
+  eventBus.emit('job:updated', job);
+
+  return job;
+}
+
+/**
+ * Delete a job and its associated file
+ */
+export async function deleteJob(id: number): Promise<boolean> {
+  // Get job to find file path
+  const job = await getJob(id);
+  if (!job) {
+    return false;
+  }
+
+  // Only allow deletion if not currently printing
+  if (job.status === 'printing') {
+    throw new Error('Cannot delete a printing job. Cancel it first.');
+  }
+
+  // Delete the file
+  if (job.file_path) {
+    const [_, deleteError] = tryCatch(() => deleteFile(job.file_path));
+    if (deleteError) {
+      logger.warn('Failed to delete job file:', {
+        filePath: job.file_path,
+        error: deleteError.message
+      });
+    }
+  }
+
+  // Delete from database
+  const [_, dbError] = await tryPromise(getDB().delete(jobs).where(eq(jobs.id, id)));
+  if (dbError) {
+    logger.error('Failed to delete job from database:', {
+      jobId: id,
+      error: dbError.message,
+      stack: dbError.stack
+    });
+    throw new Error('Failed to delete job from database.');
+  }
+
+  // Emit event
+  eventBus.emit('job:deleted', { jobId: id });
+
+  return true;
+}
+
+/**
+ * Cancel a running or pending job
+ */
+export async function cancelJob(id: number): Promise<Job | null> {
+  const job = await getJob(id);
+  if (!job) {
+    return null;
+  }
+
+  // Can only cancel pending or printing jobs
+  if (
+    job.status !== 'pending' &&
+    job.status !== 'queued' &&
+    job.status !== 'uploading' &&
+    job.status !== 'printing'
+  ) {
+    throw new Error('Can only cancel pending, queued, uploading, or printing jobs.');
+  }
+
+  return updateJob(id, { status: 'cancelled' });
+}
+
+/**
+ * Retry a failed job
+ */
+export async function retryJob(id: number): Promise<Job | null> {
+  const job = await getJob(id);
+  if (!job) {
+    return null;
+  }
+
+  if (job.status !== 'failed' && job.status !== 'cancelled') {
+    throw new Error('Can only retry failed or cancelled jobs.');
+  }
+
+  return updateJob(id, {
+    status: 'pending',
+    error_message: null,
+    current_loop: 0
+  });
+}
+
+/**
+ * Reorder jobs by updating their priorities
+ * @param jobIds Array of job IDs in the new order
+ */
+export async function reorderJobs(jobIds: number[]): Promise<void> {
+  // Update each job's priority based on its position in the array
+  for (let i = 0; i < jobIds.length; i++) {
+    const [_, updateError] = await tryPromise(
+      db
+        .update(jobs)
+        .set({ priority: i + 1, updated_at: new Date() })
+        .where(eq(jobs.id, jobIds[i]))
+    );
+
+    if (updateError) {
+      logger.error('Failed to update job priority during reorder:', {
+        jobId: jobIds[i],
+        error: updateError.message,
+        stack: updateError.stack
+      });
+    }
+  }
+
+  // Emit event
+  eventBus.emit('job:reordered', { jobIds });
+}
+
+/**
+ * Clear all complete jobs
+ */
+export async function clearCompletedJobs(): Promise<number> {
+  const completedJobs = await getJobs({ status: 'complete' });
+
+  for (const job of completedJobs) {
+    const [_, deleteError] = await tryPromise(deleteJob(job.id));
+    if (deleteError) {
+      logger.error('Failed to delete completed job:', {
+        jobId: job.id,
+        error: deleteError.message,
+        stack: deleteError.stack
+      });
+    }
+  }
+
+  return completedJobs.length;
+}
+
+/**
+ * Clear all failed jobs
+ */
+export async function clearFailedJobs(): Promise<number> {
+  const failedJobs = await getJobs({ status: 'failed' });
+
+  for (const job of failedJobs) {
+    const [_, deleteError] = await tryPromise(deleteJob(job.id));
+    if (deleteError) {
+      logger.error('Failed to delete failed job:', {
+        jobId: job.id,
+        error: deleteError.message,
+        stack: deleteError.stack
+      });
+    }
+  }
+
+  return failedJobs.length;
+}
+
+/**
+ * Cancel all pending jobs
+ */
+export async function cancelPendingJobs(): Promise<number> {
+  const pendingJobs = await getJobs({ status: 'pending' });
+
+  for (const job of pendingJobs) {
+    const [_, cancelError] = await tryPromise(cancelJob(job.id));
+    if (cancelError) {
+      logger.error('Failed to cancel pending job:', {
+        jobId: job.id,
+        error: cancelError.message,
+        stack: cancelError.stack
+      });
+    }
+  }
+
+  return pendingJobs.length;
+}
+
+/**
+ * Get pending jobs for a specific printer or any available printer
+ */
+export async function getNextPendingJob(printerId?: number): Promise<Job | null> {
+  const conditions = [eq(jobs.status, 'pending')];
+
+  if (printerId) {
+    // Get jobs assigned to this specific printer or to "any" printer
+    conditions.push(
+      sql`(${jobs.assigned_printer} = ${printerId} OR ${jobs.assigned_printer} IS NULL)`
+    );
+  }
+
+  const [result, queryError] = await tryPromise(
+    db
+      .select()
+      .from(jobs)
+      .where(and(...conditions))
+      .orderBy(asc(jobs.priority), asc(jobs.created_at))
+      .limit(1)
+  );
+
+  if (queryError) {
+    logger.error('Failed to get next pending job:', {
+      printerId,
+      error: queryError.message,
+      stack: queryError.stack
+    });
+    return null;
+  }
+
+  if (result.length === 0) {
+    return null;
+  }
+
+  const rawJob = result[0];
+  const [processingOptions, parseError] = tryCatch(() =>
+    rawJob.processing_options ? JSON.parse(rawJob.processing_options) : ['process_gcode']
+  );
+  if (parseError) {
+    logger.warn('Failed to parse processing options for next pending job:', {
+      jobId: rawJob.id,
+      error: parseError.message
+    });
+  }
+
+  return {
+    ...rawJob,
+    status: rawJob.status as JobStatus,
+    clearing_method: rawJob.clearing_method as 'actuator' | 'gcode' | null,
+    processing_options: processingOptions ?? ['process_gcode']
+  };
+}

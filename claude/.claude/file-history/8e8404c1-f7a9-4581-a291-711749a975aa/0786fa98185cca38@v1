@@ -1,0 +1,146 @@
+<agent_allocation>
+Primary: researcher
+Output: structured implementation prompt
+Workflow: research-to-prompt
+</agent_allocation>
+
+<objective>
+Research and create a structured implementation prompt for: Overall Workflow Orchestrator Prompt
+
+Design a master prompt that guides the user through the entire prompt workflow process - from initial user request through research, implementation, and completion. This orchestrator prompt will coordinate the workflow whether triggered via Claude Code commands, MCP tools, or natural language.
+</objective>
+
+<research_objective>
+Investigate:
+
+**Workflow Orchestration Patterns:**
+- How to design a prompt that guides users through multi-step processes
+- Best practices for "wizard" or "interactive" prompts in LLM systems
+- State management in conversational workflows
+- How to handle user choice points (proceed, review, edit, exit)
+
+**Integration Points:**
+- How the orchestrator invokes MCP tools (create_research_task, etc.)
+- How it handles agent spawn callbacks from MCP
+- How it maintains context across the workflow stages
+- Error handling and recovery patterns
+
+**Prompt Engineering Patterns:**
+- Multi-stage prompt templates
+- Conditional logic in prompts (if user chooses X, do Y)
+- How to preserve user agency while guiding the process
+- Template generation patterns (research prompt template, implementation prompt template)
+
+**Key Questions:**
+- Should the orchestrator be a separate prompt or part of the create-prompt command?
+- How should it handle the "natural language triggering" requirement?
+- What's the best way to structure the choice points?
+- How to handle the --auto flag for non-interactive mode?
+- How to integrate with the MCP server tools?
+- What information needs to be preserved between workflow stages?
+
+**Existing Patterns:**
+- Review the current /create-prompt skill implementation as reference
+- Look at how other workflow prompts handle multi-stage processes
+- Examine the prompt templates already created (001, 002) for consistency
+</research_objective>
+
+<research_scope>
+Sources to prioritize:
+- Context7 for LLM prompt engineering best practices
+- web-search-prime for workflow orchestration patterns
+- Existing prompts in this codebase for consistency
+
+Focus on:
+- Multi-turn conversation design
+- User choice presentation patterns
+- State preservation in prompt workflows
+- Agent orchestration patterns
+- Template generation systems
+
+**Current Workflow (for reference):**
+1. User calls `/create-prompt "{task}"` or natural language
+2. Clarifying questions asked (if needed)
+3. Research prompt created at `.agent/prompts/{branch}/###-research-{topic}.md`
+4. User choice: run researcher, review, or exit
+5. Researcher runs → creates implementation prompt
+6. Pre-implementation clarification (user can edit)
+7. User choice: run fullstack-developer, review, or exit
+8. Fullstack-developer runs → completes task
+9. Prompt moved to completed folder
+
+**Goal:** Create a master orchestrator prompt that handles this entire flow.
+</research_scope>
+
+<prompt_requirements>
+The structured implementation prompt you create MUST include:
+
+1. **XML tag structure** with clear semantic tags:
+   - <agent_allocation> - Which agent handles this
+   - <objective> - What the orchestrator does
+   - <workflow_stages> - Each stage of the process
+   - <prompts> - The actual prompts to return
+   - <choice_points> - How to handle user decisions
+   - <templates> - Prompt templates for each stage
+   - <integration> - How to use MCP tools
+
+2. **Workflow orchestration:**
+   - Clear stage definitions
+   - User choice handling
+   - State preservation
+   - Error recovery
+
+3. **File paths** - Use relative paths like `./prompts/workflow-orchestrator.md`
+
+4. **Success criteria** - Clear verification steps
+</prompt_requirements>
+
+<context>
+**Current Implementation:**
+- MCP server with tools: create_research_task, create_implementation_task, list_prompts, get_prompt, move_prompt_to_completed
+- /create-prompt skill that handles the workflow
+- Prompt folder structure: `.agent/prompts/{branch}/`
+
+**Desired State:**
+- A master workflow orchestrator prompt that can be:
+  - Invoked via Claude Code commands
+  - Invoked via MCP tools (single "workflow" tool?)
+  - Triggered by natural language
+- Guides user through entire process
+- Maintains context across stages
+- Integrates with existing MCP tools
+
+**Key Constraint:** User must remain 100% in control - can review/edit at each stage.
+</context>
+
+<requirements>
+Functional requirements:
+1. Design a workflow orchestrator prompt
+2. Define stages: clarification → research → review → implementation → completion
+3. Handle user choices at each stage
+4. Support --auto flag for non-interactive mode
+5. Generate appropriate prompts at each stage
+6. Integrate with MCP tools when available
+7. Maintain context across workflow
+8. Handle natural language triggering
+
+**Output:** Implementation prompt for creating the workflow orchestrator
+</requirements>
+
+<output>
+Save your structured implementation prompt to:
+`.agent/prompts/dev/004-workflow-orchestrator.md`
+
+The prompt should contain ONLY the structured prompt for the implementer,
+no preamble or metadata.
+</output>
+
+<success_criteria>
+Your research is complete when:
+- Workflow orchestration patterns are identified
+- Multi-stage prompt design is clear
+- User choice handling is defined
+- Integration with MCP tools is specified
+- A complete, executable prompt is written
+- The prompt works with both interactive and auto modes
+</success_criteria>

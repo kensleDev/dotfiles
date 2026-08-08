@@ -1,0 +1,142 @@
+import { z } from 'zod';
+
+/**
+ * Schema for create_research_task tool
+ */
+export const CreateResearchTaskSchema = z.object({
+  task: z.string().min(1, 'Task description is required'),
+  priority: z.enum(['low', 'medium', 'high']).optional(),
+  context: z.string().optional(),
+});
+
+export type CreateResearchTaskInput = z.infer<typeof CreateResearchTaskSchema>;
+
+/**
+ * Schema for create_implementation_task tool
+ */
+export const CreateImplementationTaskSchema = z.object({
+  task: z.string().min(1, 'Task description is required'),
+  researchFindings: z.string().optional(),
+  requirements: z.string().optional(),
+  agentType: z.enum(['fullstack-developer', 'frontend', 'backend', 'devops']).optional(),
+});
+
+export type CreateImplementationTaskInput = z.infer<typeof CreateImplementationTaskSchema>;
+
+/**
+ * Schema for list_prompts tool
+ */
+export const ListPromptsSchema = z.object({
+  branch: z.string().optional(),
+});
+
+export type ListPromptsInput = z.infer<typeof ListPromptsSchema>;
+
+/**
+ * Schema for get_prompt tool
+ */
+export const GetPromptSchema = z.object({
+  promptFilePath: z.string().min(1, 'Prompt file path is required'),
+});
+
+export type GetPromptInput = z.infer<typeof GetPromptSchema>;
+
+/**
+ * Schema for move_prompt_to_completed tool
+ */
+export const MovePromptToCompletedSchema = z.object({
+  promptFilePath: z.string().min(1, 'Prompt file path is required'),
+});
+
+export type MovePromptToCompletedInput = z.infer<typeof MovePromptToCompletedSchema>;
+
+/**
+ * Schema for create_workflow tool
+ */
+export const CreateWorkflowSchema = z.object({
+  task: z.string().min(1, 'Task description is required'),
+  invocationMethod: z.enum(['command', 'mcp', 'natural_language']).optional(),
+  autoMode: z.boolean().optional(),
+});
+
+export type CreateWorkflowInput = z.infer<typeof CreateWorkflowSchema>;
+
+/**
+ * JSON Schema representations for MCP tool registration
+ */
+export const createResearchTaskJsonSchema = {
+  type: 'object' as const,
+  properties: {
+    task: {
+      type: 'string' as const,
+      description: 'Description of the research task to be performed',
+    },
+    priority: {
+      type: 'string' as const,
+      enum: ['low', 'medium', 'high'],
+      description: 'Priority level of the research task (optional)',
+    },
+    context: {
+      type: 'string' as const,
+      description: 'Additional context for the research task (optional)',
+    },
+  },
+  required: ['task'],
+};
+
+export const createImplementationTaskJsonSchema = {
+  type: 'object' as const,
+  properties: {
+    task: {
+      type: 'string' as const,
+      description: 'Description of the implementation task to be performed',
+    },
+    researchFindings: {
+      type: 'string' as const,
+      description: 'Research findings to inform the implementation (optional)',
+    },
+    requirements: {
+      type: 'string' as const,
+      description: 'Specific requirements for the implementation (optional)',
+    },
+    agentType: {
+      type: 'string' as const,
+      enum: ['fullstack-developer', 'frontend', 'backend', 'devops'],
+      description: 'Type of agent to spawn (defaults to fullstack-developer)',
+    },
+  },
+  required: ['task'],
+};
+
+export const listPromptsJsonSchema = {
+  type: 'object' as const,
+  properties: {
+    branch: {
+      type: 'string' as const,
+      description: 'Git branch to list prompts for (defaults to current branch)',
+    },
+  },
+  required: [],
+};
+
+export const getPromptJsonSchema = {
+  type: 'object' as const,
+  properties: {
+    promptFilePath: {
+      type: 'string' as const,
+      description: 'Absolute path to the prompt file',
+    },
+  },
+  required: ['promptFilePath'],
+};
+
+export const movePromptToCompletedJsonSchema = {
+  type: 'object' as const,
+  properties: {
+    promptFilePath: {
+      type: 'string' as const,
+      description: 'Absolute path to the prompt file to move',
+    },
+  },
+  required: ['promptFilePath'],
+};

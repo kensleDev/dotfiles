@@ -1,0 +1,352 @@
+/**
+ * Camera Health Check Service
+ *
+ * Provides health monitoring for camera streams.
+ * Checks connectivity for Bambu built-in cameras and RTSP cameras (Tapo, generic).
+ */
+
+import * as tls from 'tls';
+import { spawn } from 'child_process';
+import { getDB, cameras, printers } from '../../db';
+import { eq } from 'drizzle-orm';
+import promClient from 'prom-client';
+import { createLogger } from '../../shared/utils/logger';
+import { tryPromise } from '@julian-i/try-error';
+
+const logger = createLogger('camera-health');
+
+// Camera health metrics
+export const cameraHealthStatus = new promClient.Gauge({
+	name: 'print_farm_camera_healthy',
+	help: 'Camera health status (1=healthy, 0=unhealthy)',
+	labelNames: ['camera_id', 'camera_name', 'camera_type']
+});
+
+export const cameraResponseTime = new promClient.Gauge({
+	name: 'print_farm_camera_response_time_seconds',
+	help: 'Camera health check response time in seconds',
+	labelNames: ['camera_id', 'camera_name', 'camera_type']
+});
+
+export const cameraErrorsTotal = new promClient.Counter({
+	name: 'print_farm_camera_errors_total',
+	help: 'Total camera health check errors',
+	labelNames: ['camera_id', 'camera_name', 'error_type']
+});
+
+const HEALTH_CHECK_TIMEOUT = 5000; // 5 seconds for health checks
+
+/**
+ * Check Bambu built-in camera health via TLS connection
+ */
+async function checkBambuCameraHealth(
+	cameraId: number,
+	cameraName: string,
+	printerIp: string,
+	accessCode: string
+): Promise<{ healthy: boolean; lastCheck: Date; responseTime?: number; error?: string }> {
+	const startTime = Date.now();
+
+	return new Promise((resolve) => {
+		const timeoutId = setTimeout(() => {
+			cameraErrorsTotal.labels(cameraId.toString(), cameraName, 'timeout').inc();
+			cameraHealthStatus.labels(cameraId.toString(), cameraName, 'builtin').set(0);
+			resolve({
+				healthy: false,
+				lastCheck: new Date(),
+				error: 'Connection timeout'
+			});
+		}, HEALTH_CHECK_TIMEOUT);
+
+		const socket = tls.connect(
+			{
+				host: printerIp,
+				port: 6000,
+				rejectUnauthorized: false
+			},
+			() => {
+				clearTimeout(timeoutId);
+
+				// Send authentication packet
+				const authPacket = Buffer.alloc(80);
+				authPacket.writeUInt32LE(0x40, 0);
+				authPacket.writeUInt32LE(0x3000, 4);
+				authPacket.writeUInt32LE(0, 8);
+				authPacket.writeUInt32LE(0, 12);
+				Buffer.from('bblp', 'ascii').copy(authPacket, 16);
+				Buffer.from(accessCode, 'ascii').copy(authPacket, 48);
+
+				socket.write(authPacket);
+
+				// If we get here without error, connection succeeded
+				socket.destroy();
+
+				const responseTime = (Date.now() - startTime) / 1000;
+				cameraHealthStatus.labels(cameraId.toString(), cameraName, 'builtin').set(1);
+				cameraResponseTime.labels(cameraId.toString(), cameraName, 'builtin').set(responseTime);
+
+				resolve({
+					healthy: true,
+					lastCheck: new Date(),
+					responseTime
+				});
+			}
+		);
+
+		socket.on('error', (err: Error) => {
+			clearTimeout(timeoutId);
+			cameraErrorsTotal.labels(cameraId.toString(), cameraName, err.name).inc();
+			cameraHealthStatus.labels(cameraId.toString(), cameraName, 'builtin').set(0);
+			resolve({
+				healthy: false,
+				lastCheck: new Date(),
+				error: err.message
+			});
+		});
+	});
+}
+
+/**
+ * Check RTSP camera health via FFmpeg probe
+ */
+async function checkRtspCameraHealth(
+	cameraId: number,
+	cameraName: string,
+	cameraType: string,
+	streamUrl: string
+): Promise<{ healthy: boolean; lastCheck: Date; responseTime?: number; error?: string }> {
+	const startTime = Date.now();
+
+	return new Promise((resolve) => {
+		const ffmpegPath = process.env.FFMPEG_PATH || 'ffmpeg';
+		const timeoutId = setTimeout(() => {
+			ffmpegProcess.kill('SIGTERM');
+			cameraErrorsTotal.labels(cameraId.toString(), cameraName, 'timeout').inc();
+			cameraHealthStatus.labels(cameraId.toString(), cameraName, cameraType).set(0);
+			resolve({
+				healthy: false,
+				lastCheck: new Date(),
+				error: 'Health check timeout'
+			});
+		}, HEALTH_CHECK_TIMEOUT);
+
+		const ffmpegProcess = spawn(
+			ffmpegPath,
+			[
+				'-rtsp_transport',
+				'tcp',
+				'-i',
+				streamUrl,
+				'-t',
+				'1', // Only probe for 1 second
+				'-f',
+				'null',
+				'-'
+			],
+			{
+				stdio: ['pipe', 'pipe', 'pipe']
+			}
+		);
+
+		let hasConnected = false;
+
+		ffmpegProcess.stderr?.on('data', (data: Buffer) => {
+			const message = data.toString();
+			if (message.includes('Stream #') || message.includes('Video:')) {
+				hasConnected = true;
+			}
+		});
+
+		ffmpegProcess.on('exit', (code) => {
+			clearTimeout(timeoutId);
+			const responseTime = (Date.now() - startTime) / 1000;
+
+			if (hasConnected || code === 0) {
+				cameraHealthStatus.labels(cameraId.toString(), cameraName, cameraType).set(1);
+				cameraResponseTime.labels(cameraId.toString(), cameraName, cameraType).set(responseTime);
+				resolve({
+					healthy: true,
+					lastCheck: new Date(),
+					responseTime
+				});
+			} else {
+				cameraErrorsTotal.labels(cameraId.toString(), cameraName, 'connection_failed').inc();
+				cameraHealthStatus.labels(cameraId.toString(), cameraName, cameraType).set(0);
+				resolve({
+					healthy: false,
+					lastCheck: new Date(),
+					error: 'Failed to connect to RTSP stream'
+				});
+			}
+		});
+
+		ffmpegProcess.on('error', (err: Error) => {
+			clearTimeout(timeoutId);
+			cameraErrorsTotal.labels(cameraId.toString(), cameraName, err.name).inc();
+			cameraHealthStatus.labels(cameraId.toString(), cameraName, cameraType).set(0);
+			resolve({
+				healthy: false,
+				lastCheck: new Date(),
+				error: err.message
+			});
+		});
+	});
+}
+
+/**
+ * Check all enabled cameras health
+ */
+export async function checkAllCamerasHealth(): Promise<
+	Record<number, { healthy: boolean; lastCheck: Date; responseTime?: number; error?: string }>
+> {
+	const db = getDB();
+	const [allCameras, dbError] = await tryPromise(
+		db
+			.select({
+				camera: cameras,
+				printer: printers
+			})
+			.from(cameras)
+			.innerJoin(printers, eq(cameras.printer_id, printers.id))
+			.where(eq(cameras.enabled, 1))
+	);
+
+	if (dbError) {
+		logger.error('Failed to fetch cameras for health check', {
+			error: dbError.message,
+			stack: dbError.stack
+		});
+		return {};
+	}
+
+	const results: Record<
+		number,
+		{ healthy: boolean; lastCheck: Date; responseTime?: number; error?: string }
+	> = {};
+
+	// Check all cameras in parallel
+	const healthChecks = allCameras.map(async ({ camera, printer }) => {
+		const cameraData = {
+			id: camera.id,
+			name: camera.name,
+			type: camera.type,
+			ip_address: camera.ip_address,
+			stream_url: camera.stream_url,
+			camera_account_username: camera.camera_account_username,
+			camera_account_password: camera.camera_account_password
+		};
+
+		let health: { healthy: boolean; lastCheck: Date; responseTime?: number; error?: string };
+
+		switch (camera.type) {
+			case 'builtin':
+				health = await checkBambuCameraHealth(
+					camera.id,
+					camera.name,
+					printer.ip,
+					printer.access_code
+				);
+				break;
+
+			case 'tapo_c110':
+			case 'rtsp_generic': {
+				// Build stream URL
+				let streamUrl = camera.stream_url;
+				if (!streamUrl && camera.ip_address) {
+					const username = camera.camera_account_username || '';
+					const password = camera.camera_account_password || '';
+					const auth = username && password ? `${username}:${password}@` : '';
+					const path = camera.type === 'tapo_c110' ? '/stream1' : '/stream';
+					streamUrl = `rtsp://${auth}${camera.ip_address}:554${path}`;
+				}
+
+				if (!streamUrl) {
+					health = {
+						healthy: false,
+						lastCheck: new Date(),
+						error: 'No stream URL configured'
+					};
+				} else {
+					health = await checkRtspCameraHealth(
+						camera.id,
+						camera.name,
+						camera.type,
+						streamUrl
+					);
+				}
+				break;
+			}
+
+			default:
+				health = {
+					healthy: false,
+					lastCheck: new Date(),
+					error: `Unknown camera type: ${camera.type}`
+				};
+		}
+
+		results[camera.id] = health;
+
+		logger.debug(`Camera health check completed`, {
+			cameraId: camera.id,
+			cameraName: camera.name,
+			healthy: health.healthy,
+			responseTime: health.responseTime
+		});
+	});
+
+	await Promise.all(healthChecks);
+
+	return results;
+}
+
+/**
+ * Check a single camera's health
+ */
+export async function checkCameraHealth(
+	cameraId: number,
+	printerIp: string,
+	printerAccessCode: string,
+	camera: {
+		name: string;
+		type: string;
+		ip_address: string | null;
+		stream_url: string | null;
+		camera_account_username: string | null;
+		camera_account_password: string | null;
+	}
+): Promise<{ healthy: boolean; lastCheck: Date; responseTime?: number; error?: string }> {
+	switch (camera.type) {
+		case 'builtin':
+			return checkBambuCameraHealth(cameraId, camera.name, printerIp, printerAccessCode);
+
+		case 'tapo_c110':
+		case 'rtsp_generic': {
+			let streamUrl = camera.stream_url;
+			if (!streamUrl && camera.ip_address) {
+				const username = camera.camera_account_username || '';
+				const password = camera.camera_account_password || '';
+				const auth = username && password ? `${username}:${password}@` : '';
+				const path = camera.type === 'tapo_c110' ? '/stream1' : '/stream';
+				streamUrl = `rtsp://${auth}${camera.ip_address}:554${path}`;
+			}
+
+			if (!streamUrl) {
+				return {
+					healthy: false,
+					lastCheck: new Date(),
+					error: 'No stream URL configured'
+				};
+			}
+
+			return checkRtspCameraHealth(cameraId, camera.name, camera.type, streamUrl);
+		}
+
+		default:
+			return {
+				healthy: false,
+				lastCheck: new Date(),
+				error: `Unknown camera type: ${camera.type}`
+			};
+	}
+}

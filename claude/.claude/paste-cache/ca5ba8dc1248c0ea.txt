@@ -1,0 +1,31 @@
+2026-01-17T16:03:44.547Z [sse-client] INFO: SSE client connecting | {"url":"http://localhost:3001/api/events"}
+logger.ts:82 2026-01-17T16:03:44.558Z [sse-client] INFO: SSE connection established
+installHook.js:1 2026-01-17T16:03:44.558Z [sse-client] ERROR: SSE connection error | {}
+overrideMethod @ installHook.js:1
+log @ logger.ts:73
+childLogger.log @ logger.ts:127
+error @ logger.ts:113
+(anonymous) @ sse.ts:182Understand this error
+installHook.js:1 2026-01-17T16:03:44.558Z [dashboard-page] ERROR: SSE connection error | {}
+overrideMethod @ installHook.js:1
+log @ logger.ts:73
+childLogger.log @ logger.ts:127
+error @ logger.ts:113
+onError @ DashboardPage.svelte:97
+(anonymous) @ sse.ts:183Understand this error
+logger.ts:82 2026-01-17T16:03:47.565Z [sse-client] INFO: SSE connection established
+installHook.js:1 2026-01-17T16:03:47.565Z [sse-client] ERROR: SSE connection error | {}
+overrideMethod @ installHook.js:1
+log @ logger.ts:73
+childLogger.log @ logger.ts:127
+error @ logger.ts:113
+(anonymous) @ sse.ts:182Understand this error
+installHook.js:1 2026-01-17T16:03:47.566Z [dashboard-page] ERROR: SSE connection error | {}
+overrideMethod @ installHook.js:1
+log @ logger.ts:73
+childLogger.log @ logger.ts:127
+error @ logger.ts:113
+onError @ DashboardPage.svelte:97
+(anonymous) @ sse.ts:183Understand this error
+logger.ts:82 2026-01-17T16:03:50.570Z [sse-client] INFO: SSE connection established
+installHook.js:1 2026-01-17T16:03:50.570Z [s

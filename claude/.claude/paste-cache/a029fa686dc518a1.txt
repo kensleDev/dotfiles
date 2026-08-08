@@ -1,0 +1,25 @@
+[500] GET /library
+TypeError: __vite_ssr_import_11__.jobs.useDetectPrinterType is not a function
+    at /Users/kd/repos/print/print/apps/web/src/lib/job/components/JobModal.svelte:60:34
+    at Renderer.child (../../node_modules/.bun/svelte@5.46.4/node_modules/svelte/src/internal/server/renderer.js:186:18)
+    at Renderer.component (../../node_modules/.bun/svelte@5.46.4/node_modules/svelte/src/internal/server/renderer.js:211:22)
+    at JobModal (src/lib/job/components/JobModal.svelte:34:13)
+    at $$render_inner (src/lib/model/pages/LibraryPage.svelte:828:38)
+    at eval (src/lib/model/pages/LibraryPage.svelte:849:5)
+    at Renderer.child (../../node_modules/.bun/svelte@5.46.4/node_modules/svelte/src/internal/server/renderer.js:186:18)
+    at Renderer.component (../../node_modules/.bun/svelte@5.46.4/node_modules/svelte/src/internal/server/renderer.js:211:22)
+    at LibraryPage (src/lib/model/pages/LibraryPage.svelte:30:13)
+    at eval (src/routes/library/+page.svelte:16:41)
+
+[500] GET /library
+TypeError: __vite_ssr_import_11__.jobs.useDetectPrinterType is not a function
+    at /Users/kd/repos/print/print/apps/web/src/lib/job/components/JobModal.svelte:60:34
+    at Renderer.child (../../node_modules/.bun/svelte@5.46.4/node_modules/svelte/src/internal/server/renderer.js:186:18)
+    at Renderer.component (../../node_modules/.bun/svelte@5.46.4/node_modules/svelte/src/internal/server/renderer.js:211:22)
+    at JobModal (src/lib/job/components/JobModal.svelte:34:13)
+    at $$render_inner (src/lib/model/pages/LibraryPage.svelte:828:38)
+    at eval (src/lib/model/pages/LibraryPage.svelte:849:5)
+    at Renderer.child (../../node_modules/.bun/svelte@5.46.4/node_modules/svelte/src/internal/server/renderer.js:186:18)
+    at Renderer.component (../../node_modules/.bun/svelte@5.46.4/node_modules/svelte/src/internal/server/renderer.js:211:22)
+    at LibraryPage (src/lib/model/pages/LibraryPage.svelte:30:13)
+    at eval (src/routes/library/+page.svelte:16:41)

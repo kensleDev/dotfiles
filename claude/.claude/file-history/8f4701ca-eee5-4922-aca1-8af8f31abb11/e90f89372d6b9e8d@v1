@@ -1,0 +1,111 @@
+include <keyboard_config.scad>
+
+// Module for one half of the keyboard
+module keyboard_half() {
+    difference() {
+        // Base plate - simple square
+        cube([plate_width, plate_height, plate_thickness]);
+
+        // Main 3x5 grid cutouts
+        for (row = [0:rows-1]) {
+            for (col = [0:cols-1]) {
+                translate([
+                    edge_margin + (col * key_spacing) + (key_spacing/2) - (switch_cutout_size/2),
+                    edge_margin + (row * key_spacing) + (key_spacing/2) - (switch_cutout_size/2),
+                    -0.1
+                ])
+                cube([switch_cutout_size, switch_cutout_size, plate_thickness + 0.2]);
+            }
+        }
+
+        // Thumb cluster
+        for (thumb_row = [2:4]) {
+            translate([
+                edge_margin + (cols * key_spacing) + (key_spacing/2) - (switch_cutout_size/2),
+                edge_margin + (thumb_row * key_spacing) + (key_spacing/2) - (switch_cutout_size/2),
+                -0.1
+            ])
+            cube([switch_cutout_size, switch_cutout_size, plate_thickness + 0.2]);
+        }
+    }
+}
+
+// Bridge module with optional sloped sides for tilt
+module bridge_piece() {
+    if (tilt_enabled) {
+        // Trapezoidal bridge for tilted halves
+        front_width = bridge_height;
+        back_width = bridge_height;
+        top_front_width = bridge_height * cos(tilt_angle);
+        top_back_width = bridge_height * cos(tilt_angle);
+
+        // Create a prism with sloped sides
+        // Using hull to connect front and back faces
+        hull() {
+            // Front face (at Y = plate_height)
+            // Bottom corners
+            translate([0, 0, 0])
+            cylinder(r=0.01, h=plate_thickness);
+            translate([front_width, 0, 0])
+            cylinder(r=0.01, h=plate_thickness);
+            // Top corners (narrower due to tilt)
+            translate([(bridge_height - top_front_width) / 2, 0, 0])
+            cylinder(r=0.01, h=plate_thickness);
+            translate([(bridge_height + top_front_width) / 2, 0, 0])
+            cylinder(r=0.01, h=plate_thickness);
+
+            // Back face (at Y = plate_height + bridge_length)
+            // Bottom corners
+            translate([0, bridge_length, 0])
+            cylinder(r=0.01, h=plate_thickness);
+            translate([back_width, bridge_length, 0])
+            cylinder(r=0.01, h=plate_thickness);
+            // Top corners (narrower due to tilt)
+            translate([(bridge_height - top_back_width) / 2, bridge_length, 0])
+            cylinder(r=0.01, h=plate_thickness);
+            translate([(bridge_height + top_back_width) / 2, bridge_length, 0])
+            cylinder(r=0.01, h=plate_thickness);
+        }
+    } else {
+        // Rectangular bridge for no tilt
+        cube([bridge_height, bridge_length, plate_thickness]);
+    }
+}
+
+// Assemble the full keyboard
+module keyboard_plate() {
+    union() {
+        // Left half - tilted if enabled
+        // Rotate around inner edge (y = plate_height)
+        if (tilt_enabled) {
+            translate([0, plate_height, 0])
+            rotate([tilt_angle, 0, 0])
+            translate([0, -plate_height, 0])
+            keyboard_half();
+        } else {
+            keyboard_half();
+        }
+
+        // Bridge piece
+        translate([(plate_width - bridge_height) / 2, plate_height, 0])
+        bridge_piece();
+
+        // Right half (mirrored) - tilted if enabled
+        // Rotate around inner edge (y = plate_height + bridge_length)
+        if (tilt_enabled) {
+            translate([0, plate_height + bridge_length + plate_height, 0])
+            mirror([0, 1, 0])
+            translate([0, plate_height, 0])
+            rotate([tilt_angle, 0, 0])
+            translate([0, -plate_height, 0])
+            keyboard_half();
+        } else {
+            translate([0, plate_height + bridge_length + plate_height, 0])
+            mirror([0, 1, 0])
+            keyboard_half();
+        }
+    }
+}
+
+// Render the plate by default
+keyboard_plate();

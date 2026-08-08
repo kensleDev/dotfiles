@@ -1,0 +1,79 @@
+<agent_allocation>
+Primary: researcher
+Output: structured implementation prompt
+Workflow: research-to-prompt
+</agent_allocation>
+
+<objective>
+Research and identify missing components needed to get the print farm management system working in the mono repo structure. The app has been moved from a single repo to a mono repo with apps/api and apps/web folders. Need to identify what's missing and what needs to be configured to make `bun dev` work properly.
+</objective>
+
+<research_objective>
+Investigate:
+1. Current state of both apps/api and apps/web applications
+2. Missing dependencies, configuration files, or scripts
+3. Turborepo configuration and build setup
+4. Database configuration and connectivity
+5. Environment variables and configuration
+6. Shared packages that might be needed
+7. Any missing API routes or backend services
+8. Package.json dependencies and scripts mismatches
+9. Build and development setup issues
+10. Connection between frontend and backend
+</research_objective>
+
+<research_scope>
+Sources to prioritize:
+- Check apps/web/package.json and apps/api/package.json
+- Look for turbo.json configuration
+- Examine svelte.config.js and vite.config.ts in both apps
+- Check for database configuration files
+- Look for environment variable files (.env, .env.local)
+- Examine src/ structure in both apps
+- Check for missing imports or path aliases
+- Review CLAUDE.md for specific requirements
+- Check for any build errors or missing dependencies
+</research_scope>
+
+<prompt_requirements>
+The structured prompt you create MUST include:
+
+1. **XML tag structure** with clear semantic tags:
+   - <agent_allocation> - Assign to fullstack-developer
+   - <objective> - Clear statement of what needs to be done
+   - <context> - Why this matters, who it's for, tech stack
+   - <requirements> - Specific functional requirements
+   - <constraints> - What to avoid and WHY
+   - <output> - File paths and content descriptions
+   - <success_criteria> - How to verify completion
+
+2. **Explicit instructions** - Tell the fullstack-developer exactly what to do
+
+3. **File paths** - Use relative paths like `./apps/web/src/components/Button.svelte`
+
+4. **Success criteria** - Clear, measurable criteria for completion
+
+5. **Verification steps** - How to confirm the solution works
+</prompt_requirements>
+
+<output>
+Save your structured implementation prompt to:
+`.agent/prompts/main/[number]-[name].md`
+
+Use the next available number after this research task file.
+
+The prompt file should contain ONLY the structured prompt for fullstack-developer,
+no preamble or metadata.
+</output>
+
+<success_criteria>
+Your research is complete when:
+- All missing components and configurations are identified
+- Both apps/api and apps/web are fully functional
+- Turborepo is properly configured
+- Database connectivity is working
+- Environment variables are properly set
+- All dependencies are correctly installed
+- `bun dev` command works successfully
+- Frontend can connect to backend API
+</success_criteria>

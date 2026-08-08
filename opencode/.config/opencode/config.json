@@ -51,6 +51,11 @@
         "Z_AI_API_KEY": "e2419083b6f64de885a102aa2bd4a05e.EInxt7Yr0CpTCyLy",
         "Z_AI_MODE": "ZAI"
       }
+    },
+    "specification-website": {
+      "type": "remote",
+      "url": "https://mcp.specification.website/mcp",
+      "enabled": true
     }
     // "sqlite": {
     //   "type": "local",

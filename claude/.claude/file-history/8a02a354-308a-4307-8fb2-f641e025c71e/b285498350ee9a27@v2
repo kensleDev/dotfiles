@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Find all CHEATSHEET.md files (max 6 levels deep) and display with fzf
+# Press enter to view the selected cheatsheet
+
+selected=$(find ~ -maxdepth 6 -name "CHEATSHEET.md" 2>/dev/null | fzf --preview 'bat --color=always {}' --preview-window=right:70%)
+
+if [[ -n "$selected" ]]; then
+	bat "$selected"
+fi

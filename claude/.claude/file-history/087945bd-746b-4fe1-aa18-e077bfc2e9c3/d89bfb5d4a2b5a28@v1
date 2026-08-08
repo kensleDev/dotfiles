@@ -1,0 +1,89 @@
+import { sqliteTable, text, integer, real } from 'drizzle-orm/sqlite-core';
+import { sql } from 'drizzle-orm';
+
+// Import printers table from main schema (avoid circular dependency)
+// We'll reference it by name in the table definition
+export const modelFiles = sqliteTable('model_files', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	file_name: text('file_name').notNull(),
+	file_path: text('file_path').notNull().unique(),
+	thumbnail_path: text('thumbnail_path'),
+	file_size: integer('file_size').notNull(),
+	mime_type: text('mime_type').notNull().default('model/3mf'),
+
+	// Model dimensions (in mm)
+	width: real('width'),
+	height: real('height'),
+	depth: real('depth'),
+	bounding_box: text('bounding_box'), // JSON string: {min: {x,y,z}, max: {x,y,z}}
+
+	// Print settings extracted from 3MF
+	nozzle_diameter: real('nozzle_diameter'),
+	layer_height: real('layer_height'),
+	print_time_estimate: integer('print_time_estimate'), // seconds
+	material_type: text('material_type'),
+	material_color: text('material_color'),
+	print_temp: real('print_temp'),
+	bed_temp: real('bed_temp'),
+	infill_percentage: real('infill_percentage'),
+	infill_pattern: text('infill_pattern'),
+	supports_enabled: integer('supports_enabled', { mode: 'boolean' }),
+	support_type: text('support_type'),
+	support_threshold_angle: real('support_threshold_angle'),
+	print_speed: real('print_speed'),
+	sparse_infill_speed: real('sparse_infill_speed'),
+	support_speed: real('support_speed'),
+	bridge_speed: real('bridge_speed'),
+	build_plate_adhesion: text('build_plate_adhesion'),
+	brim_width: real('brim_width'),
+	raft_layers: integer('raft_layers'),
+	skirt_loops: integer('skirt_loops'),
+	skirt_distance: real('skirt_distance'),
+	retraction_enabled: integer('retraction_enabled', { mode: 'boolean' }),
+	retraction_distance: real('retraction_distance'),
+	retraction_speed: real('retraction_speed'),
+	wipe_distance: real('wipe_distance'),
+	fan_speed: real('fan_speed'),
+	fan_min_speed: real('fan_min_speed'),
+	fan_max_speed: real('fan_max_speed'),
+	outer_wall_speed: real('outer_wall_speed'),
+	inner_wall_speed: real('inner_wall_speed'),
+	top_surface_speed: real('top_surface_speed'),
+	bottom_surface_speed: real('bottom_surface_speed'),
+	top_surface_pattern: text('top_surface_pattern'),
+	bottom_surface_pattern: text('bottom_surface_pattern'),
+	travel_speed: real('travel_speed'),
+	initial_layer_height: real('initial_layer_height'),
+	initial_layer_speed: real('initial_layer_speed'),
+	top_layers: integer('top_layers'),
+	bottom_layers: integer('bottom_layers'),
+	wall_loops: integer('wall_loops'),
+	wall_sequence: text('wall_sequence'),
+	seam_position: text('seam_position'),
+	z_hop: real('z_hop'),
+	pressure_advance: real('pressure_advance'),
+
+	// 3MF metadata
+	application: text('application'), // Slicer application used
+	application_version: text('application_version'),
+	author: text('author'),
+	title: text('title'),
+	description: text('description'),
+
+	// Preview thumbnail (base64 encoded for immediate display)
+	thumbnail_data: text('thumbnail_data'),
+
+	// Printer type detected from GCode (A1, A1_MINI, P1S)
+	printer_type: text('printer_type'),
+
+	// Timestamps
+	uploaded_at: integer('uploaded_at', { mode: 'timestamp' })
+		.notNull()
+		.default(sql`(unixepoch())`),
+	created_at: integer('created_at', { mode: 'timestamp' })
+		.notNull()
+		.default(sql`(unixepoch())`),
+	updated_at: integer('updated_at', { mode: 'timestamp' })
+		.notNull()
+		.default(sql`(unixepoch())`)
+});

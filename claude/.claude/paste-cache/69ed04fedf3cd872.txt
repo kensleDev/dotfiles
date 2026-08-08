@@ -1,0 +1,22 @@
+ence it inside a closure instead?
+https://svelte.dev/e/state_referenced_locally
+10:37:31 PM [vite-plugin-svelte] src/lib/model/pages/LibraryPage.svelte:60:10 This reference only captures the initial value of `searchQuery`. Did you mean to reference it inside a closure instead?
+https://svelte.dev/e/state_referenced_locally
+10:37:31 PM [vite-plugin-svelte] src/lib/model/pages/LibraryPage.svelte:61:8 This reference only captures the initial value of `sortBy`. Did you mean to reference it inside a closure instead?
+https://svelte.dev/e/state_referenced_locally
+10:37:31 PM [vite-plugin-svelte] src/lib/model/pages/LibraryPage.svelte:62:9 This reference only captures the initial value of `sortOrder`. Did you mean to reference it inside a closure instead?
+https://svelte.dev/e/state_referenced_locally
+
+[500] GET /library
+TypeError: __vite_ssr_import_5__.library.useUploadModelFile is not a function
+    at /Users/kd/repos/print/print/apps/web/src/lib/model/pages/LibraryPage.svelte:67:33
+    at Renderer.child (../../node_modules/.bun/svelte@5.46.4/node_modules/svelte/src/internal/server/renderer.js:186:18)
+    at Renderer.component (../../node_modules/.bun/svelte@5.46.4/node_modules/svelte/src/internal/server/renderer.js:211:22)
+    at LibraryPage (src/lib/model/pages/LibraryPage.svelte:30:13)
+    at eval (src/routes/library/+page.svelte:16:41)
+    at Renderer.child (../../node_modules/.bun/svelte@5.46.4/node_modules/svelte/src/internal/server/renderer.js:186:18)
+    at Renderer.component (../../node_modules/.bun/svelte@5.46.4/node_modules/svelte/src/internal/server/renderer.js:211:22)
+    at _page (src/routes/library/+page.svelte:12:13)
+
+
+

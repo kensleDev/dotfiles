@@ -1,0 +1,173 @@
+import { mqttManager } from '../../../printer/services/mqtt-manager';
+import { eventBus } from '../../../shared/services/event-bus';
+import { createLogger } from '../../../shared/utils/logger';
+import type { Job } from '../../../job/types/job';
+import type { Printer } from '../../../printer/types/printer';
+import { tryPromise } from '@julian-i/try-error';
+
+const logger = createLogger('loop-manager');
+
+export interface ClearingResult {
+	success: boolean;
+	error?: string;
+}
+
+export class LoopManager {
+	async performClearing(job: Job, printer: Printer): Promise<ClearingResult> {
+		logger.info('Starting job clearing', {
+			jobId: job.id,
+			printerId: printer.id,
+			clearingMethod: job.clearing_method
+		});
+
+		if (job.clearing_method === 'gcode') {
+			return await this.gcodeClear(job, printer);
+		} else if (job.clearing_method === 'actuator' && printer.actuator_id) {
+			return await this.actuatorClear(job, printer);
+		} else {
+			logger.info('No clearing method configured, skipping job clearing', { jobId: job.id });
+			return { success: true };
+		}
+	}
+
+	private async gcodeClear(job: Job, printer: Printer): Promise<ClearingResult> {
+		const clearingGcode = printer.custom_gcode || this.getDefaultClearingGcode();
+
+		logger.info('Executing clearing G-code', {
+			printerId: printer.id,
+			customGcode: !!printer.custom_gcode
+		});
+
+		const [success, sendError] = await tryPromise(
+			mqttManager.sendCommand(printer.id, {
+				type: 'gcode',
+				gcode: clearingGcode
+			})
+		);
+
+		if (sendError || !success) {
+			logger.error('Failed to send clearing G-code command', {
+				printerId: printer.id,
+				error: sendError?.message || 'Command returned false',
+				stack: sendError?.stack
+			});
+			return { success: false, error: 'Failed to send clearing G-code command' };
+		}
+
+		const [_, waitError] = await tryPromise(
+			this.waitForClearingComplete(job.id, printer.id, 30000)
+		);
+
+		if (waitError) {
+			logger.error('Failed to wait for clearing complete', {
+				jobId: job.id,
+				printerId: printer.id,
+				error: waitError.message,
+				stack: waitError.stack
+			});
+			return { success: false, error: waitError.message };
+		}
+
+		logger.info('G-code clearing completed successfully', { jobId: job.id, printerId: printer.id });
+		return { success: true };
+	}
+
+	private async actuatorClear(job: Job, printer: Printer): Promise<ClearingResult> {
+		logger.info('Triggering actuator for clearing', {
+			printerId: printer.id,
+			actuatorId: printer.actuator_id,
+			extendMs: 5000,
+			retractMs: 5000
+		});
+
+		const extendMs = 5000;
+		const retractMs = 5000;
+
+		const [_, triggerError] = await tryPromise(
+			this.triggerActuator(printer.actuator_id!, extendMs, retractMs)
+		);
+
+		if (triggerError) {
+			logger.error('Failed to trigger actuator', {
+				printerId: printer.id,
+				actuatorId: printer.actuator_id,
+				error: triggerError.message,
+				stack: triggerError.stack
+			});
+			return { success: false, error: triggerError.message };
+		}
+
+		logger.info('Actuator clearing completed successfully', {
+			jobId: job.id,
+			printerId: printer.id
+		});
+		return { success: true };
+	}
+
+	private async triggerActuator(
+		actuatorId: number,
+		extendMs: number,
+		retractMs: number
+	): Promise<void> {
+		const command = `ACTUATOR_CYCLE ${actuatorId} ${extendMs} ${retractMs}`;
+
+		await new Promise<void>((resolve, reject) => {
+			const timeout = setTimeout(
+				() => {
+					reject(new Error('Actuator command timeout'));
+				},
+				extendMs + retractMs + 5000
+			);
+
+			mqttManager.sendCommand(0, {
+				type: 'gcode',
+				gcode: command
+			});
+
+			setTimeout(
+				() => {
+					clearTimeout(timeout);
+					resolve();
+				},
+				extendMs + retractMs + 1000
+			);
+		});
+	}
+
+	private async waitForClearingComplete(
+		_jobId: number,
+		printerId: number,
+		timeoutMs: number
+	): Promise<void> {
+		return new Promise((resolve, reject) => {
+			const timeout = setTimeout(() => {
+				listener();
+				reject(new Error('Clearing timeout'));
+			}, timeoutMs);
+
+			const listener = () => {
+				const state = mqttManager.getPrinterStatus(printerId);
+				if (state && state.status === 'IDLE') {
+					clearTimeout(timeout);
+					resolve();
+				}
+			};
+
+			eventBus.on('printer:state', listener);
+		});
+	}
+
+	private getDefaultClearingGcode(): string {
+		return `
+; Clearing sequence
+G1 Z20 F3000
+G1 X150 Y150 F3000
+G1 Z0.2 F600
+G4 S5
+G1 Z5 F600
+G1 X0 Y0 F3000
+`;
+	}
+}
+
+export const loopManager = new LoopManager();

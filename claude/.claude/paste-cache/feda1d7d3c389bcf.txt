@@ -1,0 +1,1115 @@
+import { db } from '@/db';
+import { jobs, printHistory, externalPrints } from '@/db/schema';
+import { getNextPendingJob, updateJob } from '@/job/services/job-manager';
+import type { Job } from '@/job';
+import { ftpsClient } from './ftps-client';
+import { gcodeProcessor } from './gcode-processor';
+import { loopManager } from './loop-manager';
+import { mqttManager } from '@/printer/services/mqtt-manager';
+import type { Printer } from '@/printer';
+import { eventBus } from '@/shared';
+import { createLogger } from '@/shared/utils/logger';
+import { desc, eq } from 'drizzle-orm';
+import { tryPromise } from '@julian-i/try-error';
+import { createHash } from 'crypto';
+
+const logger = createLogger('queue-processor');
+
+export interface ActiveJob {
+    job: Job;
+    printer: Printer;
+    startTime: Date;
+    loopStartTime: Date;
+    processedFilePath?: string;
+}
+
+/**
+ * Information about an external print (started directly on the printer, not through the queue).
+ * These prints are tracked in memory and persisted to the database.
+ */
+interface ExternalPrintInfo {
+    printerId: number;
+    fileName: string | null;
+    startTime: Date;
+    status: 'printing' | 'finishing' | 'complete';
+    recordId: number | null;
+    printHash: string;
+}
+
+class QueueProcessor {
+    private interval: NodeJS.Timeout | null = null;
+    private activeJobs = new Map<number, ActiveJob>();
+    private externalPrints = new Map<number, ExternalPrintInfo>();
+    private readonly POLL_INTERVAL = 5000;
+    private readonly MAX_RETRIES = 3;
+    private readonly DEFAULT_COOLDOWN_TIME = 60000;
+    private readonly CLEANUP_INTERVAL = 24 * 60 * 60 * 1000;
+
+    constructor() {
+        this.setupEventListeners();
+    }
+
+    start(): void {
+        if (this.interval) {
+            logger.warn('Queue processor already running');
+            return;
+        }
+
+        logger.info('Starting queue processor...');
+        this.interval = setInterval(() => this.processQueue(), this.POLL_INTERVAL);
+
+        setInterval(() => {
+            this.cleanupStuckJobs();
+            gcodeProcessor.cleanupOldFiles();
+        }, this.CLEANUP_INTERVAL);
+
+        setTimeout(() => this.cleanupStuckJobs(), 5000);
+    }
+
+    stop(): void {
+        if (!this.interval) return;
+
+        logger.info('Stopping queue processor...');
+        clearInterval(this.interval);
+        this.interval = null;
+    }
+
+    private setupEventListeners(): void {
+        eventBus.on('printer:state', async (state) => {
+            await this.handlePrinterStateChange(state);
+        });
+    }
+
+    /**
+     * Generate a unique hash for an external print session
+     * Hash components: printer_id + file_name + started_at (minute precision)
+     *
+     * @param printerId - The printer ID
+     * @param fileName - The file name being printed (may be null)
+     * @param startedAt - When the print started
+     * @returns SHA256 hex string
+     */
+    private generatePrintHash(printerId: number, fileName: string | null, startedAt: Date): string {
+        const normalizedFileName = fileName || 'unknown';
+        const timestamp = Math.floor(startedAt.getTime() / 60000); // Minute precision
+        const hashInput = `${printerId}:${normalizedFileName}:${timestamp}`;
+
+        return createHash('sha256').update(hashInput).digest('hex');
+    }
+
+    /**
+     * Find an active external print record for mid-print joins
+     * Searches for records with the same printer and file that are still in progress
+     *
+     * @param printerId - The printer ID
+     * @param fileName - The file name being printed
+     * @returns The record with id, status, and print_hash, or null if not found
+     */
+    private async findActiveExternalPrint(
+        printerId: number,
+        fileName: string | null
+    ): Promise<{ id: number; status: string; print_hash: string } | null> {
+        const { and, or, eq } = await import('drizzle-orm');
+
+        const [result, findError] = await tryPromise(
+            db
+                .select({
+                    id: externalPrints.id,
+                    status: externalPrints.status,
+                    print_hash: externalPrints.print_hash
+                })
+                .from(externalPrints)
+                .where(
+                    and(
+                        eq(externalPrints.printer_id, printerId),
+                        eq(externalPrints.file_name, fileName || 'unknown'),
+                        or(eq(externalPrints.status, 'printing'), eq(externalPrints.status, 'finishing'))
+                    )
+                )
+                .orderBy(desc(externalPrints.created_at))
+                .limit(1)
+        );
+
+        if (findError) {
+            logger.error('Failed to query active external print record', {
+                printerId,
+                fileName,
+                error: findError.message,
+                stack: findError.stack
+            });
+            return null;
+        }
+
+        return result?.[0] ?? null;
+    }
+
+    /**
+     * Calculate started_at from progress and remaining time for mid-print joins
+     *
+     * @param progress - Print progress percentage (0-100)
+     * @param remainingTime - Remaining time in seconds
+     * @returns Estimated start time
+     */
+    private calculateStartTime(progress: number, remainingTime: number): Date {
+        if (progress > 0 && remainingTime > 0) {
+            // total_time = remaining_time / (progress / 100)
+            // elapsed = total_time - remaining_time
+            // started_at = now - elapsed
+            const totalSeconds = (remainingTime / progress) * 100;
+            const elapsedSeconds = totalSeconds - remainingTime;
+            return new Date(Date.now() - elapsedSeconds * 1000);
+        }
+        // Fallback to current time if we can't calculate
+        return new Date();
+    }
+
+    /**
+     * Insert a new external print record into the database
+     *
+     * @param printerId - The printer ID
+     * @param printerState - The current printer state
+     * @param printHash - The generated print hash
+     * @param isMidPrintJoin - Whether this is joining an existing print (default: false)
+     * @returns The record ID or null if insertion failed
+     */
+    private async insertExternalPrintRecord(
+        printerId: number,
+        printerState: any,
+        printHash: string,
+        isMidPrintJoin: boolean = false
+    ): Promise<number | null> {
+        const mqttMessage = mqttManager.getLastMessage(printerId);
+        const print = mqttMessage?.print;
+
+        const [result, insertError] = await tryPromise(
+            db
+                .insert(externalPrints)
+                .values({
+                    printer_id: printerId,
+                    print_hash: printHash,
+                    file_name: printerState.currentFile,
+                    status: 'printing',
+                    progress: printerState.progress || null,
+                    remaining_time: printerState.remainingTime || null,
+                    layer_num: printerState.layerCount || null,
+                    total_layers: printerState.totalLayers || null,
+                    bed_temp: (print?.bed_temper ?? printerState.bedTemp) || null,
+                    bed_target_temp: (print?.bed_target_temper ?? printerState.bedTargetTemp) || null,
+                    nozzle_temp: (print?.nozzle_temper ?? printerState.nozzleTemp) || null,
+                    nozzle_target_temp:
+                        (print?.nozzle_target_temper ?? printerState.nozzleTargetTemp) || null,
+                    chamber_temp: (print?.chamber_temper ?? printerState.chamberTemp) || null,
+                    heatbreak_fan_speed: print?.heatbreak_fan_speed || null,
+                    cooling_fan_speed: print?.cooling_fan_speed || null,
+                    big_fan1_speed: print?.big_fan1_speed || null,
+                    big_fan2_speed: print?.big_fan2_speed || null,
+                    spd_mag: print?.spd_mag || null,
+                    spd_lvl: print?.spd_lvl || null,
+                    wifi_signal: print?.wifi_signal || null,
+                    print_error: print?.print_error || null,
+                    started_at: isMidPrintJoin
+                        ? this.calculateStartTime(printerState.progress || 0, printerState.remainingTime || 0)
+                        : new Date()
+                })
+                .returning({ id: externalPrints.id })
+        );
+
+        if (insertError) {
+            logger.error('Failed to insert external print record', {
+                printerId,
+                error: insertError.message,
+                stack: insertError.stack
+            });
+            return null;
+        }
+
+        return result?.[0]?.id ?? null;
+    }
+
+    /**
+     * Update an existing external print record
+     *
+     * @param recordId - The database record ID
+     * @param updates - The fields to update
+     */
+    private async updateExternalPrintRecord(
+        recordId: number,
+        updates: {
+            status: string;
+            completed_at?: Date;
+            duration?: number;
+        }
+    ): Promise<void> {
+        const [_, updateError] = await tryPromise(
+            db
+                .update(externalPrints)
+                .set({
+                    ...updates,
+                    updated_at: new Date()
+                })
+                .where(eq(externalPrints.id, recordId))
+        );
+
+        if (updateError) {
+            logger.error('Failed to update external print record', {
+                recordId,
+                error: updateError.message,
+                stack: updateError.stack
+            });
+        }
+    }
+
+    private async processQueue(): Promise<void> {
+        const [availablePrinters, getPrintersError] = await tryPromise(this.getAvailablePrinters());
+        if (getPrintersError) {
+            logger.error('Error getting available printers:', {
+                error: getPrintersError.message,
+                stack: getPrintersError.stack
+            });
+            return;
+        }
+        if (availablePrinters.length === 0) return;
+
+        for (const printer of availablePrinters) {
+            if (this.isPrinterBusy(printer.id)) continue;
+
+            const [job, getNextError] = await tryPromise(getNextPendingJob(printer.id));
+            if (getNextError) {
+                logger.error('Error getting next pending job:', {
+                    printerId: printer.id,
+                    error: getNextError.message,
+                    stack: getNextError.stack
+                });
+                continue;
+            }
+
+            if (job) {
+                if (
+                    job.assigned_printer &&
+                    job.assigned_printer !== printer.id &&
+                    job.assigned_printer !== null
+                ) {
+                    continue;
+                }
+
+                const [_, startError] = await tryPromise(this.startJob(job, printer));
+                if (startError) {
+                    logger.error('Error starting job:', {
+                        jobId: job.id,
+                        printerId: printer.id,
+                        error: startError.message,
+                        stack: startError.stack
+                    });
+                }
+                break;
+            }
+        }
+    }
+
+    private async startJob(job: Job, printer: Printer): Promise<void> {
+        logger.info('Starting job', { jobId: job.id, printerId: printer.id });
+
+        const [updatedJob, updateError] = await tryPromise(updateJob(job.id, { status: 'queued' }));
+        if (updateError) {
+            logger.error('Failed to update job status to queued:', {
+                jobId: job.id,
+                error: updateError.message,
+                stack: updateError.stack
+            });
+            await this.handleJobFailure(job, 'Unable to queue job for processing');
+            return;
+        }
+        if (!updatedJob) {
+            await this.handleJobFailure(job, 'Job not found - may have been deleted');
+            return;
+        }
+
+        job = updatedJob;
+
+        this.activeJobs.set(job.id, {
+            job,
+            printer,
+            startTime: new Date(),
+            loopStartTime: new Date()
+        });
+
+        const [_, uploadError] = await tryPromise(this.uploadJob(job, printer));
+        if (uploadError) {
+            logger.error('Failed to upload job:', {
+                jobId: job.id,
+                error: uploadError.message,
+                stack: uploadError.stack
+            });
+            await this.handleJobFailure(job, 'Failed to upload job file to printer');
+        }
+    }
+
+    private async uploadJob(job: Job, printer: Printer): Promise<void> {
+        logger.info('Uploading job', { jobId: job.id, printerId: printer.id });
+
+        const [updatedJob, updateError] = await tryPromise(updateJob(job.id, { status: 'uploading' }));
+        if (updateError) {
+            logger.error('Failed to update job status to uploading:', {
+                jobId: job.id,
+                error: updateError.message,
+                stack: updateError.stack
+            });
+            throw new Error('Failed to set uploading status');
+        }
+        if (!updatedJob) {
+            throw new Error('Job not found while uploading');
+        }
+
+        job = updatedJob;
+
+        eventBus.emit('job:uploading', { jobId: job.id, printerId: printer.id });
+
+        const [processResult, processError] = await tryPromise(
+            gcodeProcessor.processJob(job, job.processing_options ?? undefined)
+        );
+        if (processError) {
+            logger.error('Failed to process G-code:', {
+                jobId: job.id,
+                error: processError.message,
+                stack: processError.stack
+            });
+            throw new Error('Failed to process model file for printing');
+        }
+
+        const activeJob = this.activeJobs.get(job.id);
+        if (activeJob) {
+            activeJob.processedFilePath = processResult.filePath;
+        }
+
+        const [_, uploadError] = await tryPromise(
+            ftpsClient.uploadFile(printer, processResult.filePath, `${job.id}_${job.display_name}.3mf`)
+        );
+        if (uploadError) {
+            logger.error('FTPS upload failed:', {
+                jobId: job.id,
+                printerId: printer.id,
+                error: uploadError.message,
+                stack: uploadError.stack
+            });
+            throw new Error('Failed to transfer file to printer - check printer connection');
+        }
+
+        logger.info('Upload complete', { jobId: job.id });
+
+        const [__, startPrintError] = await tryPromise(this.startPrint(job, printer));
+        if (startPrintError) {
+            logger.error('Failed to start print after upload:', {
+                jobId: job.id,
+                error: startPrintError.message,
+                stack: startPrintError.stack
+            });
+            throw new Error('File uploaded but print failed to start');
+        }
+    }
+
+    private async startPrint(job: Job, printer: Printer): Promise<void> {
+        logger.info('Starting print', { jobId: job.id });
+
+        const [updatedJob, updateError] = await tryPromise(
+            updateJob(job.id, { status: 'printing', started_at: new Date() })
+        );
+        if (updateError) {
+            logger.error('Failed to update job status to printing:', {
+                jobId: job.id,
+                error: updateError.message,
+                stack: updateError.stack
+            });
+            throw new Error('Failed to set printing status');
+        }
+        if (!updatedJob) {
+            throw new Error('Job not found while starting print');
+        }
+
+        job = updatedJob;
+
+        job.current_loop = (job.current_loop || 0) + 1;
+
+        const [updatedLoop, loopError] = await tryPromise(
+            updateJob(job.id, { current_loop: job.current_loop })
+        );
+        if (loopError) {
+            logger.error('Failed to update loop count:', {
+                jobId: job.id,
+                error: loopError.message,
+                stack: loopError.stack
+            });
+            throw new Error('Failed to update loop counter');
+        }
+        if (!updatedLoop) {
+            throw new Error('Job not found while updating loop');
+        }
+
+        job = updatedLoop;
+
+        eventBus.emit('job:printing', {
+            jobId: job.id,
+            printerId: printer.id,
+            loopNumber: job.current_loop
+        });
+
+        const [success, mqttError] = await tryPromise(
+            mqttManager.sendCommand(printer.id, {
+                type: 'start',
+                fileName: `${job.id}_${job.display_name}.3mf`
+            })
+        );
+
+        if (mqttError || !success) {
+            logger.error('Failed to send MQTT print command:', {
+                jobId: job.id,
+                printerId: printer.id,
+                error: mqttError?.message ?? 'Command returned false',
+                stack: mqttError?.stack
+            });
+            throw new Error('Failed to communicate with printer - check MQTT connection');
+        }
+
+        const activeJob = this.activeJobs.get(job.id);
+        if (activeJob) {
+            activeJob.loopStartTime = new Date();
+        }
+    }
+
+    private async handlePrinterStateChange(state: {
+        printerId: number;
+        status: string;
+    }): Promise<void> {
+        const activeJob = this.getActiveJobForPrinter(state.printerId);
+
+        // Handle internal job state changes (existing logic)
+        if (activeJob) {
+            const { job, printer } = activeJob;
+
+            if (state.status === 'FINISH' && job.status === 'printing') {
+                logger.info('Print complete', { jobId: job.id, loopNumber: job.current_loop });
+                await this.onPrintComplete(job, printer);
+            } else if (state.status === 'ERROR' && job.status === 'printing') {
+                logger.error('Print error', { jobId: job.id });
+                const errorMessage = 'Print error';
+                await this.handleJobFailure(job, errorMessage);
+            }
+            return;
+        }
+
+        // Handle external print state changes (new logic)
+        await this.handleExternalPrintStateChange(state.printerId, state.status);
+    }
+
+    /**
+     * Handles state changes for external prints (prints started directly on the printer).
+     * These prints are not part of the queue system and are tracked in memory and database.
+     *
+     * State machine:
+     * - NOT_TRACKED -> PRINTING/PREPARE: Create database record and tracking entry, emit 'started' event
+     * - printing -> FINISH: Update status to 'finishing', log info
+     * - finishing -> IDLE: Update database record with 'complete' status and duration, emit 'complete' event, clean up tracking
+     * - any -> STOP: Update database record with 'stopped' status and partial duration, clean up tracking
+     * - any -> ERROR: Update database record with 'error' status and partial duration, emit 'error' event, clean up tracking
+     *
+     * @param printerId - The printer ID
+     * @param status - The printer status
+     */
+    private async handleExternalPrintStateChange(printerId: number, status: string): Promise<void> {
+        const printerState = mqttManager.getPrinterStatus(printerId);
+        if (!printerState) {
+            logger.debug('No printer state available for external print tracking', { printerId });
+            return;
+        }
+
+        // Track external print start
+        if ((status === 'PRINTING' || status === 'PREPARE') && !this.externalPrints.has(printerId)) {
+            const startTime = new Date();
+
+            // Check for existing active print (e.g., app restarted during print)
+            const existingRecord = await this.findActiveExternalPrint(
+                printerId,
+                printerState.currentFile
+            );
+
+            let recordId: number | null;
+            let printHash: string;
+            let isMidPrintJoin = false;
+
+            if (existingRecord) {
+                // Record exists - this is a mid-print join (app restart or reconnect)
+                recordId = existingRecord.id;
+                printHash = existingRecord.print_hash; // Use the original hash
+                isMidPrintJoin = true;
+                logger.info('Found existing external print record (mid-print join)', {
+                    printerId,
+                    fileName: printerState.currentFile,
+                    recordId,
+                    existingStatus: existingRecord.status
+                });
+
+                // Update record status back to printing (in case it was stale)
+                await this.updateExternalPrintRecord(recordId, {
+                    status: 'printing'
+                });
+            } else {
+                // No record exists - create new one
+                printHash = this.generatePrintHash(printerId, printerState.currentFile, startTime);
+                recordId = await this.insertExternalPrintRecord(printerId, printerState, printHash, false);
+            }
+
+            if (recordId) {
+                this.externalPrints.set(printerId, {
+                    printerId,
+                    fileName: printerState.currentFile,
+                    startTime,
+                    status: 'printing',
+                    recordId,
+                    printHash
+                });
+                logger.info('External print detected and recorded', {
+                    printerId,
+                    fileName: printerState.currentFile,
+                    recordId,
+                    isMidPrintJoin
+                });
+            } else {
+                // Record insertion failed (likely duplicate hash), still track in memory but without record
+                this.externalPrints.set(printerId, {
+                    printerId,
+                    fileName: printerState.currentFile,
+                    startTime,
+                    status: 'printing',
+                    recordId: null,
+                    printHash
+                });
+                logger.warn('External print detected but database record creation failed', {
+                    printerId,
+                    fileName: printerState.currentFile
+                });
+            }
+
+            eventBus.emit('external-print:started', {
+                printerId,
+                fileName: printerState.currentFile
+            });
+            return;
+        }
+
+        // Track external print finishing
+        if (status === 'FINISH') {
+            const externalPrint = this.externalPrints.get(printerId);
+            if (externalPrint) {
+                externalPrint.status = 'finishing';
+                logger.info('External print finishing', {
+                    printerId,
+                    fileName: externalPrint.fileName,
+                    recordId: externalPrint.recordId
+                });
+            }
+            return;
+        }
+
+        // Handle external print completion
+        if (status === 'IDLE') {
+            const externalPrint = this.externalPrints.get(printerId);
+            if (externalPrint && externalPrint.status === 'finishing') {
+                const duration = Math.floor((Date.now() - externalPrint.startTime.getTime()) / 1000);
+
+                if (externalPrint.recordId) {
+                    await this.updateExternalPrintRecord(externalPrint.recordId, {
+                        status: 'complete',
+                        completed_at: new Date(),
+                        duration
+                    });
+                }
+
+                logger.info('External print complete', {
+                    printerId,
+                    fileName: externalPrint.fileName,
+                    duration,
+                    recordId: externalPrint.recordId
+                });
+                eventBus.emit('external-print:complete', {
+                    printerId,
+                    fileName: externalPrint.fileName,
+                    duration
+                });
+            }
+
+            // Always cleanup when IDLE (prevents memory leaks from missed FINISH events)
+            if (this.externalPrints.has(printerId)) {
+                this.externalPrints.delete(printerId);
+                logger.debug('Cleared external print tracking', { printerId });
+            }
+        }
+
+        // Handle external print stop (cancelled by user)
+        if (status === 'STOP') {
+            const externalPrint = this.externalPrints.get(printerId);
+            if (externalPrint) {
+                const duration = Math.floor((Date.now() - externalPrint.startTime.getTime()) / 1000);
+
+                if (externalPrint.recordId) {
+                    await this.updateExternalPrintRecord(externalPrint.recordId, {
+                        status: 'stopped',
+                        completed_at: new Date(),
+                        duration
+                    });
+                }
+
+                logger.info('External print stopped', {
+                    printerId,
+                    fileName: externalPrint.fileName,
+                    duration,
+                    recordId: externalPrint.recordId
+                });
+
+                this.externalPrints.delete(printerId);
+            }
+        }
+
+        // Handle external print error
+        if (status === 'ERROR') {
+            const externalPrint = this.externalPrints.get(printerId);
+            if (externalPrint) {
+                const duration = Math.floor((Date.now() - externalPrint.startTime.getTime()) / 1000);
+
+                if (externalPrint.recordId) {
+                    await this.updateExternalPrintRecord(externalPrint.recordId, {
+                        status: 'error',
+                        completed_at: new Date(),
+                        duration
+                    });
+                }
+
+                logger.warn('External print error', {
+                    printerId,
+                    fileName: externalPrint.fileName,
+                    duration,
+                    recordId: externalPrint.recordId
+                });
+                eventBus.emit('external-print:error', {
+                    printerId,
+                    fileName: externalPrint.fileName
+                });
+
+                this.externalPrints.delete(printerId);
+            }
+        }
+    }
+
+    private async onPrintComplete(job: Job, printer: Printer): Promise<void> {
+        const activeJob = this.activeJobs.get(job.id);
+        if (!activeJob) return;
+
+        const duration = Math.floor((Date.now() - activeJob.loopStartTime.getTime()) / 1000);
+
+        const [_, insertError] = await tryPromise(
+            db.insert(printHistory).values({
+                job_id: job.id,
+                printer_id: printer.id,
+                loop_number: job.current_loop,
+                status: 'complete',
+                duration
+            })
+        );
+        if (insertError) {
+            logger.error('Failed to insert print history:', {
+                jobId: job.id,
+                error: insertError.message,
+                stack: insertError.stack
+            });
+            await this.handleJobFailure(job, 'Failed to record print history');
+            return;
+        }
+
+        if (job.current_loop < job.loop_count) {
+            const [_, cooldownError] = await tryPromise(this.startCooldown(job, printer));
+            if (cooldownError) {
+                logger.error('Failed to start cooldown:', {
+                    jobId: job.id,
+                    error: cooldownError.message,
+                    stack: cooldownError.stack
+                });
+                await this.handleJobFailure(job, 'Failed to start cooldown period');
+            }
+        } else {
+            const [__, completeError] = await tryPromise(this.completeJob(job));
+            if (completeError) {
+                logger.error('Failed to complete job:', {
+                    jobId: job.id,
+                    error: completeError.message,
+                    stack: completeError.stack
+                });
+                await this.handleJobFailure(job, 'Failed to mark job as complete');
+            }
+        }
+    }
+
+    private async startCooldown(job: Job, printer: Printer): Promise<void> {
+        logger.info('Starting cooldown', { jobId: job.id });
+
+        const [updatedJob, updateError] = await tryPromise(updateJob(job.id, { status: 'cooling' }));
+        if (updateError) {
+            logger.error('Failed to update job status to cooling:', {
+                jobId: job.id,
+                error: updateError.message,
+                stack: updateError.stack
+            });
+            throw new Error('Failed to set cooling status');
+        }
+        if (!updatedJob) {
+            throw new Error('Job not found while starting cooldown');
+        }
+
+        job = updatedJob;
+
+        eventBus.emit('job:cooling', { jobId: job.id, printerId: printer.id });
+
+        const cooldownTime = (job.cooldown_time ?? 60) * 1000 || this.DEFAULT_COOLDOWN_TIME;
+
+        setTimeout(async () => {
+            const [_, clearingError] = await tryPromise(this.startClearing(job, printer));
+            if (clearingError) {
+                logger.error('Error after cooldown:', {
+                    jobId: job.id,
+                    error: clearingError.message,
+                    stack: clearingError.stack
+                });
+                await this.handleJobFailure(job, 'Failed during cooldown period');
+            }
+        }, cooldownTime);
+    }
+
+    private async startClearing(job: Job, printer: Printer): Promise<void> {
+        logger.info('Starting clearing', { jobId: job.id });
+
+        const [updatedJob, updateError] = await tryPromise(updateJob(job.id, { status: 'clearing' }));
+        if (updateError) {
+            logger.error('Failed to update job status to clearing:', {
+                jobId: job.id,
+                error: updateError.message,
+                stack: updateError.stack
+            });
+            throw new Error('Failed to set clearing status');
+        }
+        if (!updatedJob) {
+            throw new Error('Job not found while starting clearing');
+        }
+
+        job = updatedJob;
+
+        eventBus.emit('job:clearing', { jobId: job.id, printerId: printer.id });
+
+        const [result, clearingError] = await tryPromise(loopManager.performClearing(job, printer));
+        if (clearingError) {
+            logger.error('Error performing clearing:', {
+                jobId: job.id,
+                error: clearingError.message,
+                stack: clearingError.stack
+            });
+            throw new Error('Failed to execute clearing sequence');
+        }
+
+        if (result.success) {
+            logger.info('Clearing complete', { jobId: job.id });
+            const [_, nextLoopError] = await tryPromise(this.nextLoop(job, printer));
+            if (nextLoopError) {
+                logger.error('Failed to start next loop:', {
+                    jobId: job.id,
+                    error: nextLoopError.message,
+                    stack: nextLoopError.stack
+                });
+                throw new Error('Failed to continue to next loop');
+            }
+        } else {
+            logger.error('Clearing operation failed:', { jobId: job.id, error: result.error });
+            throw new Error(result.error || 'Clearing operation failed');
+        }
+    }
+
+    private async nextLoop(job: Job, printer: Printer): Promise<void> {
+        if (job.current_loop >= job.loop_count) {
+            const [_, completeError] = await tryPromise(this.completeJob(job));
+            if (completeError) {
+                logger.error('Failed to complete job in nextLoop:', {
+                    jobId: job.id,
+                    error: completeError.message,
+                    stack: completeError.stack
+                });
+                throw new Error('Failed to finalize job completion');
+            }
+            return;
+        }
+
+        logger.info('Starting next loop', {
+            jobId: job.id,
+            loopNumber: job.current_loop + 1,
+            totalLoops: job.loop_count
+        });
+
+        const [__, printError] = await tryPromise(this.startPrint(job, printer));
+        if (printError) {
+            logger.error('Failed to start print for next loop:', {
+                jobId: job.id,
+                error: printError.message,
+                stack: printError.stack
+            });
+            throw new Error('Failed to restart print for next loop');
+        }
+    }
+
+    private async completeJob(job: Job): Promise<void> {
+        logger.info('Completing job', { jobId: job.id });
+
+        const [updatedJob, updateError] = await tryPromise(
+            updateJob(job.id, { status: 'complete', completed_at: new Date() })
+        );
+        if (updateError) {
+            logger.error('Failed to update job status to complete:', {
+                jobId: job.id,
+                error: updateError.message,
+                stack: updateError.stack
+            });
+            throw new Error('Failed to mark job as complete');
+        }
+        if (!updatedJob) {
+            throw new Error('Job not found while completing');
+        }
+
+        job = updatedJob;
+
+        eventBus.emit('job:complete', { jobId: job.id });
+
+        this.activeJobs.delete(job.id);
+
+        logger.info('Job completed successfully', { jobId: job.id });
+    }
+
+    private async handleJobFailure(job: Job, errorMessage: string): Promise<void> {
+        logger.error('Job failed', { jobId: job.id, error: errorMessage });
+
+        const newRetryCount = (job.retry_count || 0) + 1;
+
+        if (newRetryCount >= this.MAX_RETRIES) {
+            logger.warn('Job exceeded max retries, marking as failed', {
+                jobId: job.id,
+                retryCount: newRetryCount
+            });
+
+            const [_, updateError] = await tryPromise(
+                updateJob(job.id, {
+                    status: 'failed',
+                    error_message: errorMessage,
+                    retry_count: newRetryCount,
+                    completed_at: new Date()
+                })
+            );
+            if (updateError) {
+                logger.error('Failed to update job to failed status:', {
+                    jobId: job.id,
+                    error: updateError.message,
+                    stack: updateError.stack
+                });
+            }
+
+            eventBus.emit('job:failed', {
+                jobId: job.id,
+                error: errorMessage,
+                retryCount: newRetryCount
+            });
+
+            this.activeJobs.delete(job.id);
+        } else {
+            logger.info('Retrying job', {
+                jobId: job.id,
+                retryCount: newRetryCount,
+                maxRetries: this.MAX_RETRIES
+            });
+
+            const [_, updateError] = await tryPromise(
+                updateJob(job.id, {
+                    status: 'pending',
+                    error_message: errorMessage,
+                    retry_count: newRetryCount,
+                    current_loop: 0
+                })
+            );
+            if (updateError) {
+                logger.error('Failed to reset job for retry:', {
+                    jobId: job.id,
+                    error: updateError.message,
+                    stack: updateError.stack
+                });
+            }
+
+            this.activeJobs.delete(job.id);
+        }
+    }
+
+    private async getAvailablePrinters(): Promise<Printer[]> {
+        const [printersTable, importError] = await tryPromise(
+            import('@/db/schema').then((m) => m.printers)
+        );
+        if (importError) {
+            logger.error('Failed to import printers schema:', {
+                error: importError.message,
+                stack: importError.stack
+            });
+            return [];
+        }
+
+        const [allPrinters, dbError] = await tryPromise(
+            db.select().from(printersTable).where(eq(printersTable.enabled, true))
+        );
+        if (dbError) {
+            logger.error('Failed to query available printers:', {
+                error: dbError.message,
+                stack: dbError.stack
+            });
+            return [];
+        }
+
+        const available: Printer[] = [];
+
+        for (const printer of allPrinters as Printer[]) {
+            const isConnected = mqttManager.isConnected(printer.id);
+            const state = mqttManager.getPrinterStatus(printer.id);
+            const isIdle = state?.status === 'IDLE';
+
+            if (isConnected && isIdle && !this.isPrinterBusy(printer.id)) {
+                available.push(printer);
+            }
+        }
+
+        return available;
+    }
+
+    private isPrinterBusy(printerId: number): boolean {
+        for (const activeJob of this.activeJobs.values()) {
+            if (activeJob.printer.id === printerId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private getActiveJobForPrinter(printerId: number): ActiveJob | undefined {
+        for (const activeJob of this.activeJobs.values()) {
+            if (activeJob.printer.id === printerId) {
+                return activeJob;
+            }
+        }
+        return undefined;
+    }
+
+    private async cleanupStuckJobs(): Promise<void> {
+        logger.info('Checking for stuck jobs');
+
+        const [stuckJobs, stuckJobsError] = await tryPromise(
+            db
+                .select()
+                .from(jobs)
+                .where(
+                    eq(
+                        jobs.status,
+                        'uploading' as
+                            | 'pending'
+                            | 'queued'
+                            | 'uploading'
+                            | 'printing'
+                            | 'cooling'
+                            | 'clearing'
+                            | 'complete'
+                            | 'failed'
+                            | 'cancelled'
+                    )
+                )
+        );
+        if (stuckJobsError) {
+            logger.error('Failed to query stuck uploading jobs:', {
+                error: stuckJobsError.message,
+                stack: stuckJobsError.stack
+            });
+            return;
+        }
+
+        for (const job of stuckJobs) {
+            const [updated, updateError] = await tryPromise(
+                updateJob(job.id, { status: 'pending', error_message: null })
+            );
+            if (updateError) {
+                logger.error('Failed to reset stuck uploading job:', {
+                    jobId: job.id,
+                    error: updateError.message,
+                    stack: updateError.stack
+                });
+            } else if (updated) {
+                logger.info('Reset stuck uploading job', { jobId: job.id });
+            }
+        }
+
+        const [stuckPrintingJobs, stuckPrintingError] = await tryPromise(
+            db
+                .select()
+                .from(jobs)
+                .where(
+                    eq(
+                        jobs.status,
+                        'printing' as
+                            | 'pending'
+                            | 'queued'
+                            | 'uploading'
+                            | 'printing'
+                            | 'cooling'
+                            | 'clearing'
+                            | 'complete'
+                            | 'failed'
+                            | 'cancelled'
+                    )
+                )
+        );
+        if (stuckPrintingError) {
+            logger.error('Failed to query stuck printing jobs:', {
+                error: stuckPrintingError.message,
+                stack: stuckPrintingError.stack
+            });
+            return;
+        }
+
+        for (const job of stuckPrintingJobs) {
+            if (job.assigned_printer) {
+                const state = mqttManager.getPrinterStatus(job.assigned_printer);
+                if (state && state.status === 'IDLE') {
+                    const [updated, updateError] = await tryPromise(
+                        updateJob(job.id, {
+                            status: 'pending',
+                            error_message: 'Printer was idle while job was printing'
+                        })
+                    );
+                    if (updateError) {
+                        logger.error('Failed to reset stuck printing job:', {
+                            jobId: job.id,
+                            error: updateError.message,
+                            stack: updateError.stack
+                        });
+                    } else if (updated) {
+                        logger.info('Reset stuck printing job', { jobId: job.id });
+                    }
+                }
+            }
+        }
+    }
+
+    getActiveJobs(): ActiveJob[] {
+        return Array.from(this.activeJobs.values());
+    }
+
+    isRunning(): boolean {
+        return this.interval !== null;
+    }
+}
+
+// Export class for testing
+export { QueueProcessor };
+export const queueProcessor = new QueueProcessor();

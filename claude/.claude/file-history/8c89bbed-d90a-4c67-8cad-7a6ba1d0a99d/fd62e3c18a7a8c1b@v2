@@ -1,0 +1,147 @@
+import chokidar from "chokidar";
+import fs from "node:fs";
+import path from "node:path";
+import { trySync, type Result } from "../utils/result.js";
+import { Logger } from "../utils/logger.js";
+import type { ResolvedConfig } from "../config/types.js";
+import { LockManager } from "./lock.js";
+import { FileQueue } from "./queue.js";
+
+// Type for chokidar FSWatcher (chokidar v4 types)
+type FSWatcherInstance = ReturnType<typeof chokidar.watch>;
+
+export interface WatcherCallbacks {
+  onFileAdded: (filePath: string) => void | Promise<void>;
+  onError?: (error: Error) => void;
+}
+
+/**
+ * Wraps chokidar to watch a directory for new files.
+ *
+ * Key design choices:
+ * - `ignoreInitial: true` — we only care about NEW files, not existing ones
+ * - `awaitWriteFinish` — prevents processing half-downloaded files
+ *   (think of it as waiting for the "ink to dry" before filing the paper)
+ * - Hidden files and temp files are ignored by default
+ */
+export class Watcher {
+  private fsWatcher: FSWatcherInstance | null = null;
+  private lockManager: LockManager;
+  private fileQueue: FileQueue;
+
+  constructor(
+    private config: ResolvedConfig,
+    private logger: Logger,
+  ) {
+    this.lockManager = new LockManager(this.config.watchPath, this.logger);
+    this.fileQueue = new FileQueue(this.config.watchPath);
+  }
+
+  /**
+   * Start watching the configured directory.
+   */
+  async start(callbacks: WatcherCallbacks): Promise<Result<void>> {
+    // Load persisted queue from previous runs
+    await this.fileQueue.load();
+    this.logger.debug(`Queue loaded: ${this.fileQueue.size} files pending`);
+
+    return trySync(() => {
+      const ignored = this.buildIgnorePatterns();
+
+      this.fsWatcher = chokidar.watch(this.config.watchPath, {
+        ignored,
+        ignoreInitial: true,
+        persistent: true,
+        depth: 0, // Only watch the top-level directory, not subdirs
+        awaitWriteFinish: {
+          stabilityThreshold: this.config.debounceMs,
+          pollInterval: 100,
+        },
+      });
+
+      this.fsWatcher.on("add", async (filePath: string) => {
+        this.logger.debug(`File detected: ${path.basename(filePath)}`);
+
+        // Check if lock is active (sort operation in progress)
+        if (await this.lockManager.isLockHeld()) {
+          this.logger.debug(`Lock active, queuing: ${path.basename(filePath)}`);
+          try {
+            await this.fileQueue.enqueue(filePath);
+          } catch (err) {
+            this.logger.error(`Failed to enqueue ${filePath}: ${err}`);
+          }
+          return; // Skip normal processing
+        }
+
+        // Normal processing when lock is not active
+        try {
+          await callbacks.onFileAdded(filePath);
+        } catch (err) {
+          this.logger.error(`Error processing ${filePath}: ${err}`);
+          callbacks.onError?.(err instanceof Error ? err : new Error(String(err)));
+        }
+      });
+
+      this.fsWatcher.on("error", (error: unknown) => {
+        const err = error instanceof Error ? error : new Error(String(error));
+        this.logger.error(`Watcher error: ${err.message}`);
+        callbacks.onError?.(err);
+      });
+
+      this.fsWatcher.on("ready", () => {
+        this.logger.info(`Watching: ${this.config.watchPath}`);
+      });
+    });
+  }
+
+  /**
+   * Stop watching and clean up resources.
+   */
+  async stop(): Promise<void> {
+    if (this.fsWatcher) {
+      await this.fsWatcher.close();
+      this.fsWatcher = null;
+      this.logger.info("Watcher stopped.");
+    }
+  }
+
+  /**
+   * Build the ignore patterns array for chokidar.
+   * Combines user-defined exclude patterns with hidden file filtering.
+   */
+  private buildIgnorePatterns(): Array<string | RegExp | ((testPath: string) => boolean)> {
+    const patterns: Array<string | RegExp | ((testPath: string) => boolean)> = [];
+
+    // Ignore subdirectories (we create category folders in the watch dir)
+    const watchPath = this.config.watchPath;
+    patterns.push((testPath: string) => {
+      // Allow the root watch path itself
+      if (testPath === watchPath) return false;
+      // Ignore directories
+      try {
+        return fs.statSync(testPath).isDirectory();
+      } catch {
+        return false;
+      }
+    });
+
+    // Hidden files (dotfiles)
+    if (this.config.ignoreHiddenFiles) {
+      patterns.push(/(^|[/\\])\../);
+    }
+
+    // User-defined exclude patterns (glob-style converted to regex)
+    for (const pattern of this.config.excludePatterns) {
+      if (pattern.startsWith("*.")) {
+        // Convert "*.tmp" to regex matching the extension
+        const ext = pattern.slice(1).replace(/\./g, "\\.");
+        patterns.push(new RegExp(`${ext}$`, "i"));
+      } else {
+        // Exact match (like .DS_Store)
+        patterns.push(pattern);
+      }
+    }
+
+    return patterns;
+  }
+}

@@ -1,0 +1,34 @@
+$ bun run --hot src/index.ts
+2026-01-17T11:48:51.373Z [metrics] INFO: Metrics initialized
+2026-01-17T11:48:51.373Z [app] INFO: Starting Print Farm API | {"port":5173,"host":"0.0.0.0"}
+Started development server: http://localhost:5173
+2026-01-17T11:48:52.375Z [app] INFO: Initializing services...
+2026-01-17T11:48:52.375Z [service-initializer] INFO: Initializing services...
+2026-01-17T11:48:52.375Z [service-initializer] INFO: Initializing MQTT manager...
+2026-01-17T11:48:52.382Z [service-initializer] INFO: Found 1 enabled printers
+2026-01-17T11:48:52.382Z [mqtt-manager] INFO: Connecting to printer | {"printerId":3,"ip":"192.168.0.235","serial":"0309BA582800050"}
+2026-01-17T11:48:52.412Z [service-initializer] INFO: Connected to printer: The Baby (3)
+2026-01-17T11:48:52.412Z [service-initializer] INFO: MQTT manager initialized: 1/1 printers connected
+2026-01-17T11:48:52.412Z [service-initializer] INFO: Initializing queue processor...
+2026-01-17T11:48:52.412Z [queue-processor] INFO: Starting queue processor...
+2026-01-17T11:48:52.412Z [service-initializer] INFO: Queue processor initialized
+2026-01-17T11:48:52.412Z [service-initializer] INFO: Initializing Home Assistant client...
+2026-01-17T11:48:52.412Z [homeassistant-client] WARN: Home Assistant URL or token not configured
+2026-01-17T11:48:52.412Z [service-initializer] INFO: Home Assistant client not configured
+2026-01-17T11:48:52.412Z [service-initializer] INFO: Camera proxy is a stub implementation
+2026-01-17T11:48:52.412Z [app] INFO: Services initialized: 2 running, 2 stopped, 0 errors
+2026-01-17T11:48:53.171Z [mqtt-manager] INFO: Connected to printer | {"printerId":3}
+2026-01-17T11:48:53.181Z [mqtt-manager] INFO: Subscribed to report topic | {"printerId":3,"topic":"device/0309BA582800050/report"}
+2026-01-17T11:48:53.181Z [mqtt-manager] INFO: Sent pushall request | {"printerId":3,"topic":"device/0309BA582800050/request"}
+2026-01-17T11:48:57.415Z [queue-processor] ERROR: Error getting next pending job: | {"printerId":3,"error":"db is not defined","stack":"ReferenceError: db is not defined\n    at getNextPendingJob (/Users/kd/repos/print/print/apps/api/src/lib/job/services/job-manager.ts:664:5)\n    at getNextPendingJob (/Users/kd/repos/print/print/apps/api/src/lib/job/services/job-manager.ts:653:41)\n    at processQueue (/Users/kd/repos/print/print/apps/api/src/lib/queue/services/queue-processor.ts:276:52)\n    at processTicksAndRejections (native:7:39)"}
+2026-01-17T11:48:57.415Z [queue-processor] INFO: Checking for stuck jobs
+1003 |
+1004 |   private async cleanupStuckJobs(): Promise<void> {
+1005 |     logger.info('Checking for stuck jobs');
+1006 |
+1007 |     const [stuckJobs, stuckJobsError] = await tryPromise(
+1008 |       db
+             ^
+ReferenceError: db is not defined
+      at cleanupStuckJobs (/Users/kd/repos/print/print/apps/api/src/lib/queue/services/queue-processor.ts:1008:7)
+      at cleanupStuckJobs (/Users/kd/repos/print/print/apps/api/src/lib/queue/services/queue-processor.ts:1004:51)

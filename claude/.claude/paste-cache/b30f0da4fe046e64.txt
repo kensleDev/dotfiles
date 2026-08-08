@@ -1,0 +1,17 @@
+8:28:31 PM [vite-plugin-svelte] src/lib/printer/components/PrinterCamera.svelte:8:46 This reference only captures the initial value of `printer`. Did you mean to reference it inside a closure instead?
+https://svelte.dev/e/state_referenced_locally
+8:28:31 PM [vite-plugin-svelte] src/lib/printer/pages/PrinterDetailPage.svelte:39:42 This reference only captures the initial value of `printerId`. Did you mean to reference it inside a closure instead?
+https://svelte.dev/e/state_referenced_locally
+8:28:31 PM [vite-plugin-svelte] src/lib/printer/pages/PrinterDetailPage.svelte:40:48 This reference only captures the initial value of `printerId`. Did you mean to reference it inside a closure instead?
+https://svelte.dev/e/state_referenced_locally
+
+[500] GET /queue
+TypeError: __vite_ssr_import_9__.queue.useReorderJobs is not a function
+    at /Users/kd/repos/print/print/apps/web/src/lib/queue/pages/QueuePage.svelte:98:32
+    at Renderer.child (../../node_modules/.bun/svelte@5.46.4/node_modules/svelte/src/internal/server/renderer.js:186:18)
+    at Renderer.component (../../node_modules/.bun/svelte@5.46.4/node_modules/svelte/src/internal/server/renderer.js:211:22)
+    at QueuePage (src/lib/queue/pages/QueuePage.svelte:32:13)
+    at eval (src/routes/queue/+page.svelte:14:39)
+    at Renderer.child (../../node_modules/.bun/svelte@5.46.4/node_modules/svelte/src/internal/server/renderer.js:186:18)
+    at Renderer.component (../../node_modules/.bun/svelte@5.46.4/node_modules/svelte/src/internal/server/renderer.js:211:22)
+    at _page (src/routes/queue/+page.svelte:12:13)

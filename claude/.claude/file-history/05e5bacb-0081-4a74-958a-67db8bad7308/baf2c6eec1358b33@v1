@@ -1,0 +1,167 @@
+# Roadmap: tidydown
+
+## Overview
+
+Tidydown currently provides automatic file organization via background services (launchd/systemd). This roadmap adds a manual sort command that enables users to trigger one-time reorganization of their watch folders on-demand. The journey begins with building foundational components (scanner, coordination, progress tracking), wires them together into the sort command with dry-run by default, and concludes with undo capabilities for recovery.
+
+## Phases
+
+**Phase Numbering:**
+- Integer phases (1, 2, 3): Planned milestone work
+- Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
+
+Decimal phases appear between their surrounding integers in numeric order.
+
+- [x] **Phase 1: Core Scanner** - Streaming directory scan for batch file processing (Completed: 2026-02-07)
+- [ ] **Phase 2: Service Coordination** - Lock-based coordination to prevent watcher/sort race conditions
+- [ ] **Phase 3: Progress & Logging** - Visual feedback and verbose output for bulk operations
+- [ ] **Phase 4: Sort Command** - Manual sort with dry-run by default and explicit execute flag
+- [ ] **Phase 5: User Confirmation** - Interactive prompts before executing file moves
+- [ ] **Phase 6: Undo & Recovery** - Operation history logging and rollback capability
+
+## Phase Details
+
+### Phase 1: Core Scanner
+
+**Goal**: Streaming directory scanner that discovers files for batch processing without memory exhaustion
+
+**Depends on**: Nothing (first phase)
+
+**Requirements**: PROC-01, PROC-02, PROC-03, PROC-04, PROC-05
+
+**Success Criteria** (what must be TRUE):
+1. Scanner discovers all files in watch folder root (not subdirectories)
+2. Scanner skips files already in category folders
+3. Scanner respects exclude patterns from config
+4. Scanner safely skips symbolic links without dereferencing
+5. Scanner uses async generators to stream files (memory-efficient for large directories)
+
+**Plans**: 1 plan (1 wave)
+
+Plans:
+- [ ] 01-01-PLAN.md — Build DirectoryScanner with async generator-based streaming (excludes patterns, skips symlinks, no recursion)
+
+### Phase 2: Service Coordination
+
+**Goal**: Lock file mechanism prevents background watcher from interfering with manual sort operations
+
+**Depends on**: Nothing (parallel with Phase 1)
+
+**Requirements**: COORD-01, COORD-02, COORD-03, COORD-04
+
+**Success Criteria** (what must be TRUE):
+1. Sort command acquires lock file before processing begins
+2. Background watcher checks for lock file and skips processing when lock exists
+3. Lock file is released after sort completes (even on error)
+4. Stale lock files (>1 hour old) are automatically cleaned up
+
+**Plans**: TBD
+
+Plans:
+- [ ] 02-01: Implement lock file acquisition and release mechanism
+- [ ] 02-02: Update background watcher to check for lock before processing
+- [ ] 02-03: Add stale lock detection and automatic cleanup
+
+### Phase 3: Progress & Logging
+
+**Goal**: Visual progress display and verbose logging give users confidence during bulk operations
+
+**Depends on**: Phase 1 (requires file count data)
+
+**Requirements**: PRG-01, PRG-02, PRG-03, PRG-04, LOG-01, LOG-02, LOG-03, LOG-04
+
+**Success Criteria** (what must be TRUE):
+1. Sort command shows TUI progress bar with current file and percentage
+2. Progress displays real-time counter (Processed X/Y files)
+3. Each file move is logged with color-coded category
+4. Verbose output shows source and destination paths
+5. Summary shows total files moved, skipped, and errors
+6. TUI falls back to simple text output in non-TTY environments
+
+**Plans**: TBD
+
+Plans:
+- [ ] 03-01: Build ProgressTracker with listr2 integration
+- [ ] 03-02: Implement color-coded verbose logging
+- [ ] 03-03: Add summary reporting (moved, skipped, errors)
+- [ ] 03-04: Implement TTY detection and fallback behavior
+
+### Phase 4: Sort Command
+
+**Goal**: Manual sort command with dry-run by default, explicit execute flag, and proper exit codes
+
+**Depends on**: Phase 1 (scanner), Phase 2 (coordination), Phase 3 (progress)
+
+**Requirements**: CLI-01, CLI-02, CLI-03, DRY-01, DRY-02, DRY-03, DRY-04, EXIT-01, EXIT-02, EXIT-03
+
+**Success Criteria** (what must be TRUE):
+1. User can run `tidydown sort` to trigger manual re-organization
+2. Sort command defaults to dry-run mode showing preview of changes
+3. Dry-run output shows each file that would be moved with destination
+4. Dry-run output shows summary count (X files would be moved)
+5. `--execute` flag is required to actually move files
+6. Command returns 0 on success, non-zero on critical errors
+7. Individual file move errors don't cause non-zero exit (graceful degradation)
+
+**Plans**: TBD
+
+Plans:
+- [ ] 04-01: Implement core sort command with dry-run by default
+- [ ] 04-02: Add --execute flag to apply changes after preview
+- [ ] 04-03: Wire together scanner, coordinator, progress, and existing FileMover
+- [ ] 04-04: Implement proper exit codes and graceful error handling
+
+### Phase 5: User Confirmation
+
+**Goal**: Interactive confirmation prompts build user confidence before destructive file operations
+
+**Depends on**: Phase 4 (sort command)
+
+**Requirements**: CONF-01, CONF-02, CONF-03
+
+**Success Criteria** (what must be TRUE):
+1. Sort command prompts for confirmation before executing moves
+2. Confirmation shows count of files that will be moved
+3. `--yes` flag skips confirmation for scripting scenarios
+
+**Plans**: TBD
+
+Plans:
+- [ ] 05-01: Add @clack/prompts confirmation before file moves
+- [ ] 05-02: Implement --yes flag to bypass confirmation
+
+### Phase 6: Undo & Recovery
+
+**Goal**: Operation history logging and rollback capability enable recovery from unintended sorts
+
+**Depends on**: Phase 4 (sort command)
+
+**Requirements**: CLI-04, UNDO-01, UNDO-02, UNDO-03, UNDO-04
+
+**Success Criteria** (what must be TRUE):
+1. Sort operation logs all moves to `~/.local/share/tidydown/history.json`
+2. History log includes timestamp, source path, and destination path for each move
+3. User can run `tidydown sort --undo` to reverse the last sort operation
+4. Undo operation handles cases where files no longer exist at destination
+
+**Plans**: TBD
+
+Plans:
+- [ ] 06-01: Implement operation history logging to history.json
+- [ ] 06-02: Build undo command that reverses moves from last operation
+- [ ] 06-03: Add graceful handling for missing files during undo
+- [ ] 06-04: Wire --undo flag into sort command
+
+## Progress
+
+**Execution Order:**
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
+
+| Phase | Plans Complete | Status | Completed |
+|-------|----------------|--------|-----------|
+| 1. Core Scanner | 0/1 | Ready to execute | - |
+| 2. Service Coordination | 0/3 | Not started | - |
+| 3. Progress & Logging | 0/4 | Not started | - |
+| 4. Sort Command | 0/4 | Not started | - |
+| 5. User Confirmation | 0/2 | Not started | - |
+| 6. Undo & Recovery | 0/4 | Not started | - |

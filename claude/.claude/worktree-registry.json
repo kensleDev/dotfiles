@@ -1,0 +1,30 @@
+{
+  "worktrees": [
+    {
+      "id": "B48C0715-EA4A-4454-BB24-C325E465383E",
+      "project": "test-repo",
+      "repoPath": "/Users/kd/tmp/test-repo",
+      "branch": "cat",
+      "branchSlug": "cat",
+      "worktreePath": "/Users/kd/tmp/worktrees/test-repo/cat",
+      "ports": [
+        8100,
+        8101
+      ],
+      "createdAt": "2026-01-18T16:45:38Z",
+      "validatedAt": null,
+      "agentLaunchedAt": null,
+      "task": null,
+      "prNumber": null,
+      "status": "active"
+    }
+  ],
+  "portPool": {
+    "start": 8100,
+    "end": 8199,
+    "allocated": [
+      8100,
+      8101
+    ]
+  }
+}

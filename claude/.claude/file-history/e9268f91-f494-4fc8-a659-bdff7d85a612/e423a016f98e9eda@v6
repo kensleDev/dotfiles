@@ -1,0 +1,67 @@
+include <keyboard_plate.scad>
+
+// Case configuration
+plate_gap = 0.2;  // Gap around the plate
+case_wall_thickness = 2;  // Thickness of case walls
+case_height = 10;  // Height of the case
+
+// Case (follows plate shape with gap)
+difference() {
+    // Outer case shell
+    minkowski() {
+        // Base shape matching the plate outline
+        union() {
+            // Left half footprint
+            cube([plate_width, plate_height, case_height]);
+
+            // Bridge footprint
+            translate([(plate_width - bridge_height) / 2, plate_height, 0])
+            cube([bridge_height, bridge_length, case_height]);
+
+            // Right half footprint
+            translate([0, plate_height + bridge_length, 0])
+            cube([plate_width, plate_height, case_height]);
+        }
+
+        // Add gap + wall thickness around entire shape
+        sphere(r = plate_gap + case_wall_thickness);
+    }
+
+    // Hollow out interior (plate gap only) - side walls
+    translate([0, 0, case_wall_thickness])
+    minkowski() {
+        union() {
+            // Left half cutout
+            cube([plate_width, plate_height, case_height - case_wall_thickness]);
+
+            // Bridge cutout
+            translate([(plate_width - bridge_height) / 2, plate_height, 0])
+            cube([bridge_height, bridge_length, case_height - case_wall_thickness]);
+
+            // Right half cutout
+            translate([0, plate_height + bridge_length, 0])
+            cube([plate_width, plate_height, case_height - case_wall_thickness]);
+        }
+
+        sphere(r = plate_gap);
+    }
+
+    // Plate-shaped opening at top (aligned with base cubes)
+    translate([0, 0, case_wall_thickness])
+    minkowski() {
+        union() {
+            // Left half opening
+            cube([plate_width, plate_height, case_height]);
+
+            // Bridge opening
+            translate([(plate_width - bridge_height) / 2, plate_height, 0])
+            cube([bridge_height, bridge_length, case_height]);
+
+            // Right half opening
+            translate([0, plate_height + bridge_length, 0])
+            cube([plate_width, plate_height, case_height]);
+        }
+
+        sphere(r = plate_gap);
+    }
+}

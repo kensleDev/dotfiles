@@ -1,0 +1,26 @@
+/**
+ * Check if running in a CI environment.
+ *
+ * Standard CI environment variable set by:
+ * - GitHub Actions (CI=true)
+ * - GitLab CI (CI=true)
+ * - Travis CI (CI=true)
+ * - CircleCI (CI=true)
+ * - Jenkins (CI=true)
+ *
+ * Most major CI providers set the CI environment variable to '1' or 'true'.
+ * This is the standard convention for CI detection without additional dependencies.
+ *
+ * @returns true if CI environment variable is set to '1' or 'true', false otherwise
+ *
+ * @example
+ * ```ts
+ * if (isInCI()) {
+ *   console.log('Running in CI environment');
+ * }
+ * ```
+ */
+export function isInCI(): boolean {
+  const ci = process.env.CI;
+  return ci === '1' || ci === 'true' || ci?.toLowerCase() === 'true';
+}

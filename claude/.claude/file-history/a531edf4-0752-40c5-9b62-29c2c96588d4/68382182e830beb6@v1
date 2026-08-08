@@ -1,0 +1,26 @@
+<script lang="ts">
+	import { CameraFeed } from '@/shared';
+	import type { PrinterWithStatus } from '../stores/printers.svelte';
+
+	let { printer, showCamera }: { printer: PrinterWithStatus; showCamera: boolean } = $props();
+
+	const apiBase = import.meta.env.VITE_HONO_API_URL || 'http://localhost:3000';
+	const streamUrl = `${apiBase}/api/printers/${printer.id}/camera`;
+
+	function navigateToPrinter() {
+		window.location.href = `/printers/${printer.id}`;
+	}
+</script>
+
+{#if showCamera}
+	<div class="mb-4 overflow-hidden rounded-lg border bg-muted">
+		<CameraFeed
+			printerId={printer.id}
+			streamUrl={streamUrl}
+			autoStart={true}
+			showControls={false}
+			className="cursor-pointer hover:opacity-90"
+			onclick={navigateToPrinter}
+		/>
+	</div>
+{/if}

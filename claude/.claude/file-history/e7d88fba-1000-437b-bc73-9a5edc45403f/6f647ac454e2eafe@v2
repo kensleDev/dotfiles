@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Script to move windows within layout or to adjacent monitors
+# Usage: move_or_monitor.sh <direction>
+# direction: left, down, up, right
+
+DIRECTION=$1
+
+if [ -z "$DIRECTION" ]; then
+    echo "Usage: $0 <left|down|up|right>"
+    exit 1
+fi
+
+# Get current focused window info before move
+BEFORE_WINDOW_ID=$(aerospace list-windows --focused --format "%{window-id}")
+BEFORE_MONITOR_ID=$(aerospace list-monitors --focused --format "%{monitor-id}")
+
+# Try to move within the current workspace layout
+aerospace move "$DIRECTION"
+
+# Small delay to let the move complete
+sleep 0.05
+
+# Get window and monitor info after move
+AFTER_WINDOW_ID=$(aerospace list-windows --focused --format "%{window-id}")
+AFTER_MONITOR_ID=$(aerospace list-monitors --focused --format "%{monitor-id}")
+
+# Check if the window actually moved within the layout
+# If the window didn't move (same window ID still focused, same monitor),
+# it means we hit a boundary - try moving to adjacent monitor
+if [ "$BEFORE_WINDOW_ID" = "$AFTER_WINDOW_ID" ] && [ "$BEFORE_MONITOR_ID" = "$AFTER_MONITOR_ID" ]; then
+    # We're at a boundary, move to adjacent monitor
+    aerospace move-node-to-monitor --wrap-around "$DIRECTION"
+    # Follow the window by focusing it directly (more reliable than focus-monitor)
+    aerospace focus --window-id "$BEFORE_WINDOW_ID"
+fi

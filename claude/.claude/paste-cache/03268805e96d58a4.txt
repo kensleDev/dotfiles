@@ -1,0 +1,28 @@
+
+src/progress/task-runner.ts:72:37 - error TS2344: Type 'ListrOptions' does not satisfy the constraint 'ListrRendererValue'.
+
+72   private listr: Listr<TaskContext, ListrOptions, 'default' | 'verbose'>;
+                                       ~~~~~~~~~~~~
+
+src/progress/task-runner.ts:78:5 - error TS2322: Type 'Listr<TaskContext, "default", "simple">' is not assignable to type 'Listr<TaskContext, ListrOptions, "default" | "verbose">'.
+  Types of property 'task' are incompatible.
+    Type 'ListrTask<TaskContext, typeof DefaultRenderer, typeof SimpleRenderer> | ListrTask<TaskContext, typeof DefaultRenderer, typeof SimpleRenderer>[]' is not assignable to type 'ListrTask<TaskContext, never, typeof DefaultRenderer | typeof VerboseRenderer> | ListrTask<TaskContext, never, typeof DefaultRenderer | typeof VerboseRenderer>[]'.
+      Type 'ListrTask<TaskContext, typeof DefaultRenderer, typeof SimpleRenderer>' is not assignable to type 'ListrTask<TaskContext, never, typeof DefaultRenderer | typeof VerboseRenderer> | ListrTask<TaskContext, never, typeof DefaultRenderer | typeof VerboseRenderer>[]'.
+        Type 'ListrTask<TaskContext, typeof DefaultRenderer, typeof SimpleRenderer>' is not assignable to type 'ListrTask<TaskContext, never, typeof DefaultRenderer | typeof VerboseRenderer>'.
+          Type 'typeof SimpleRenderer' is not assignable to type 'typeof DefaultRenderer | typeof VerboseRenderer'.
+            Type 'typeof SimpleRenderer' is not assignable to type 'typeof DefaultRenderer'.
+              The types of 'rendererOptions.logger' are incompatible between these types.
+                Type 'ListrLogger<ListrLogLevels> | undefined' is not assignable to type 'ListrLogger<ListrDefaultRendererLogLevels> | undefined'.
+                  Type 'ListrLogger<ListrLogLevels>' is not assignable to type 'ListrLogger<ListrDefaultRendererLogLevels>'.
+                    Types of property 'log' are incompatible.
+                      Type '(level: ListrLogLevels, message: string | any[], options?: LoggerFieldOptions<false> | undefined) => void' is not assignable to type '(level: ListrDefaultRendererLogLevels, message: string | any[], options?: LoggerFieldOptions<false> | undefined) => void'.
+                        Types of parameters 'level' and 'level' are incompatible.
+                          Type 'ListrDefaultRendererLogLevels' is not assignable to type 'ListrLogLevels'.
+
+78     this.listr = new Listr<TaskContext>(tasks, this.getRendererOptions(verbosity) as any);
+       ~~~~~~~~~~
+
+
+Found 2 errors in the same file, starting at: src/progress/task-runner.ts:72
+
+➜  tidydown git:(dev) ✗

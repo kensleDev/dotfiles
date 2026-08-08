@@ -1,0 +1,52 @@
+# AeroSpace Keybindings Cheatsheet
+
+## Focus Navigation
+| Key | Action |
+|-----|--------|
+| `alt+j` | Focus left |
+| `alt+k` | Focus down |
+| `alt+l` | Focus up |
+| `alt+;` | Focus right |
+
+## Move Windows
+| Key | Action |
+|-----|--------|
+| `alt+shift+j` | Move window left |
+| `alt+shift+k` | Move window down |
+| `alt+shift+l` | Move window up |
+| `alt+shift+;` | Move window right |
+
+## Resize
+| Key | Action |
+|-----|--------|
+| `alt+shift+i` | Shrink window (-150) |
+| `alt+shift+o` | Expand window (+150) |
+
+## Workspaces
+| Key | Action |
+|-----|--------|
+| `alt+1-9` | Switch to workspace 1-9 |
+| `alt+shift+cmd+n` | Next workspace |
+| `alt+shift+cmd+p` | Previous workspace |
+| `alt+shift+1-9` | Move window to workspace 1-9 |
+
+## Layout
+| Key | Action |
+|-----|--------|
+| `alt+shift+/` | Cycle tiles layout |
+| `alt+shift+,` | Cycle accordion layout |
+
+## Apps
+| Key | Action |
+|-----|--------|
+| `alt+g` | Open Ghostty |
+| `alt+t` | Open Thorium |
+
+## Service Mode (`cmd+shift+alt+r`)
+| Key | Action |
+|-----|--------|
+| `esc` | Reload config & exit mode |
+| `r` | Flatten workspace tree (reset layout) |
+| `f` | Toggle floating/tiling |
+| `backspace` | Close all windows but current |
+| `alt+j/k/l/;` | Join with window in direction |

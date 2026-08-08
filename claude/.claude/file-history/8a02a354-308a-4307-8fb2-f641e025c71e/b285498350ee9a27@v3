@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/cheats"
+CACHE_FILE="$CACHE_DIR/cheatsheet_index.txt"
+
+# Create cache dir if it doesn't exist
+mkdir -p "$CACHE_DIR"
+
+# Refresh cache if it doesn't exist, is older than 5 minutes, or --refresh is passed
+refresh_cache() {
+	find ~ -maxdepth 6 -name "CHEATSHEET.md" 2>/dev/null > "$CACHE_FILE"
+}
+
+if [[ "$1" == "--refresh" ]]; then
+	refresh_cache
+elif [[ ! -f "$CACHE_FILE" ]] || [[ $(find "$CACHE_FILE" -mmin +5 2>/dev/null) ]]; then
+	refresh_cache
+fi
+
+selected=$(cat "$CACHE_FILE" | fzf --preview 'bat --color=always {}' --preview-window=right:70%)
+
+if [[ -n "$selected" ]]; then
+	bat "$selected"
+fi

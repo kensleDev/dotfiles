@@ -1,0 +1,23 @@
+// Configuration shared between plate and case
+switch_cutout_size = 14;
+key_spacing = 19.05;
+plate_thickness = 1.5;
+edge_margin = 2;
+
+rows = 5;
+cols = 3;
+
+// Calculate plate dimensions
+plate_width = ((cols + 1) * key_spacing) + (2 * edge_margin);
+plate_height = (rows * key_spacing) + (2 * edge_margin);
+
+// Bridge configuration
+is_full_height = true;
+user_height = 20;
+
+bridge_length = 55;  // Distance between the two halves
+bridge_height = is_full_height ? (plate_height - key_spacing) : user_height;
+
+// Tilt configuration
+tilt_enabled = true;
+tilt_angle = 10;  // Angle in degrees (0-20) for inward tilt of left/right halves

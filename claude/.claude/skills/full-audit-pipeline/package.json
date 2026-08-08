@@ -1,0 +1,25 @@
+{
+  "name": "full-audit-pipeline",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "parse:url": "tsx scripts/parse-maps-url.ts",
+    "scrape:maps": "tsx scripts/scrape-google-maps.ts",
+    "scrape:website": "tsx scripts/scrape-website.ts",
+    "scrape:competitors": "tsx scripts/scrape-competitors.ts",
+    "scrape:directories": "tsx scripts/scrape-directories.ts",
+    "collect": "tsx scripts/collect-business-research.ts",
+    "analyze": "tsx scripts/analyze-audit.ts",
+    "render": "tsx scripts/render-report.ts",
+    "pipeline": "tsx scripts/run-pipeline.ts"
+  },
+  "dependencies": {
+    "cheerio": "^1.1.2",
+    "playwright": "^1.55.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.2.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.2"
+  }
+}

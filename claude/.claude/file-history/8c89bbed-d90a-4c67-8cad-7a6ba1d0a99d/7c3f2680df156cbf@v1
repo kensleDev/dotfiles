@@ -1,0 +1,166 @@
+import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
+import { startCommand } from "./commands/start.js";
+import { installCommand } from "./commands/install.js";
+import { uninstallCommand } from "./commands/uninstall.js";
+import { statusCommand } from "./commands/status.js";
+import { showConfigCommand, initConfigCommand } from "./commands/config.js";
+import { sortCommand } from "./commands/sort.js";
+
+const BANNER = `
+\x1b[36m  ╔╦╗╦╔╦╗╦ ╦╔╦╗╔═╗╦ ╦╔╗╔
+   ║ ║ ║║╚╦╝ ║║║ ║║║║║║║
+   ╩ ╩═╩╝ ╩ ═╩╝╚═╝╚╩╝╝╚╝\x1b[0m
+  \x1b[90mAuto-organize your Downloads\x1b[0m
+`;
+
+async function main() {
+  await yargs(hideBin(process.argv))
+    .scriptName("tidydown")
+    .usage(BANNER)
+
+    // ── start ──────────────────────────────────────────
+    .command(
+      "start",
+      "Start watching in foreground (Ctrl+C to stop)",
+      (yargs) =>
+        yargs.option("config", {
+          alias: "c",
+          describe: "Path to config file",
+          type: "string",
+        }),
+      async (argv) => {
+        await startCommand(argv.config);
+      },
+    )
+
+    // ── install ────────────────────────────────────────
+    .command(
+      "install",
+      "Install as a background service (auto-detects macOS/Linux)",
+      (yargs) =>
+        yargs.option("config", {
+          alias: "c",
+          describe: "Path to config file",
+          type: "string",
+        }),
+      async (argv) => {
+        await installCommand(argv.config);
+      },
+    )
+
+    // ── uninstall ──────────────────────────────────────
+    .command(
+      "uninstall",
+      "Remove the background service",
+      {},
+      async () => {
+        await uninstallCommand();
+      },
+    )
+
+    // ── status ─────────────────────────────────────────
+    .command(
+      "status",
+      "Show service and config status",
+      (yargs) =>
+        yargs.option("config", {
+          alias: "c",
+          describe: "Path to config file",
+          type: "string",
+        }),
+      async (argv) => {
+        await statusCommand(argv.config);
+      },
+    )
+
+    // ── config ─────────────────────────────────────────
+    .command("config", "Manage configuration", (yargs) =>
+      yargs
+        .command(
+          "show",
+          "Display the resolved configuration",
+          (yargs) =>
+            yargs.option("config", {
+              alias: "c",
+              describe: "Path to config file",
+              type: "string",
+            }),
+          (argv) => {
+            showConfigCommand(argv.config);
+          },
+        )
+        .command(
+          "init",
+          "Create a default config file",
+          {},
+          () => {
+            initConfigCommand();
+          },
+        )
+        .demandCommand(1, "Specify a config subcommand: show | init"),
+    )
+
+    // ── sort ───────────────────────────────────────────
+    .command(
+      "sort",
+      "Organize files in your Downloads folder",
+      (yargs) =>
+        yargs
+          .option("folder", {
+            alias: "f",
+            type: "string",
+            describe: "Folder to organize (default: watchPath from config)",
+          })
+          .option("execute", {
+            type: "boolean",
+            default: false,
+            describe: "Actually move files (default: dry-run preview)",
+          })
+          .option("verbose", {
+            alias: "v",
+            type: "boolean",
+            default: false,
+            describe: "Show detailed progress",
+          })
+          .option("silent", {
+            type: "boolean",
+            default: false,
+            describe: "Only show summary",
+          })
+          .option("yes", {
+            alias: "y",
+            type: "boolean",
+            default: false,
+            describe: "Skip confirmation prompt (use with --execute for scripting)",
+          })
+          .example("$0 sort", "Preview file organization (dry-run)")
+          .example("$0 sort --execute", "Organize files with confirmation")
+          .example("$0 sort --execute --yes", "Organize files without confirmation")
+          .example("$0 sort -e -y", "Same as above (short flags)")
+          .example("$0 sort --folder ~/Documents", "Organize a different folder"),
+      async (argv) => {
+        await sortCommand({
+          folder: argv.folder,
+          execute: argv.execute as boolean,
+          verbose: argv.verbose as boolean,
+          silent: argv.silent as boolean,
+          yes: argv.yes as boolean,
+        });
+      },
+    )
+
+    .demandCommand(1, "Run `tidydown --help` to see available commands.")
+    .strict()
+    .help()
+    .alias("h", "help")
+    .version()
+    .alias("v", "version")
+    .wrap(80)
+    .parse();
+}
+
+main().catch((err) => {
+  console.error(`\x1b[31mFatal:\x1b[0m ${err instanceof Error ? err.message : String(err)}`);
+  process.exit(1);
+});

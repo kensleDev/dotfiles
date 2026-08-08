@@ -1,0 +1,285 @@
+/**
+ * Device Manager for Home Assistant integration
+ * Handles device discovery, filtering, and pairing
+ */
+
+import { homeAssistantClient } from './homeassistant-client';
+import { createLogger } from '../../shared/utils/logger';
+import { tryCatch, tryPromise } from '@julian-i/try-error';
+import type { SwitchDevice } from '../types';
+
+const logger = createLogger('ha-device-manager');
+
+/**
+ * Device Manager class
+ */
+class DeviceManager {
+	/**
+	 * Get all available switch devices that can be used for smart plugs
+	 */
+	async getSwitchDevices(): Promise<SwitchDevice[]> {
+		if (!homeAssistantClient.isConnected()) {
+			logger.error('Home Assistant not connected');
+			return [];
+		}
+
+		logger.info('Fetching switch devices from Home Assistant');
+
+		const entities = await homeAssistantClient.getEntityRegistry();
+		const devices = await homeAssistantClient.getDeviceRegistry();
+
+		// Filter for switch entities from the registry
+		// Type guard to check if entity has required properties
+		const isSwitchEntity = (e: unknown): e is {
+			entity_id: string;
+			entity_type: string;
+			disabled_by: string | null;
+			hidden_by: string | null;
+			device_id: string | null;
+			name: string | null;
+			original_name: string;
+			icon: string | null;
+		} => {
+			return (
+				typeof e === 'object' && e !== null &&
+				'entity_type' in e && 'entity_id' in e &&
+				'disabled_by' in e && 'hidden_by' in e
+			);
+		};
+
+		const switchEntities = (entities as unknown[]).filter(isSwitchEntity).filter(
+			(e) => e.entity_type === 'switch' && !e.disabled_by && !e.hidden_by
+		);
+
+		// Get current states
+		const allStates = homeAssistantClient.getEntities();
+
+		// Build switch device list with power monitoring info
+		const switchDevices: SwitchDevice[] = [];
+
+		for (const entity of switchEntities) {
+			const state = allStates[entity.entity_id];
+			if (!state) continue;
+
+			// Type guard for device
+			const isDevice = (d: unknown): d is {
+				id: string;
+				manufacturer: string | null;
+				model: string | null;
+			} => {
+				return (
+					typeof d === 'object' && d !== null &&
+					'id' in d && 'manufacturer' in d && 'model' in d
+				);
+			};
+
+			const device = (devices as unknown[])
+				?.filter(isDevice)
+				.find((d) => d.id === entity.device_id);
+
+			// Check if this device has power monitoring
+			const hasPowerMonitoring = this.hasPowerMonitoring(entity.entity_id, allStates);
+
+			const switchDevice: SwitchDevice = {
+				entity_id: entity.entity_id,
+				name: entity.name || entity.original_name,
+				device_id: entity.device_id,
+				manufacturer: device?.manufacturer || null,
+				model: device?.model || null,
+				area: null, // Would need to fetch area registry
+				state: state.state,
+				is_on: state.state === 'on' || state.state === 'unavailable',
+				has_power_monitoring,
+				current_power_w: hasPowerMonitoring
+					? this.getPowerReading(entity.entity_id, allStates)
+					: undefined,
+				icon: entity.icon || undefined
+			};
+
+			switchDevices.push(switchDevice);
+		}
+
+		logger.info('Found switch devices', {
+			count: switchDevices.length,
+			withPowerMonitoring: switchDevices.filter((d) => d.has_power_monitoring).length
+		});
+
+		return switchDevices;
+	}
+
+	/**
+	 * Check if a device has power monitoring capability
+	 * Looks for associated power sensors (e.g., switch.myplug -> sensor.myplug_power)
+	 */
+	private hasPowerMonitoring(
+		entityId: string,
+		states: Record<string, unknown>
+	): boolean {
+		// Extract base name from entity_id (e.g., "switch.myplug" -> "myplug")
+		const baseName = entityId.split('.').pop();
+
+		// Look for power sensors with matching base name
+		const powerSensorPatterns = [
+			`sensor.${baseName}_power`,
+			`sensor.${baseName}_energy`,
+			`sensor.${baseName}_current`
+		];
+
+		for (const pattern of powerSensorPatterns) {
+			if (states[pattern]) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Get current power reading for a device
+	 */
+	private getPowerReading(
+		entityId: string,
+		states: Record<string, unknown>
+	): number | undefined {
+		const baseName = entityId.split('.').pop();
+
+		// Try different sensor patterns
+		const patterns = [
+			`sensor.${baseName}_power`,
+			`sensor.${baseName}_current_power`,
+			`sensor.${baseName}_energy_power`
+		];
+
+		for (const pattern of patterns) {
+			const sensor = states[pattern] as { state: string } | undefined;
+			if (sensor?.state) {
+				const [power, parseError] = tryCatch(() => parseFloat(sensor.state));
+				if (!parseError && !isNaN(power)) {
+					return power;
+				}
+			}
+		}
+
+		return undefined;
+	}
+
+	/**
+	 * Get current power draw for a specific switch entity
+	 */
+	async getCurrentPower(entityId: string): Promise<number | null> {
+		if (!homeAssistantClient.isConnected()) {
+			logger.error('Home Assistant not connected');
+			return null;
+		}
+
+		const states = homeAssistantClient.getEntities();
+		const power = this.getPowerReading(entityId, states);
+
+		if (power !== undefined) {
+			logger.debug('Power reading retrieved', {
+				entityId,
+				power
+			});
+			return power;
+		}
+
+		logger.warn('No power sensor found for entity', { entityId });
+		return null;
+	}
+
+	/**
+	 * Monitor power draw for a device over time
+	 * Returns true if power stays below threshold for specified duration
+	 */
+	async monitorPowerDraw(
+		entityId: string,
+		threshold: number,
+		duration: number
+	): Promise<boolean> {
+		logger.info('Starting power monitoring', {
+			entityId,
+			threshold,
+			duration
+		});
+
+		const startTime = Date.now();
+		const checkInterval = 2000; // Check every 2 seconds
+
+		while (Date.now() - startTime < duration * 1000) {
+			const power = await this.getCurrentPower(entityId);
+
+			if (power === null) {
+				// No power sensor available, skip verification
+				logger.info('No power sensor available, skipping power verification');
+				return true;
+			}
+
+			if (power > threshold) {
+				logger.info('Power threshold exceeded', {
+					entityId,
+					power,
+					threshold
+				});
+				return false;
+			}
+
+			logger.debug('Power check passed', {
+				entityId,
+				power,
+				threshold
+			});
+
+			// Wait before next check
+			await new Promise((resolve) => setTimeout(resolve, checkInterval));
+		}
+
+		logger.info('Power monitoring completed successfully', {
+			entityId,
+			duration
+		});
+		return true;
+	}
+
+	/**
+	 * Test if a switch device is controllable
+	 */
+	async testSwitch(entityId: string): Promise<boolean> {
+		logger.info('Testing switch', { entityId });
+
+		const currentState = homeAssistantClient.getEntityState(entityId);
+		if (!currentState) {
+			logger.error('Entity not found', { entityId });
+			return false;
+		}
+
+		const isCurrentlyOn = currentState.state === 'on';
+
+		// Toggle to opposite state
+		const success = isCurrentlyOn
+			? await homeAssistantClient.turnOff(entityId)
+			: await homeAssistantClient.turnOn(entityId);
+
+		if (!success) {
+			logger.error('Failed to toggle switch', { entityId });
+			return false;
+		}
+
+		// Wait a moment
+		await new Promise((resolve) => setTimeout(resolve, 1000));
+
+		// Toggle back
+		const restoreSuccess = isCurrentlyOn
+			? await homeAssistantClient.turnOn(entityId)
+			: await homeAssistantClient.turnOff(entityId);
+
+		if (!restoreSuccess) {
+			logger.warn('Failed to restore switch state', { entityId });
+		}
+
+		logger.info('Switch test completed', { entityId });
+		return true;
+	}
+}
+
+// Singleton instance
+export const deviceManager = new DeviceManager();

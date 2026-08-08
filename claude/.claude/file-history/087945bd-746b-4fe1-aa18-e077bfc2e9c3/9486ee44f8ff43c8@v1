@@ -1,0 +1,157 @@
+import type { Printer } from '../../../printer/types/printer';
+import ftp from 'basic-ftp';
+import { createLogger } from '../../../shared/utils/logger';
+import { tryPromise, tryCatch } from '@julian-i/try-error';
+
+const logger = createLogger('ftps-client');
+
+export interface UploadProgress {
+	loaded: number;
+	total: number;
+	percent: number;
+}
+
+export interface UploadOptions {
+	onProgress?: (progress: UploadProgress) => void;
+}
+
+export class FTPSClient {
+	private client: ftp.Client;
+
+	constructor() {
+		this.client = new ftp.Client();
+		this.client.ftp.verbose = true; // Enable for debugging FTPS issues
+		this.client.timeout = 120000; // Increase timeout to 120 seconds for TLS handshake
+	}
+
+	async uploadFile(
+		printer: Printer,
+		filePath: string,
+		fileName: string,
+		options?: UploadOptions
+	): Promise<boolean> {
+		logger.info(`Connecting to FTPS server`, { printerId: printer.id, ip: printer.ip, port: 990 });
+
+		const [_, accessError] = await tryPromise(
+			this.client.access({
+				host: printer.ip,
+				port: 990,
+				user: 'bblp',
+				password: printer.access_code,
+				secure: 'implicit', // Use implicit FTPS for port 990
+				secureOptions: {
+					rejectUnauthorized: false,
+					// Additional TLS options that may help with Bambu Lab printers
+					minVersion: 'TLSv1.2'
+				},
+				// Use passive mode for embedded devices
+				passive: true
+			})
+		);
+
+		if (accessError) {
+			logger.error(`FTPS connection failed`, {
+				printerId: printer.id,
+				fileName,
+				error: accessError.message,
+				stack: accessError.stack
+			});
+			await this.client.close();
+			throw new Error(`Failed to connect to printer FTPS - ${accessError.message}`);
+		}
+
+		logger.info(`Starting file upload`, { printerId: printer.id, fileName });
+
+		this.client.trackProgress((info) => {
+			if (options?.onProgress) {
+				options.onProgress({
+					loaded: info.bytes,
+					total: info.bytesOverall,
+					percent: info.bytesOverall > 0 ? (info.bytes / info.bytesOverall) * 100 : 0
+				});
+			}
+		});
+
+		const [__, uploadError] = await tryPromise(this.client.uploadFrom(filePath, fileName));
+
+		if (uploadError) {
+			logger.error(`File upload failed`, {
+				printerId: printer.id,
+				fileName,
+				error: uploadError.message,
+				stack: uploadError.stack
+			});
+			await this.client.close();
+			throw new Error(`File upload failed - ${uploadError.message}`);
+		}
+
+		logger.info(`File upload completed successfully`, { printerId: printer.id, fileName });
+
+		this.client.close();
+		return true;
+	}
+
+	async deleteFile(printer: Printer, fileName: string): Promise<boolean> {
+		logger.info(`Connecting to FTPS server`, { printerId: printer.id, ip: printer.ip, port: 990 });
+
+		const [_, accessError] = await tryPromise(
+			this.client.access({
+				host: printer.ip,
+				port: 990,
+				user: 'bblp',
+				password: printer.access_code,
+				secure: 'implicit', // Use implicit FTPS for port 990
+				secureOptions: {
+					rejectUnauthorized: false,
+					// Additional TLS options that may help with Bambu Lab printers
+					minVersion: 'TLSv1.2'
+				},
+				// Use passive mode for embedded devices
+				passive: true
+			})
+		);
+
+		if (accessError) {
+			logger.error(`FTPS connection failed`, {
+				printerId: printer.id,
+				fileName,
+				error: accessError.message,
+				stack: accessError.stack
+			});
+			await this.client.close();
+			throw new Error(`Failed to connect to printer FTPS - ${accessError.message}`);
+		}
+
+		logger.info(`Starting file deletion`, { printerId: printer.id, fileName });
+
+		const [__, removeError] = await tryPromise(this.client.remove(fileName));
+
+		if (removeError) {
+			logger.error(`File deletion failed`, {
+				printerId: printer.id,
+				fileName,
+				error: removeError.message,
+				stack: removeError.stack
+			});
+			await this.client.close();
+			throw new Error(`File deletion failed - ${removeError.message}`);
+		}
+
+		logger.info(`File deletion completed successfully`, { printerId: printer.id, fileName });
+
+		this.client.close();
+		return true;
+	}
+
+	disconnect(): void {
+		const [_, error] = tryCatch(() => this.client.close());
+		if (error) {
+			logger.error('Error disconnecting FTPS client', {
+				error: error.message,
+				stack: error.stack
+			});
+		}
+	}
+}
+
+export const ftpsClient = new FTPSClient();

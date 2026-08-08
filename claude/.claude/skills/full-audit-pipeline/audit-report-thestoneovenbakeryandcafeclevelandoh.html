@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local Business Digital Audit — The Stone Oven Bakery and Cafe</title>
+  <style>
+    :root {
+      --navy: #152238;
+      --navy-light: #20324d;
+      --coral: #e35d6a;
+      --green: #0ea96e;
+      --amber: #d97706;
+      --red: #dc2626;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-400: #9ca3af;
+      --gray-600: #4b5563;
+      --gray-800: #1f2937;
+      --radius: 14px;
+      --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif; background: linear-gradient(180deg, #f6f7fb 0%, #edf1f7 100%); color: var(--gray-800); }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 32px 20px 64px; }
+    .cover, .section { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); }
+    .cover { padding: 34px; background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); color: #fff; margin-bottom: 22px; }
+    .cover h1 { margin: 0; font-size: clamp(28px, 5vw, 42px); line-height: 1.1; }
+    .subtitle { margin: 10px 0 0; max-width: 72ch; color: rgba(255,255,255,.82); }
+    .cover-grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-top: 24px; }
+    .cover-item .label { font-size: 11px; letter-spacing: 1.4px; text-transform: uppercase; color: rgba(255,255,255,.54); }
+    .cover-item .value { margin-top: 4px; font-size: 15px; font-weight: 600; }
+    .section { padding: 24px; margin-bottom: 18px; }
+    .section h2 { margin: 0 0 16px; font-size: 22px; }
+    .muted { color: var(--gray-600); }
+    .gauge-grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+    .gauge-card, .competitor-card, .opp-card { border: 1px solid var(--gray-200); border-radius: 12px; padding: 16px; background: var(--gray-50); }
+    .gauge-value { font-size: 30px; font-weight: 800; margin-top: 8px; }
+    .gauge-value span { color: var(--gray-400); font-size: 14px; font-weight: 600; }
+    .gauge-note, .competitor-meta, .opp-meta { color: var(--gray-600); font-size: 13px; margin-top: 8px; }
+    .competitor-grid, .opp-grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .findings { display: grid; gap: 12px; }
+    details.finding { border: 1px solid var(--gray-200); border-radius: 12px; overflow: hidden; background: #fff; }
+    details.finding summary { cursor: pointer; padding: 16px 18px; font-weight: 700; }
+    .finding-body { padding: 0 18px 18px; }
+    .badge, .effort { display: inline-flex; align-items: center; border-radius: 999px; padding: 4px 10px; font-size: 12px; font-weight: 700; }
+    .badge-low, .effort-low { background: #dcfce7; color: #166534; }
+    .badge-medium, .effort-medium { background: #fef3c7; color: #92400e; }
+    .badge-high, .effort-high { background: #fee2e2; color: #991b1b; }
+    table { width: 100%; border-collapse: collapse; overflow: hidden; }
+    th, td { padding: 14px 12px; border-bottom: 1px solid var(--gray-200); text-align: left; vertical-align: top; }
+    th { color: var(--gray-600); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+    .internal-notes { margin-top: 18px; padding: 22px; border-radius: var(--radius); background: #111827; color: #fff; }
+    .internal-notes.hidden { display: block; }
+    .internal-notes h2, .internal-notes h3 { color: #fff; }
+    .section-toggle { margin: 14px 0 0; background: rgba(255,255,255,.12); color: #fff; border: 0; padding: 10px 14px; border-radius: 999px; cursor: pointer; }
+    .hidden-panel { display: none; }
+    .hidden-panel.open { display: block; }
+    @media (max-width: 720px) {
+      .wrap { padding-inline: 14px; }
+      .section, .cover { padding: 18px; }
+      table, thead, tbody, tr, th, td { display: block; width: 100%; }
+      thead { display: none; }
+      tr { border-bottom: 1px solid var(--gray-200); padding: 10px 0; }
+      td { border: 0; padding: 6px 0; }
+      td::before { content: attr(data-label) ": "; font-weight: 700; color: var(--gray-600); }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="cover">
+      <div class="muted" style="text-transform:uppercase;letter-spacing:2px;font-size:11px;">Local Business Digital Audit</div>
+      <h1>The Stone Oven Bakery and Cafe</h1>
+      <p class="subtitle">The Stone Oven Bakery and Cafe has limited public review evidence, a 4.6 Maps snapshot, and a usable website surface.</p>
+      <div class="cover-grid">
+        <div class="cover-item"><div class="label">Maps listing</div><div class="value">4.6 / — reviews</div></div>
+        <div class="cover-item"><div class="label">Website</div><div class="value">ok</div></div>
+        <div class="cover-item"><div class="label">Competitors</div><div class="value">3</div></div>
+        <div class="cover-item"><div class="label">Audit date</div><div class="value">21/06/2026, 16:37:25</div></div>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>Executive Summary</h2>
+      <p class="muted">The Stone Oven Bakery and Cafe has limited public review evidence, a 4.6 Maps snapshot, and a usable website surface.</p>
+    </section>
+
+    <section class="section">
+      <h2>Scores</h2>
+      <div class="gauge-grid">
+        <div class="gauge-card">
+          <div class="gauge-label">Visibility</div>
+          <div class="gauge-value">7<span>/10</span></div>
+          <div class="gauge-note">Maps listing exists and additional mentions were found.</div>
+        </div>
+        <div class="gauge-card">
+          <div class="gauge-label">Reputation</div>
+          <div class="gauge-value">6<span>/10</span></div>
+          <div class="gauge-note">No review snapshots recorded.</div>
+        </div>
+        <div class="gauge-card">
+          <div class="gauge-label">Website</div>
+          <div class="gauge-value">8<span>/10</span></div>
+          <div class="gauge-note">Website content is usable and crawlable.</div>
+        </div>
+        <div class="gauge-card">
+          <div class="gauge-label">Conversion</div>
+          <div class="gauge-value">5<span>/10</span></div>
+          <div class="gauge-note">Menu appears to be a PDF or download-first.</div>
+        </div>
+        <div class="gauge-card">
+          <div class="gauge-label">Competitiveness</div>
+          <div class="gauge-value">6<span>/10</span></div>
+          <div class="gauge-note">3 competitors were identified from the local pack.</div>
+        </div></div>
+    </section>
+
+    <section class="section">
+      <h2>Competitor Snapshot</h2>
+      <div class="competitor-grid">
+        <article class="competitor-card">
+          <h4>Sweet Wife Baking</h4>
+          <div class="competitor-meta">No rating</div>
+          <p>Potential local competitor discovered from search results.</p>
+        </article>
+        <article class="competitor-card">
+          <h4>Elysian Fields Artisan Bakery & Dainties</h4>
+          <div class="competitor-meta">No rating</div>
+          <p>Potential local competitor discovered from search results.</p>
+        </article>
+        <article class="competitor-card">
+          <h4>Sisters Bakery</h4>
+          <div class="competitor-meta">No rating</div>
+          <p>Potential local competitor discovered from search results.</p>
+        </article></div>
+    </section>
+
+    <section class="section">
+      <h2>The 3 Biggest Opportunities</h2>
+      <div class="opp-grid">
+        <article class="opp-card">
+          <h4>Systematize review requests</h4>
+          <p>More recent social proof reduces decision friction.</p>
+          <div class="opp-meta"><span>Low</span><span>You / staff</span></div>
+        </article>
+        <article class="opp-card">
+          <h4>Replace PDF-first menu with a web page</h4>
+          <p>Menus that render in-browser are easier to scan and act on.</p>
+          <div class="opp-meta"><span>Medium</span><span>Web person</span></div>
+        </article></div>
+    </section>
+
+    <section class="section">
+      <h2>Detailed Findings</h2>
+      <div class="findings">
+        <details class="finding">
+          <summary>1. Google profile completeness</summary>
+          <div class="finding-body">
+            <span class="badge badge-low">Low</span>
+            <p>Website link exists on the listing.</p>
+          </div>
+        </details>
+        <details class="finding">
+          <summary>2. Review volume snapshot</summary>
+          <div class="finding-body">
+            <span class="badge badge-high">High</span>
+            <p>No review count captured.</p>
+          </div>
+        </details>
+        <details class="finding">
+          <summary>3. Website conversion path</summary>
+          <div class="finding-body">
+            <span class="badge badge-high">High</span>
+            <p>No obvious order or booking route was captured.</p>
+          </div>
+        </details></div>
+    </section>
+
+    <section class="section">
+      <h2>Priority Action Plan</h2>
+      <table>
+        <thead>
+          <tr><th>#</th><th>Fix</th><th>Why it matters</th><th>Effort</th><th>Who</th></tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td data-label="#">1</td>
+          <td data-label="Fix">Systematize review requests</td>
+          <td data-label="Why it matters">More recent social proof reduces decision friction.</td>
+          <td data-label="Effort"><span class="effort effort-low">Low</span></td>
+          <td data-label="Who">You / staff</td>
+        </tr>
+        <tr>
+          <td data-label="#">2</td>
+          <td data-label="Fix">Replace PDF-first menu with a web page</td>
+          <td data-label="Why it matters">Menus that render in-browser are easier to scan and act on.</td>
+          <td data-label="Effort"><span class="effort effort-medium">Medium</span></td>
+          <td data-label="Who">Web person</td>
+        </tr>
+        <tr>
+          <td data-label="#">3</td>
+          <td data-label="Fix">Create a steady review request process</td>
+          <td data-label="Why it matters">Recent reviews raise trust and click-through.</td>
+          <td data-label="Effort"><span class="effort effort-low">Low</span></td>
+          <td data-label="Who">You / staff</td>
+        </tr></tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>Limitations &amp; Caveats</h2>
+      <ul><li>Snapshot in time only; review counts and rankings change daily.</li><li>Public data only; no private account access, analytics, or order-system access.</li><li>Local-pack competitors are the visible set from the crawl location, not an exhaustive market map.</li></ul>
+    </section>
+
+    <section class="internal-notes hidden" id="internalNotes">
+      <h2>Internal Notes</h2>
+      <p class="muted" style="color:rgba(255,255,255,.72)">Not for client delivery.</p>
+      <button class="section-toggle" id="toggleInternal">Toggle evidence details</button>
+      <div class="hidden-panel" id="internalPanel">
+        <h3>Evidence Quality</h3>
+        <ul><li>Maps listing: ok</li><li>Website crawl: ok</li><li>Directory checks: 0 successful</li></ul>
+
+        <h3>Risk Matrix</h3>
+        <table>
+          <thead><tr><th>Flag</th><th>Severity</th><th>Detail</th></tr></thead>
+          <tbody>
+        <tr>
+          <td data-label="Flag">Missing GBP detail</td>
+          <td data-label="Severity"><span class="badge badge-low">Low</span></td>
+          <td data-label="Detail">Some listing details are available.</td>
+        </tr>
+        <tr>
+          <td data-label="Flag">No online ordering</td>
+          <td data-label="Severity"><span class="badge badge-medium">Medium</span></td>
+          <td data-label="Detail">Potential lost revenue for customers who want to pre-order.</td>
+        </tr>
+        <tr>
+          <td data-label="Flag">PDF menu on mobile</td>
+          <td data-label="Severity"><span class="badge badge-medium">Medium</span></td>
+          <td data-label="Detail">A PDF/menu-style asset appears to be part of the journey.</td>
+        </tr></tbody>
+        </table>
+
+        <h3>Source Log</h3>
+        <table>
+          <thead><tr><th>Source</th><th>Status</th><th>Timestamp</th><th>Notes</th></tr></thead>
+          <tbody>
+        <tr>
+          <td data-label="Source">google-maps</td>
+          <td data-label="Status">ok</td>
+          <td data-label="Timestamp">2026-06-21T15:37:08.526Z</td>
+          <td data-label="Notes">Extracted from the public Maps page.</td>
+        </tr>
+        <tr>
+          <td data-label="Source">website</td>
+          <td data-label="Status">ok</td>
+          <td data-label="Timestamp">2026-06-21T15:37:19.101Z</td>
+          <td data-label="Notes">Crawled 3 pages.</td>
+        </tr>
+        <tr>
+          <td data-label="Source">directories</td>
+          <td data-label="Status">blocked</td>
+          <td data-label="Timestamp">2026-06-21T15:37:23.350Z</td>
+          <td data-label="Notes">Search results appeared blocked or consent-gated.</td>
+        </tr>
+        <tr>
+          <td data-label="Source">directories</td>
+          <td data-label="Status">blocked</td>
+          <td data-label="Timestamp">2026-06-21T15:37:23.342Z</td>
+          <td data-label="Notes">Search results appeared blocked or consent-gated.</td>
+        </tr>
+        <tr>
+          <td data-label="Source">directories</td>
+          <td data-label="Status">blocked</td>
+          <td data-label="Timestamp">2026-06-21T15:37:23.340Z</td>
+          <td data-label="Notes">Search results appeared blocked or consent-gated.</td>
+        </tr>
+        <tr>
+          <td data-label="Source">directories</td>
+          <td data-label="Status">blocked</td>
+          <td data-label="Timestamp">2026-06-21T15:37:23.512Z</td>
+          <td data-label="Notes">Search results appeared blocked or consent-gated.</td>
+        </tr>
+        <tr>
+          <td data-label="Source">directories</td>
+          <td data-label="Status">blocked</td>
+          <td data-label="Timestamp">2026-06-21T15:37:23.350Z</td>
+          <td data-label="Notes">Search results appeared blocked or consent-gated.</td>
+        </tr>
+        <tr>
+          <td data-label="Source">directories</td>
+          <td data-label="Status">blocked</td>
+          <td data-label="Timestamp">2026-06-21T15:37:23.342Z</td>
+          <td data-label="Notes">Search results appeared blocked or consent-gated.</td>
+        </tr>
+        <tr>
+          <td data-label="Source">directories</td>
+          <td data-label="Status">blocked</td>
+          <td data-label="Timestamp">2026-06-21T15:37:23.435Z</td>
+          <td data-label="Notes">Search results appeared blocked or consent-gated.</td>
+        </tr>
+        <tr>
+          <td data-label="Source">directories</td>
+          <td data-label="Status">blocked</td>
+          <td data-label="Timestamp">2026-06-21T15:37:23.361Z</td>
+          <td data-label="Notes">Search results appeared blocked or consent-gated.</td>
+        </tr>
+        <tr>
+          <td data-label="Source">directories</td>
+          <td data-label="Status">blocked</td>
+          <td data-label="Timestamp">2026-06-21T15:37:23.250Z</td>
+          <td data-label="Notes">Search results appeared blocked or consent-gated.</td>
+        </tr>
+        <tr>
+          <td data-label="Source">directories</td>
+          <td data-label="Status">blocked</td>
+          <td data-label="Timestamp">2026-06-21T15:37:23.430Z</td>
+          <td data-label="Notes">Search results appeared blocked or consent-gated.</td>
+        </tr>
+        <tr>
+          <td data-label="Source">competitor-search</td>
+          <td data-label="Status">ok</td>
+          <td data-label="Timestamp">2026-06-21T15:37:25.778Z</td>
+          <td data-label="Notes">Used Google search results to seed local competitor discovery.</td>
+        </tr></tbody>
+        </table>
+
+        <h3>Directory Checks</h3>
+        <table>
+          <thead><tr><th>Platform</th><th>Status</th><th>Rating</th><th>Reviews</th><th>Last active</th><th>Notes</th></tr></thead>
+          <tbody>
+        <tr>
+          <td data-label="Platform">Facebook</td>
+          <td data-label="Status">blocked</td>
+          <td data-label="Rating">—</td>
+          <td data-label="Reviews">—</td>
+          <td data-label="Last active">—</td>
+          <td data-label="Notes">Search results appeared blocked or consent-gated.</td>
+        </tr>
+        <tr>
+          <td data-label="Platform">Tripadvisor</td>
+          <td data-label="Status">blocked</td>
+          <td data-label="Rating">—</td>
+          <td data-label="Reviews">—</td>
+          <td data-label="Last active">—</td>
+          <td data-label="Notes">Search results appeared blocked or consent-gated.</td>
+        </tr>
+        <tr>
+          <td data-label="Platform">Yelp</td>
+          <td data-label="Status">blocked</td>
+          <td data-label="Rating">—</td>
+          <td data-label="Reviews">—</td>
+          <td data-label="Last active">—</td>
+          <td data-label="Notes">Search results appeared blocked or consent-gated.</td>
+        </tr>
+        <tr>
+          <td data-label="Platform">Yell</td>
+          <td data-label="Status">blocked</td>
+          <td data-label="Rating">—</td>
+          <td data-label="Reviews">—</td>
+          <td data-label="Last active">—</td>
+          <td data-label="Notes">Search results appeared blocked or consent-gated.</td>
+        </tr>
+        <tr>
+          <td data-label="Platform">Trustpilot</td>
+          <td data-label="Status">blocked</td>
+          <td data-label="Rating">—</td>
+          <td data-label="Reviews">—</td>
+          <td data-label="Last active">—</td>
+          <td data-label="Notes">Search results appeared blocked or consent-gated.</td>
+        </tr>
+        <tr>
+          <td data-label="Platform">Just Eat</td>
+          <td data-label="Status">blocked</td>
+          <td data-label="Rating">—</td>
+          <td data-label="Reviews">—</td>
+          <td data-label="Last active">—</td>
+          <td data-label="Notes">Search results appeared blocked or consent-gated.</td>
+        </tr>
+        <tr>
+          <td data-label="Platform">Deliveroo</td>
+          <td data-label="Status">blocked</td>
+          <td data-label="Rating">—</td>
+          <td data-label="Reviews">—</td>
+          <td data-label="Last active">—</td>
+          <td data-label="Notes">Search results appeared blocked or consent-gated.</td>
+        </tr>
+        <tr>
+          <td data-label="Platform">Uber Eats</td>
+          <td data-label="Status">blocked</td>
+          <td data-label="Rating">—</td>
+          <td data-label="Reviews">—</td>
+          <td data-label="Last active">—</td>
+          <td data-label="Notes">Search results appeared blocked or consent-gated.</td>
+        </tr>
+        <tr>
+          <td data-label="Platform">Apple Maps</td>
+          <td data-label="Status">blocked</td>
+          <td data-label="Rating">—</td>
+          <td data-label="Reviews">—</td>
+          <td data-label="Last active">—</td>
+          <td data-label="Notes">Search results appeared blocked or consent-gated.</td>
+        </tr>
+        <tr>
+          <td data-label="Platform">Companies House</td>
+          <td data-label="Status">blocked</td>
+          <td data-label="Rating">—</td>
+          <td data-label="Reviews">—</td>
+          <td data-label="Last active">—</td>
+          <td data-label="Notes">Search results appeared blocked or consent-gated.</td>
+        </tr></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+  <script>
+    const toggle = document.getElementById('toggleInternal');
+    const panel = document.getElementById('internalPanel');
+    if (toggle && panel) {
+      toggle.addEventListener('click', () => panel.classList.toggle('open'));
+    }
+  </script>
+</body>
+</html>

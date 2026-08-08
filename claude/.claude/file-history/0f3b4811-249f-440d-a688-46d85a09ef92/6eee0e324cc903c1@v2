@@ -1,0 +1,210 @@
+import { eventBus } from './event-bus';
+import { createLogger } from '../utils/logger';
+import type { PrinterState, PrinterError } from '../../printer/types/printer';
+import type { FilamentState } from '../../printer/types/filament';
+import type { Job } from '../../job/types/job';
+import { tryCatch } from '@julian-i/try-error';
+
+const logger = createLogger('sse-manager');
+
+// Metrics will be loaded from monitoring module when available
+let metrics: {
+	sseActiveConnections: { set(value: number): void };
+	sseConnectionsTotal: { inc(): void };
+	sseDisconnectionsTotal: { inc(): void };
+	sseMessagesSent: { inc(labels: { event_type: string }): void };
+	sseSendErrors: { inc(): void };
+} | null = null;
+
+async function loadMetrics() {
+	if (metrics === null) {
+		try {
+			const metricsModule = await import('../../monitoring/server/services/metrics');
+			metrics = {
+				sseActiveConnections: metricsModule.sseActiveConnections,
+				sseConnectionsTotal: metricsModule.sseConnectionsTotal,
+				sseDisconnectionsTotal: metricsModule.sseDisconnectionsTotal,
+				sseMessagesSent: metricsModule.sseMessagesSent,
+				sseSendErrors: metricsModule.sseSendErrors
+			};
+		} catch (error) {
+			// Metrics not available yet
+			logger.debug('Metrics not available in this context');
+		}
+	}
+}
+
+interface SSEClient {
+	id: string;
+	controller: ReadableStreamDefaultController;
+	connectedAt: Date;
+}
+
+class SSEManager {
+	private clients: SSEClient[] = [];
+
+	addClient(id: string, controller: ReadableStreamDefaultController): void {
+		this.clients.push({ id, controller, connectedAt: new Date() });
+		// Update metrics (if available)
+		loadMetrics().then(() => {
+			if (metrics) {
+				metrics.sseConnectionsTotal.inc();
+				metrics.sseActiveConnections.set(this.clients.length);
+			}
+		});
+	}
+
+	removeClient(id: string): void {
+		const beforeLength = this.clients.length;
+		this.clients = this.clients.filter((client) => client.id !== id);
+		if (this.clients.length < beforeLength) {
+			// Update metrics (if available)
+			loadMetrics().then(() => {
+				if (metrics) {
+					metrics.sseDisconnectionsTotal.inc();
+					metrics.sseActiveConnections.set(this.clients.length);
+				}
+			});
+		}
+	}
+
+	/**
+	 * Get current connection count (for health monitoring)
+	 */
+	getConnectionCount(): number {
+		return this.clients.length;
+	}
+
+	sendToClient(clientId: string, event: string, data: unknown): void {
+		const client = this.clients.find((c) => c.id === clientId);
+		if (client) {
+			const [_, error] = tryCatch(() =>
+				client.controller.enqueue(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`)
+			);
+			if (error) {
+				logger.error(`Error sending to client ${clientId}:`, {
+					error: error.message,
+					stack: error.stack
+				});
+				this.removeClient(clientId);
+			}
+		}
+	}
+
+	broadcast(event: string, data: unknown): void {
+		for (const client of this.clients) {
+			// Skip if controller is null/undefined
+			if (!client?.controller) {
+				this.removeClient(client.id);
+				continue;
+			}
+
+			// Check if stream is closed using desiredSize (returns null when closed)
+			const [desiredSize, dsError] = tryCatch(() => client.controller.desiredSize);
+			if (dsError || desiredSize === null) {
+				this.removeClient(client.id);
+				continue;
+			}
+
+			const [_, error] = tryCatch(() =>
+				client.controller.enqueue(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`)
+			);
+			if (error) {
+				if (error.message.includes('Controller is already closed')) {
+					this.removeClient(client.id);
+				} else {
+					logger.error(`Error broadcasting to client ${client.id}:`, {
+						error: error.message,
+						stack: error.stack
+					});
+					this.removeClient(client.id);
+				}
+			}
+		}
+	}
+
+	sendKeepalive(): void {
+		this.broadcast('keepalive', { timestamp: Date.now() });
+	}
+}
+
+export const sseManager = new SSEManager();
+
+// Wire up event bus to SSE broadcasts
+eventBus.on('printer:connected', (data) => {
+	sseManager.broadcast('printer:connected', data);
+});
+
+eventBus.on('printer:disconnected', (data) => {
+	sseManager.broadcast('printer:disconnected', data);
+});
+
+eventBus.on('printer:state', (data: PrinterState) => {
+	sseManager.broadcast('printer:state', data);
+});
+
+eventBus.on('printer:error', (data: PrinterError) => {
+	sseManager.broadcast('printer:error', data);
+});
+
+eventBus.on('printer:filament', (data: FilamentState) => {
+	sseManager.broadcast('printer:filament', data);
+});
+
+// Job events
+eventBus.on('job:created', (data: Job) => {
+	sseManager.broadcast('job:created', data);
+});
+
+eventBus.on('job:updated', (data: Job) => {
+	sseManager.broadcast('job:updated', data);
+});
+
+eventBus.on('job:deleted', (data: { jobId: number }) => {
+	sseManager.broadcast('job:deleted', data);
+});
+
+eventBus.on('job:reordered', (data: { jobIds: number[] }) => {
+	sseManager.broadcast('job:reordered', data);
+});
+
+// Queue processor events
+eventBus.on('job:uploading', (data: { jobId: number; printerId: number }) => {
+	sseManager.broadcast('job:uploading', data);
+});
+
+eventBus.on('job:printing', (data: { jobId: number; printerId: number; loopNumber: number }) => {
+	sseManager.broadcast('job:printing', data);
+});
+
+eventBus.on('job:cooling', (data: { jobId: number; printerId: number }) => {
+	sseManager.broadcast('job:cooling', data);
+});
+
+eventBus.on('job:clearing', (data: { jobId: number; printerId: number }) => {
+	sseManager.broadcast('job:clearing', data);
+});
+
+eventBus.on('job:complete', (data: { jobId: number }) => {
+	sseManager.broadcast('job:complete', data);
+});
+
+eventBus.on('job:failed', (data: { jobId: number; error: string; retryCount: number }) => {
+	sseManager.broadcast('job:failed', data);
+});
+
+// External print events
+eventBus.on('external-print:started', (data: { printerId: number; fileName: string | null }) => {
+	sseManager.broadcast('external-print:started', data);
+});
+
+eventBus.on(
+	'external-print:complete',
+	(data: { printerId: number; fileName: string | null; duration: number }) => {
+		sseManager.broadcast('external-print:complete', data);
+	}
+);
+
+eventBus.on('external-print:error', (data: { printerId: number; fileName: string | null }) => {
+	sseManager.broadcast('external-print:error', data);
+});

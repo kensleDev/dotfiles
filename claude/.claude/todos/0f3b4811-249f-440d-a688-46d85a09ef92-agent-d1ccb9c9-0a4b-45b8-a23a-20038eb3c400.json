@@ -1,0 +1,12 @@
+[
+  {
+    "content": "Add Tailwind CSS v4 Vite plugin to vite.config.ts",
+    "status": "in_progress",
+    "activeForm": "Adding Tailwind CSS v4 Vite plugin"
+  },
+  {
+    "content": "Verify styles are being applied correctly",
+    "status": "pending",
+    "activeForm": "Verifying styles are applied"
+  }
+]

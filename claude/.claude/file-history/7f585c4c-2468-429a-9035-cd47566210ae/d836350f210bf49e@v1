@@ -1,0 +1,105 @@
+// ============================================
+// KEYBOARD PLATE - LEFT SIDE
+// 3x5 Ortholinear + 3 Thumb Keys
+// ============================================
+
+// --- PARAMETERS (like TypeScript constants) ---
+key_unit = 19.05;           // 1U key spacing (standard)
+switch_cutout = 14;         // MX+Alps switch cutout size
+plate_thickness = 1.5;      // Plate thickness in mm
+corner_radius = 0.5;        // Rounded corners for cutouts
+
+// Main grid dimensions
+cols = 3;                   // 3 columns
+rows = 5;                   // 5 rows
+
+// Plate dimensions (calculated from layout)
+plate_width = cols * key_unit + 4;  // 3 columns + 2mm edge each side
+plate_height = rows * key_unit + 4; // 5 rows + 2mm edge each side
+
+// --- MODULES (like functions/components) ---
+
+// Module to create a single switch cutout (2D shape)
+module switch_cutout_2d() {
+    offset(r=corner_radius) {
+        offset(r=-corner_radius) {
+            square([switch_cutout, switch_cutout], center=true);
+        }
+    }
+}
+
+// 3D switch cutout (extruded through the plate)
+module switch_cutout_3d() {
+    linear_extrude(height=plate_thickness) {
+        switch_cutout_2d();
+    }
+}
+
+// Module to create the main grid of switches
+// Positioned starting at (15, 15) for margin
+module main_grid() {
+    start_x = 15;
+    start_y = 15;
+
+    for (col = [0:cols-1]) {
+        for (row = [0:rows-1]) {
+            translate([
+                start_x + col * key_unit,
+                start_y + row * key_unit,
+                0
+            ]) {
+                switch_cutout_3d();
+            }
+        }
+    }
+}
+
+// Module for thumb cluster
+// Positioned below and to the left of the main grid
+module thumb_cluster() {
+    start_x = 15;
+    start_y = 15;
+
+    // Thumb keys positioned at bottom-left
+    // These align with rows 2, 3, 4 of the main grid but offset left
+    thumb_positions = [
+        [start_x - key_unit * 0.5, start_y + key_unit * 2],  // Bottom thumb (row 2 level)
+        [start_x - key_unit * 1.2, start_y + key_unit * 3],  // Middle thumb (row 3 level)
+        [start_x - key_unit * 0.8, start_y + key_unit * 4]   // Top thumb (row 4 level)
+    ];
+
+    for (pos = thumb_positions) {
+        translate([pos[0], pos[1], 0]) {
+            switch_cutout_3d();
+        }
+    }
+}
+
+// Base plate with rounded corners
+module base_plate() {
+    linear_extrude(height=plate_thickness) {
+        offset(r=3) {
+            offset(r=-3) {
+                square([plate_width, plate_height]);
+            }
+        }
+    }
+}
+
+// --- MAIN ASSEMBLY ---
+// difference() = base plate MINUS switch cutouts
+
+difference() {
+    base_plate();
+
+    union() {
+        main_grid();
+        // thumb_cluster();
+    }
+}
+
+// --- HELPFUL TIPS ---
+// Press F5 to preview (quick render)
+// Press F6 to full render
+// Use View -> Animate to see changes
+// Right-click + drag to rotate view

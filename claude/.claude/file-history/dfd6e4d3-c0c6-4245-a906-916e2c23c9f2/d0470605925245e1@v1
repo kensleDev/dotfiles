@@ -1,0 +1,114 @@
+/**
+ * Home Assistant integration types
+ */
+
+// Entity types from Home Assistant
+export type EntityType =
+	| 'switch'
+	| 'light'
+	| 'input_boolean'
+	| 'automation'
+	| 'script'
+	| 'sensor'
+	| 'binary_sensor';
+
+// Device classes for smart plugs
+export type DeviceClass =
+	| 'outlet'
+	| 'switch'
+	| 'plug'
+	| 'power'
+	| 'current'
+	| 'voltage'
+	| 'energy';
+
+// Home Assistant entity state
+export interface EntityState {
+	entity_id: string;
+	state: string;
+	attributes: EntityAttributes;
+	last_changed: string;
+	last_updated: string;
+	context: {
+		id: string;
+		user_id: string | null;
+	};
+}
+
+export interface EntityAttributes {
+	friendly_name?: string;
+	device_class?: string;
+	unit_of_measurement?: string;
+	icon?: string;
+	assumed_state?: boolean;
+	// Power monitoring attributes
+	current_power_w?: number;
+	power?: number;
+	voltage?: number;
+	current?: number;
+	// Device attributes
+	device?: {
+		identifiers: string[];
+		name: string;
+		model: string;
+		manufacturer: string;
+	};
+	// Switch specific
+	[KEY: string]: unknown;
+}
+
+// Printer Home Assistant configuration
+export interface PrinterHAConfig {
+	home_assistant_entity_id: string | null;
+	auto_shutdown_enabled: boolean;
+	shutdown_delay_minutes: number;
+	power_threshold_watts: number;
+	power_verification_seconds: number;
+}
+
+// Auto-shutdown state
+export interface AutoShutdownState {
+	printerId: number;
+	pending: boolean;
+	scheduledTime?: Date;
+	completedAt?: Date;
+	skippedReason?: string;
+}
+
+// Temperature safety thresholds
+export interface TemperatureThresholds {
+	nozzle_max_temp: number; // Default: 50
+	bed_max_temp: number; // Default: 40
+}
+
+// Auto-shutdown result
+export interface ShutdownResult {
+	success: boolean;
+	message: string;
+	timestamp: Date;
+	printerId: number;
+	reason?: string;
+}
+
+// Connection status
+export interface ConnectionStatus {
+	connected: boolean;
+	connecting: boolean;
+	lastError: string | null;
+	lastConnected: Date | null;
+}
+
+// Available switch devices (filtered from HA)
+export interface SwitchDevice {
+	entity_id: string;
+	name: string;
+	device_id: string | null;
+	manufacturer: string | null;
+	model: string | null;
+	area: string | null;
+	state: string;
+	is_on: boolean;
+	has_power_monitoring: boolean;
+	current_power_w?: number;
+	icon?: string;
+}

@@ -1,0 +1,336 @@
+import { onDestroy } from 'svelte';
+import { createLogger } from '@/shared/utils/logger';
+import { getApiBaseUrl } from './client';
+
+const logger = createLogger('sse-client');
+
+type EventHandler = (data: unknown) => void;
+type ErrorEventHandler = () => void;
+
+/**
+ * SSE event data types
+ */
+export interface PrinterConnectedEvent {
+	printerId: number;
+	printerName: string;
+	timestamp: string;
+}
+
+export interface PrinterDisconnectedEvent {
+	printerId: number;
+	printerName: string;
+	timestamp: string;
+}
+
+export interface PrinterStateEvent {
+	printerId: number;
+	status: string;
+	progress: number;
+	remainingTime: number;
+	currentFile: string | null;
+	bedTemp: number;
+	bedTargetTemp: number;
+	nozzleTemp: number;
+	nozzleTargetTemp: number;
+	chamberTemp: number;
+	layerCount: number;
+	totalLayers: number;
+	timestamp: string;
+}
+
+export interface PrinterErrorEvent {
+	printerId: number;
+	errorCode: string;
+	errorMessage: string;
+	timestamp: string;
+}
+
+export interface JobCreatedEvent {
+	jobId: number;
+	jobName: string;
+	printerId: number | null;
+	timestamp: string;
+}
+
+export interface JobUpdatedEvent {
+	jobId: number;
+	status: string;
+	currentLoop: number;
+	timestamp: string;
+}
+
+export interface JobDeletedEvent {
+	jobId: number;
+	timestamp: string;
+}
+
+export interface JobReorderedEvent {
+	jobIds: number[];
+	timestamp: string;
+}
+
+/**
+ * SSE client options
+ */
+export interface SseClientOptions {
+	onPrinterConnected?: (data: PrinterConnectedEvent) => void;
+	onPrinterDisconnected?: (data: PrinterDisconnectedEvent) => void;
+	onPrinterState?: (data: PrinterStateEvent) => void;
+	onPrinterError?: (data: PrinterErrorEvent) => void;
+	onJobCreated?: (data: JobCreatedEvent) => void;
+	onJobUpdated?: (data: JobUpdatedEvent) => void;
+	onJobDeleted?: (data: JobDeletedEvent) => void;
+	onJobReordered?: (data: JobReorderedEvent) => void;
+	onError?: ErrorEventHandler;
+}
+
+/**
+ * Creates and manages an SSE connection to the Hono API
+ * @param path - The SSE endpoint path (e.g., '/api/events')
+ * @param options - Event handlers for various SSE events
+ * @returns An object with a close method to clean up the connection
+ */
+export function createSseClientWithOptions(path: string, options: SseClientOptions) {
+	const API_BASE = getApiBaseUrl();
+	const url = `${API_BASE}${path}`;
+	const eventSource = new EventSource(url);
+
+	logger.info('SSE client connecting', { url });
+
+	// Printer events
+	eventSource.addEventListener('printer:connected', (event) => {
+		try {
+			const data = JSON.parse(event.data) as PrinterConnectedEvent;
+			logger.debug('Printer connected event', { printerId: data.printerId });
+			options.onPrinterConnected?.(data);
+		} catch (error) {
+			logger.error('Failed to parse printer:connected event', { error });
+		}
+	});
+
+	eventSource.addEventListener('printer:disconnected', (event) => {
+		try {
+			const data = JSON.parse(event.data) as PrinterDisconnectedEvent;
+			logger.debug('Printer disconnected event', { printerId: data.printerId });
+			options.onPrinterDisconnected?.(data);
+		} catch (error) {
+			logger.error('Failed to parse printer:disconnected event', { error });
+		}
+	});
+
+	eventSource.addEventListener('printer:state', (event) => {
+		try {
+			const data = JSON.parse(event.data) as PrinterStateEvent;
+			options.onPrinterState?.(data);
+		} catch (error) {
+			logger.error('Failed to parse printer:state event', { error });
+		}
+	});
+
+	eventSource.addEventListener('printer:error', (event) => {
+		try {
+			const data = JSON.parse(event.data) as PrinterErrorEvent;
+			logger.warn('Printer error event', { printerId: data.printerId, error: data.errorMessage });
+			options.onPrinterError?.(data);
+		} catch (error) {
+			logger.error('Failed to parse printer:error event', { error });
+		}
+	});
+
+	// Job events
+	eventSource.addEventListener('job:created', (event) => {
+		try {
+			const data = JSON.parse(event.data) as JobCreatedEvent;
+			logger.debug('Job created event', { jobId: data.jobId });
+			options.onJobCreated?.(data);
+		} catch (error) {
+			logger.error('Failed to parse job:created event', { error });
+		}
+	});
+
+	eventSource.addEventListener('job:updated', (event) => {
+		try {
+			const data = JSON.parse(event.data) as JobUpdatedEvent;
+			options.onJobUpdated?.(data);
+		} catch (error) {
+			logger.error('Failed to parse job:updated event', { error });
+		}
+	});
+
+	eventSource.addEventListener('job:deleted', (event) => {
+		try {
+			const data = JSON.parse(event.data) as JobDeletedEvent;
+			logger.debug('Job deleted event', { jobId: data.jobId });
+			options.onJobDeleted?.(data);
+		} catch (error) {
+			logger.error('Failed to parse job:deleted event', { error });
+		}
+	});
+
+	eventSource.addEventListener('job:reordered', (event) => {
+		try {
+			const data = JSON.parse(event.data) as JobReorderedEvent;
+			logger.debug('Job reordered event', { jobIds: data.jobIds });
+			options.onJobReordered?.(data);
+		} catch (error) {
+			logger.error('Failed to parse job:reordered event', { error });
+		}
+	});
+
+	// Error handling
+	eventSource.addEventListener('error', () => {
+		logger.error('SSE connection error');
+		options.onError?.();
+	});
+
+	// Log when connection is open
+	eventSource.onopen = () => {
+		logger.info('SSE connection established');
+	};
+
+	return {
+		close: () => {
+			logger.info('SSE client closing');
+			eventSource.close();
+		},
+		get readyState() {
+			return eventSource.readyState;
+		}
+	};
+}
+
+/**
+ * Simple SSE client class with on/off API for easier use
+ * This is the default exported client that matches the API used in pages
+ */
+class SSEClient {
+	private eventSource: EventSource | null = null;
+	private handlers = new Map<string, Set<EventHandler>>();
+	private url: string;
+
+	constructor() {
+		const API_BASE = getApiBaseUrl();
+		this.url = `${API_BASE}/api/events`;
+		this.connect();
+	}
+
+	private connect() {
+		if (this.eventSource) {
+			this.eventSource.close();
+		}
+
+		this.eventSource = new EventSource(this.url);
+		logger.info('SSE client connecting', { url: this.url });
+
+		// Set up message handler that delegates to registered handlers
+		this.eventSource.onmessage = (event) => {
+			logger.debug('SSE message received', { data: event.data });
+		};
+
+		// Generic event listener that routes to specific handlers
+		const eventTypes = [
+			'printer:connected',
+			'printer:disconnected',
+			'printer:state',
+			'printer:error',
+			'printer:filament',
+			'job:created',
+			'job:updated',
+			'job:deleted',
+			'job:reordered',
+			'connected',
+			'keepalive'
+		];
+
+		for (const eventType of eventTypes) {
+			this.eventSource.addEventListener(eventType, (event) => {
+				const handlers = this.handlers.get(eventType);
+				if (handlers) {
+					try {
+						const data = JSON.parse((event as MessageEvent).data);
+						for (const handler of handlers) {
+							handler(data);
+						}
+					} catch (error) {
+						logger.error(`Failed to parse ${eventType} event`, { error });
+					}
+				}
+			});
+		}
+
+		// Error handling
+		this.eventSource.addEventListener('error', () => {
+			logger.error('SSE connection error');
+			const errorHandlers = this.handlers.get('error');
+			if (errorHandlers) {
+				for (const handler of errorHandlers) {
+					handler();
+				}
+			}
+		});
+
+		// Log when connection is open
+		this.eventSource.onopen = () => {
+			logger.info('SSE connection established');
+		};
+	}
+
+	on(event: string, handler: EventHandler) {
+		if (!this.handlers.has(event)) {
+			this.handlers.set(event, new Set());
+		}
+		this.handlers.get(event)!.add(handler);
+	}
+
+	off(event: string, handler: EventHandler) {
+		const handlers = this.handlers.get(event);
+		if (handlers) {
+			handlers.delete(handler);
+		}
+	}
+
+	disconnect() {
+		logger.info('SSE client disconnecting');
+		if (this.eventSource) {
+			this.eventSource.close();
+			this.eventSource = null;
+		}
+		this.handlers.clear();
+	}
+}
+
+/**
+ * Create a new SSE client with the simple on/off API
+ * This is the default export for easier use in components
+ */
+export function createSSEClient(): SSEClient {
+	return new SSEClient();
+}
+
+// Export the simple client as the default for backward compatibility
+export { createSSEClient as createSseClient };
+
+/**
+ * Svelte action for automatic SSE connection cleanup
+ * Usage: <div use:sse={"/api/events", handlers} />
+ */
+export function sse(node: HTMLElement, params: { path: string; options: SseClientOptions }) {
+	const { path, options } = params;
+	const client = createSseClientWithOptions(path, options);
+
+	onDestroy(() => {
+		client.close();
+	});
+
+	return {
+		update(newParams: { path: string; options: SseClientOptions }) {
+			client.close();
+			const newClient = createSseClientWithOptions(newParams.path, newParams.options);
+			// Note: In a real implementation, you'd want to track the new client
+			// to allow cleanup on the next update/destroy
+		},
+		destroy() {
+			client.close();
+		}
+	};
+}

@@ -1,0 +1,36 @@
+{
+  "preferences": {
+    "quickEntryDictationShortcut": "capslock"
+  },
+  "mcpServers": {
+    "openscad": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--with",
+        "git+https://github.com/quellant/openscad-mcp.git",
+        "openscad-mcp"
+      ],
+      "env": {
+        "OPENSCAD_PATH": "/opt/homebrew/bin/openscad",
+        "OPENSCAD_MCP_CACHE_DIR": "/tmp/.openscad-mcp"
+      }
+    },
+    "context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp",
+        "--api-key",
+        "ctx7sk-bb4a51ab-0bf1-43a4-874f-f835bcadb081"
+      ]
+    },
+    "prompt-workflow": {
+      "command": "bun",
+      "args": [
+        "/Users/kd/repos/mcp/prompt-workflow/src/index.ts"
+      ],
+      "cwd": "/Users/kd/repos/mcp/prompt-workflow"
+    }
+  }
+}

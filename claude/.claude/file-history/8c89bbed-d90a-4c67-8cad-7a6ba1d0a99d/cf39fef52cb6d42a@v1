@@ -1,0 +1,140 @@
+import chalk from 'chalk';
+import { CATEGORY_COLORS } from './colors.js';
+import type { SortStatistics } from './statistics.js';
+import { useColor } from './verbosity.js';
+
+// Re-export SortStatistics for use in task-runner.ts
+export type { SortStatistics };
+
+/**
+ * Format SortStatistics as a human-readable summary.
+ *
+ * Per CONTEXT.md:
+ * - "Category breakdown format: Images: 47, Documents: 23, Videos: 5..."
+ * - "Always show count and reasons for skipped files"
+ * - "List all errors in summary with file path and reason"
+ *
+ * This implements LOG-03: "Summary shows total files moved,
+ * skipped, and errors."
+ *
+ * Output format (with colors):
+ * ```
+ * Moved 150 files in 2.3 seconds
+ *
+ * Images: 47, Documents: 23, Videos: 5, Audio: 12, Archives: 8, Code: 55
+ *
+ * Skipped: 3
+ *   - /Downloads/.hidden (hidden file)
+ *   - /Downloads/temp.tmp (excluded pattern)
+ *   - /Downloads/Images/photo.png (already categorized)
+ *
+ * Errors: 2
+ *   - /Downloads/locked.pdf: Permission denied
+ *   - /Downloads/corrupt.zip: File not found
+ * ```
+ *
+ * @param stats - SortStatistics from StatisticsCollector
+ * @returns Formatted summary string (with colors if TTY)
+ */
+export function formatSummary(stats: SortStatistics): string {
+  const shouldColor = useColor();
+  const lines: string[] = [];
+
+  // Line 1: Total moved and duration
+  const totalMoved = Array.from(stats.moved.values()).reduce((sum, count) => sum + count, 0);
+  const duration = ((stats.endTime - stats.startTime) / 1000).toFixed(1);
+  const movedLine = shouldColor
+    ? chalk.green(`Moved ${totalMoved} files in ${duration} seconds`)
+    : `Moved ${totalMoved} files in ${duration} seconds`;
+  lines.push(movedLine);
+
+  // Line 2: Category breakdown (if any files moved)
+  if (totalMoved > 0) {
+    const categories = Array.from(stats.moved.entries())
+      .map(([cat, count]) => {
+        const coloredCat = shouldColor ? CATEGORY_COLORS[cat as keyof typeof CATEGORY_COLORS]?.(cat) ?? cat : cat;
+        return `${coloredCat}: ${count}`;
+      })
+      .join(', ');
+    lines.push('');
+    lines.push(categories);
+  }
+
+  // Section: Skipped files (if any)
+  if (stats.skipped.length > 0) {
+    lines.push('');
+    const skippedHeader = shouldColor
+      ? chalk.yellow(`Skipped: ${stats.skipped.length}`)
+      : `Skipped: ${stats.skipped.length}`;
+    lines.push(skippedHeader);
+
+    // Show up to 5 skipped files, then "and X more"
+    const displayLimit = 5;
+    const toDisplay = stats.skipped.slice(0, displayLimit);
+    const remaining = stats.skipped.length - displayLimit;
+
+    for (const { file, reason } of toDisplay) {
+      // Show basename only for cleaner output (not full path)
+      const basename = file.split('/').pop() ?? file;
+      const fileDisplay = shouldColor ? chalk.dim(basename) : basename;
+      const reasonDisplay = shouldColor ? chalk.dim(`(${reason})`) : `(${reason})`;
+      lines.push(`  - ${fileDisplay} ${reasonDisplay}`);
+    }
+
+    if (remaining > 0) {
+      const moreLine = shouldColor
+        ? chalk.dim(`  ... and ${remaining} more`)
+        : `  ... and ${remaining} more`;
+      lines.push(moreLine);
+    }
+  }
+
+  // Section: Errors (if any)
+  if (stats.errors.length > 0) {
+    lines.push('');
+    const errorsHeader = shouldColor
+      ? chalk.red(`Errors: ${stats.errors.length}`)
+      : `Errors: ${stats.errors.length}`;
+    lines.push(errorsHeader);
+
+    for (const { file, error } of stats.errors) {
+      // Show basename only for cleaner output
+      const basename = file.split('/').pop() ?? file;
+      const fileDisplay = shouldColor ? chalk.red(basename) : basename;
+      const errorDisplay = shouldColor ? chalk.dim(error) : error;
+      lines.push(`  - ${fileDisplay}: ${errorDisplay}`);
+    }
+  }
+
+  return lines.join('\n');
+}
+
+/**
+ * Format a single-line summary for silent mode.
+ *
+ * Compact version: "Moved 150 files in 2.3 seconds (3 skipped, 2 errors)"
+ *
+ * @param stats - SortStatistics from StatisticsCollector
+ * @returns Single-line summary string
+ */
+export function formatSummaryCompact(stats: SortStatistics): string {
+  const shouldColor = useColor();
+  const totalMoved = Array.from(stats.moved.values()).reduce((sum, count) => sum + count, 0);
+  const duration = ((stats.endTime - stats.startTime) / 1000).toFixed(1);
+
+  let line = `Moved ${totalMoved} files in ${duration} seconds`;
+
+  const parts: string[] = [];
+  if (stats.skipped.length > 0) {
+    parts.push(`${stats.skipped.length} skipped`);
+  }
+  if (stats.errors.length > 0) {
+    parts.push(`${stats.errors.length} errors`);
+  }
+
+  if (parts.length > 0) {
+    line += ` (${parts.join(', ')})`;
+  }
+
+  return shouldColor ? chalk.green(line) : line;
+}

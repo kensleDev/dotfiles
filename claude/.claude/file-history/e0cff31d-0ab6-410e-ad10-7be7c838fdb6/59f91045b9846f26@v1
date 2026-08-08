@@ -1,0 +1,58 @@
+# Phase 5: User Confirmation - Context
+
+**Gathered:** 2026-02-07
+**Status:** Ready for planning
+
+## Phase Boundary
+
+Interactive confirmation prompts before executing file moves in the sort command. User sees what will happen and confirms before any destructive operations. This phase does NOT add new sorting capabilities — it adds confirmation to the existing sort command flow.
+
+## Implementation Decisions
+
+### Confirmation timing
+- Prompt appears AFTER dry-run preview, BEFORE lock acquisition
+- This order ensures user sees preview without holding lock
+- Stale lock acceptance counts as confirmation (if user accepts stale lock override, that's their confirmation — don't prompt again)
+- Show confirmation even if zero files to move (e.g., "0 files will be moved. Proceed?")
+- Active lock detection exits immediately with message in dry-run output, no confirmation prompt
+
+### Confirmation content
+- Full file list + summary displayed in prompt
+- Format: One file per line (not grouped, not table)
+- Each line shows: `basename → category`
+- For 20+ files: Show first 10, then ask user if they want to view full list
+- Full list view: Display all files with same format, then offer to proceed
+
+### Prompt interaction
+- Options: y (yes/enter), n (no), v (view full list)
+- If user selects 'v': Show full list, then offer to proceed (y/n) again
+- Cancel ('n'): Exit 0 with message "Sort cancelled."
+- Enter key defaults to 'y' (proceed)
+
+### Skip confirmation behavior
+- `--yes` flag is ignored without `--execute` (must have both to auto-confirm)
+- In CI environment: Auto-confirm AND warn user about `--yes` flag
+- CI detection: Check `CI` environment variable (standard CI=1)
+- CI auto-confirm exits with code 0 and message indicating auto-confirmation
+
+### Claude's Discretion
+- Exact prompt wording and phrasing
+- How to paginate very long file lists (1000+ files)
+- Color/styling of confirmation prompt
+- Exact warning message for CI auto-confirm
+
+## Specific Ideas
+
+- Show first 10 files, then "17 more files. View full list? (v/n)"
+- After viewing full list: "Proceed with these 27 changes? (y/n)"
+- Zero files: "0 files will be moved to /Downloads. Proceed? (y/n)"
+- CI warning: "CI detected: auto-confirming. Use --yes flag explicitly to silence this warning."
+
+## Deferred Ideas
+
+None — discussion stayed within phase scope.
+
+---
+
+*Phase: 05-user-confirmation*
+*Context gathered: 2026-02-07*

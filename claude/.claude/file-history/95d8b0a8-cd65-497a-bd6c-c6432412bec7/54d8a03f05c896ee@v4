@@ -1,0 +1,151 @@
+//---------------------------------
+// PLATE
+// -------------------------------
+switch_cutout_size = 14;
+key_spacing = 19.05;
+plate_thickness = 3;
+edge_margin = 2;
+rows = 5;
+cols = 3;
+
+plate_width = ((cols + 1) * key_spacing) + (2 * edge_margin);
+plate_height = (rows * key_spacing) + (2 * edge_margin);
+
+case_height = 18;
+plate_gap = 0.2;
+case_wall_thickness = 2;
+case_wall_multiplier = 3;
+
+// X-axis tilt configuration (tilt forward/back on Y-axis rotation)
+x_tilt_enabled = false;
+x_tilt_angle = 10;  // Angle in degrees (0-20) for X-axis tilt
+
+// Z-axis tilt configuration (rotate inward from top view)
+z_tilt_enabled = true;
+z_tilt_angle = 15;  // Angle in degrees (0-45) for Z-axis rotation inward
+
+//---------------------------------
+// SCREWS - M2
+// -------------------------------
+
+screw_hole_diameter = 2.3;
+counter_sink_diameter = 4.2;
+counter_sink_depth = 1.8;
+screw_positions = [
+  // Top pair (row 1/2 intersection) - near outer edge
+  [edge_margin + 1 * key_spacing, edge_margin + 1 * key_spacing],
+  [edge_margin + (cols) * key_spacing, edge_margin + 1 * key_spacing],
+  // Bottom pair - moved DOWN (lower Y = toward outer edge)
+  [edge_margin + 1 * key_spacing, edge_margin + 4 * key_spacing],
+  [edge_margin + (cols) * key_spacing, edge_margin + 4 * key_spacing],
+
+  // Middle - single
+  [edge_margin + (cols - 1) * key_spacing, edge_margin + 3 * key_spacing],
+];
+
+//---------------------------------
+// BRIDGE
+// -------------------------------
+is_full_height = true;
+user_height = 20;
+
+bridge_length = 55;  // Distance between the two halves
+bridge_height = is_full_height ? (plate_height - key_spacing) : user_height;
+
+//---------------------------------
+// TRACKPAD - Cirque TM040040 40mm
+// -------------------------------
+trackpad_enabled = false;
+trackpad_debug = false;           // Show trackpad mount in red for development
+
+trackpad_diameter = 40;           // mm, trackpad diameter
+trackpad_sensing_area = 38;       // mm, active sensing area
+trackpad_recess_depth = 1.5;      // mm, depth for friction mount
+trackpad_clearance = 0.3;         // mm, gap for easy insertion
+trackpad_height_offset = 10;      // mm, raise to keycap height (adjustable)
+trackpad_rotation = 7;            // degrees, clockwise (parameterized for right-hand bias)
+
+trackpad_cable_width = 13;        // mm, 12-pin FPC connector width
+trackpad_cable_thickness = 0.3;   // mm, ribbon cable thickness
+
+// Position parameters
+trackpad_x_offset = 0;            // mm, from center of bridge
+trackpad_y_offset = 0;             // mm, from center of bridge (positive = toward back)
+
+
+//---------------------------------
+// THUMB DIP
+// -------------------------------
+thumb_dip_enabled = true;       // Toggle thumb dip feature
+thumb_dip_debug = false;        // Show dip shape in red for development
+thumb_dip_smooth = true;        // Enable smooth transition for thumb dip
+
+thumb_dip_depth = 7;            // Depth of ledge in mm (down from top surface)
+thumb_dip_width = 60;           // Width of ledge in mm (spanning thumb cluster rows)
+thumb_dip_toward_bridge = 10.5;   // Move toward bridge in mm (diagonal, accounts for rotation)
+
+thumb_dip_length = 8;          // Length into case in mm (from edge inward)
+thumb_dip_start_x = 8;         // Offset from edge in mm (positive = further inward)
+thumb_dip_slant_angle = 35;     // Angle to slant sides inward (0 = vertical, 45 = diagonal)
+
+//---------------------------------
+// INSET POSTS
+// -------------------------------
+insert_hole_diameter = 3.2;  // Hole for M2 heat set insert
+insert_depth = 4;            // Depth of insert hole
+insert_post_diameter = 8;    // Outer diameter of the post (increased for strength)
+insert_post_height = 10;      // Height of the insert posts (independent of case height)
+
+//---------------------------------
+// SKIRT
+//-------------------------------
+skirt_enabled = true;         // Toggle inner skirt feature
+skirt_thickness = 2.5;        // Thickness of the inner skirt wall (2-3mm)
+
+//---------------------------------
+// USB PORT & PRO MICRO
+//-------------------------------
+// USB Port Cutout (through back wall)
+usb_cutout_enabled = true;           // Toggle USB port cutout feature
+usb_cutout_debug = true;            // Show USB cutout shape in red for development
+
+usb_cutout_width = 15;               // mm, USB-C cutout width (across wall)
+usb_cutout_height = 8;               // mm, USB-C cutout height (up wall)
+usb_cutout_depth = 10;               // mm, USB cutout depth through back wall
+
+// Position overrides (set to -1 to use auto-calculated position)
+usb_cutout_x = -1;                   // mm, X position override (-1 = auto: outer_x - cutout_depth)
+usb_cutout_y = -1;                   // mm, Y position override (-1 = auto: center_y - width/2)
+usb_cutout_z = -1;                   // mm, Z position override (-1 = auto: usb_cutout_z_position - height/2)
+
+// USB Recess (cavity in back wall for connector)
+usb_recess_enabled = false;          // Toggle USB recess feature (cavity for connector)
+usb_recess_debug = false;            // Show USB recess shape in orange for development
+
+usb_recess_width = 10;               // mm, recess width (across wall)
+usb_recess_height = 4;               // mm, recess height (up/down wall)
+usb_recess_depth = 4;                // mm, recess depth into wall from back
+
+// Position overrides (set to -1 to use auto-calculated position)
+usb_recess_x = -1;                   // mm, X position override (-1 = auto: outer_x - recess_depth)
+usb_recess_y = -1;                   // mm, Y position override (-1 = auto: center_y - width/2)
+usb_recess_z = -1;                   // mm, Z position override (-1 = auto: PCB level)
+
+pro_micro_overlap = 2;               // mm, Pro Micro overlap beyond inner wall
+raised_platform_enabled = true;      // Use raised platform for mounting
+bottom_trenches_enabled = false;     // Use bottom trenches for pin clearance (alternative)
+platform_height = 2.5;               // mm, height of raised platform
+trench_width = 4;                    // mm, width of bottom trenches
+trench_depth = 3;                    // mm, depth of bottom trenches
+
+pro_micro_tray_enabled = false;       // Toggle Pro Micro tray feature
+pro_micro_tray_width = 13;           // mm, tray width
+pro_micro_tray_length = 35;          // mm, tray length
+pro_micro_tray_height = 3;           // mm, tray height
+
+// Pro Micro dimensions (Arduino Pro Micro 5V/16MHz with USB-C)
+pro_micro_width = 18.28;             // mm, board width
+pro_micro_length = 33.02;            // mm, board length
+usb_connector_width = 8.25;          // mm, USB-C connector width
+usb_connector_height = 2.5;          // mm, USB-C connector height from PCB
+pin_row_spacing = 15.24;             // mm, spacing between pin rows (6 pins x 2.54mm)

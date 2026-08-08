@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en-GB" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Local Business Digital Audit — {{BUSINESS_NAME}}</title>
+<style>
+  :root {
+    --navy: #1a1a2e;
+    --navy-light: #16213e;
+    --coral: #e94560;
+    --green: #0ea96e;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --blue: #3b82f6;
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+    --shadow-lg: 0 12px 24px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.06);
+    --gauge-circ: 263.89;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--gray-800);
+    background: var(--gray-100);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ── Toolbar ── */
+  .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--navy);
+    padding: 10px 14px;
+    padding-left: max(14px, env(safe-area-inset-left));
+    padding-right: max(14px, env(safe-area-inset-right));
+    padding-top: max(10px, env(safe-area-inset-top));
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .toolbar .brand {
+    color: #fff;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    margin-right: auto;
+    opacity: 0.85;
+    white-space: nowrap;
+  }
+  .toolbar button {
+    padding: 7px 12px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    font-family: inherit;
+    white-space: nowrap;
+  }
+  .btn-int { background: transparent; color: rgba(255,255,255,0.8); }
+  .btn-int:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .btn-int.active { background: var(--coral); border-color: var(--coral); color: #fff; }
+  .btn-print { background: #fff; color: var(--navy); }
+  .btn-print:hover { background: var(--gray-200); }
+
+  /* ── Report container ── */
+  .report {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 20px 16px 64px;
+  }
+
+  /* ── Cover ── */
+  .cover {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+    color: #fff;
+    padding: 36px 24px 28px;
+    border-radius: var(--radius);
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::after {
+    content: '';
+    position: absolute;
+    top: -90px;
+    right: -90px;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: var(--coral);
+    opacity: 0.10;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    bottom: -120px;
+    left: -60px;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: var(--blue);
+    opacity: 0.06;
+  }
+  .cover > * { position: relative; }
+  .cover-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 14px;
+  }
+  .cover h1 {
+    font-size: clamp(26px, 6.5vw, 38px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+  }
+  .cover .subtitle {
+    font-size: clamp(14px, 3.5vw, 17px);
+    color: rgba(255,255,255,0.7);
+    font-weight: 400;
+  }
+  .cover-risk {
+    margin-top: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .cover-risk .risk-tag {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.5);
+  }
+  .cover-meta {
+    display: grid;
+    gap: 14px 24px;
+    margin-top: 24px;
+    grid-template-columns: 1fr;
+  }
+  .cover-meta-item { display: flex; flex-direction: column; gap: 2px; }
+  .cover-meta-item .label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.45);
+  }
+  .cover-meta-item .value {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.9);
+    word-break: break-word;
+  }
+
+  /* ── Info bar ── */
+  .info-bar {
+    display: grid;
+    gap: 14px;
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+    grid-template-columns: 1fr;
+  }
+  .info-stat { display: flex; flex-direction: column; gap: 2px; }
+  .info-stat .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gray-400);
+  }
+  .info-stat .value { font-size: 15px; font-weight: 600; color: var(--gray-800); }
+  .info-stat.rating .stars { color: var(--amber); font-size: 14px; letter-spacing: 1px; }
+  .info-stat.rating .numeric { font-weight: 700; }
+
+  /* ── Section cards ── */
+  .section {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 22px 20px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .section-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-icon svg { width: 19px; height: 19px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .section-header h2 {
+    font-size: clamp(17px, 4vw, 19px);
+    font-weight: 700;
+    color: var(--gray-900);
+    letter-spacing: -0.01em;
+  }
+  .icon-summary { background: #eef2ff; color: #4338ca; }
+  .icon-scores { background: #fef3c7; color: #d97706; }
+  .icon-good { background: #d1fae5; color: #059669; }
+  .icon-opp { background: #fee2e2; color: #dc2626; }
+  .icon-find { background: #e0e7ff; color: #4f46e5; }
+  .icon-plan { background: #fce7f3; color: #db2777; }
+  .icon-quick { background: #d1fae5; color: #059669; }
+  .icon-offer { background: #fef3c7; color: #b45309; }
+  .icon-notes { background: var(--gray-100); color: var(--gray-500); }
+  .icon-comp { background: #dbeafe; color: #2563eb; }
+
+  /* ── Executive summary ── */
+  .exec-summary p {
+    font-size: 16px;
+    color: var(--gray-700);
+    line-height: 1.7;
+  }
+  .exec-summary p + p { margin-top: 12px; }
+
+  /* ── Score gauges ── */
+  .gauges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 18px 12px;
+  }
+  .gauge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .gauge-ring {
+    position: relative;
+    width: 100%;
+    max-width: 150px;
+    aspect-ratio: 1;
+    margin-bottom: 8px;
+  }
+  .gauge-svg { width: 100%; height: 100%; transform: rotate(-90deg); display: block; }
+  .gauge-track { fill: none; stroke: var(--gray-200); stroke-width: 8; }
+  .gauge-fill {
+    fill: none;
+    stroke: var(--gauge-color, var(--gray-400));
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: var(--gauge-circ);
+    stroke-dashoffset: var(--gauge-circ);
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .gauges-grid.in-view .gauge-fill { stroke-dashoffset: var(--gauge-target, var(--gauge-circ)); }
+  .gauge:nth-child(2) .gauge-fill { transition-delay: 0.1s; }
+  .gauge:nth-child(3) .gauge-fill { transition-delay: 0.2s; }
+  .gauge:nth-child(4) .gauge-fill { transition-delay: 0.3s; }
+  .gauge:nth-child(5) .gauge-fill { transition-delay: 0.4s; }
+  .gauge-num {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(22px, 5vw, 28px);
+    font-weight: 800;
+    color: var(--gauge-color, var(--gray-800));
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .gauge-num .gauge-max { font-size: 0.5em; font-weight: 600; color: var(--gray-400); margin-left: 1px; }
+  .gauge-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-600);
+    line-height: 1.3;
+  }
+  .score-band-good { --gauge-color: var(--green); }
+  .score-band-mid  { --gauge-color: var(--amber); }
+  .score-band-low  { --gauge-color: var(--red); }
+  .score-band-none { --gauge-color: var(--gray-300); }
+  .score-band-none .gauge-fill { display: none; }
+
+  .score-note {
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid var(--gray-200);
+    font-size: 13px;
+    color: var(--gray-400);
+  }
+
+  /* Risk badge (used on cover) */
+  .badge {
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .badge-low { background: rgba(14,169,110,0.25); color: #6ee7b7; border: 1px solid rgba(110,231,183,0.4); }
+  .badge-medium { background: rgba(245,158,11,0.25); color: #fcd34d; border: 1px solid rgba(252,211,77,0.4); }
+  .badge-high { background: rgba(239,68,68,0.25); color: #fca5a5; border: 1px solid rgba(252,165,165,0.4); }
+
+  /* ── What's working well ── */
+  .working-well { border-left: 4px solid var(--green); }
+  .working-well ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .working-well li {
+    padding-left: 26px;
+    position: relative;
+    font-size: 14.5px;
+    color: var(--gray-700);
+  }
+  .working-well li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--green);
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  /* ── 3 opportunities ── */
+  .opp-cards { display: grid; gap: 12px; }
+  .opp-card {
+    display: flex;
+    gap: 14px;
+    padding: 18px 18px;
+    background: var(--gray-50);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--gray-200);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .opp-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--coral);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .opp-content h4 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 4px;
+  }
+  .opp-content p {
+    font-size: 13.5px;
+    color: var(--gray-500);
+    line-height: 1.55;
+  }
+
+  /* ── Findings accordion ── */
+  details.finding {
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  details.finding[open] { border-color: var(--gray-300); }
+  details.finding summary {
+    padding: 14px 16px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--gray-800);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    user-select: none;
+    background: var(--gray-50);
+  }
+  details.finding summary::-webkit-details-marker { display: none; }
+  details.finding summary::before {
+    content: '›';
+    display: inline-block;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gray-400);
+    transition: transform 0.2s;
+    width: 20px;
+    text-align: center;
+    line-height: 1;
+  }
+  details.finding[open] summary::before { transform: rotate(90deg); color: var(--coral); }
+  details.finding[open] summary { background: #fff; border-bottom: 1px solid var(--gray-200); }
+  .finding-body { padding: 16px 16px; }
+
+  /* ── Responsive tables (mobile-first: stacked cards) ── */
+  table.responsive { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  table.responsive thead { display: none; }
+  table.responsive tr {
+    display: block;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  table.responsive tr:last-child { border-bottom: none; }
+  table.responsive td {
+    display: block;
+    padding: 3px 0;
+    text-align: left;
+    border: none;
+    font-size: 13.5px;
+  }
+  table.responsive td::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--gray-400);
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  table.responsive td:first-child {
+    font-weight: 600;
+    color: var(--gray-900);
+    padding-top: 0;
+  }
+  td.status-good { color: var(--green); font-weight: 600; }
+  td.status-warn { color: var(--amber); font-weight: 600; }
+  td.status-bad { color: var(--red); font-weight: 600; }
+
+  .finding-issue {
+    margin-top: 16px;
+    padding: 14px 16px;
+    background: var(--gray-50);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    color: var(--gray-700);
+    line-height: 1.65;
+    border-left: 3px solid var(--coral);
+  }
+  .finding-issue strong { color: var(--gray-900); }
+
+  blockquote.review-quote {
+    margin: 14px 0 0;
+    padding: 14px 16px;
+    background: #fff;
+    border-left: 3px solid var(--amber);
+    font-style: italic;
+    color: var(--gray-600);
+    font-size: 13.5px;
+    line-height: 1.6;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+  blockquote.review-quote .attr {
+    display: block;
+    margin-top: 6px;
+    font-style: normal;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gray-400);
+  }
+
+  /* ── Priority action plan (extra cell styling on mobile) ── */
+  .action-plan-table td[data-label="#"] { font-weight: 800; font-size: 17px; color: var(--coral); }
+  .effort {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  .effort-low { background: #d1fae5; color: #065f46; }
+  .effort-medium { background: #fef3c7; color: #92400e; }
+  .effort-high { background: #fee2e2; color: #991b1b; }
+
+  /* ── Quick wins ── */
+  .quick-wins-intro { font-size: 13.5px; color: var(--gray-500); margin-bottom: 12px; }
+  .quick-wins-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .quick-wins-list li {
+    padding: 12px 14px 12px 40px;
+    background: var(--gray-50);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    color: var(--gray-700);
+    position: relative;
+    border-left: 3px solid var(--green);
+  }
+  .quick-wins-list li::before {
+    content: '☐';
+    position: absolute;
+    left: 14px;
+    top: 11px;
+    font-size: 16px;
+    color: var(--gray-400);
+  }
+
+  /* ── Service offer ── */
+  .offer-intro { font-size: 13.5px; color: var(--gray-500); margin-bottom: 14px; }
+  .offer-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .offer-card {
+    padding: 18px 18px;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    background: var(--gray-50);
+  }
+  .offer-card h4 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 8px;
+  }
+  .offer-card ul {
+    list-style: none;
+    font-size: 13px;
+    color: var(--gray-600);
+    line-height: 1.7;
+  }
+  .offer-card ul li::before { content: '— '; color: var(--gray-400); }
+  .offer-foot { font-size: 12.5px; color: var(--gray-400); margin-top: 14px; }
+
+  /* ── Notes ── */
+  .notes-section p {
+    font-size: 13.5px;
+    color: var(--gray-500);
+    line-height: 1.65;
+  }
+  .notes-section p + p { margin-top: 8px; }
+
+  /* ── Local competitive context ── */
+  .comp-intro { font-size: 14px; color: var(--gray-600); margin-bottom: 14px; }
+  .competitor-cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .competitor-card {
+    padding: 18px 18px;
+    background: var(--gray-50);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--gray-200);
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .competitor-card h4 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 10px;
+  }
+  .competitor-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    margin-bottom: 10px;
+    font-size: 13px;
+  }
+  .comp-rating { color: var(--amber); font-weight: 700; }
+  .comp-reviews { color: var(--gray-600); font-weight: 500; }
+  .comp-distance { color: var(--gray-400); font-size: 12px; align-self: center; }
+  .competitor-note {
+    font-size: 13px;
+    color: var(--gray-500);
+    font-style: italic;
+    line-height: 1.5;
+    margin: 0;
+  }
+  .benchmark-callout {
+    margin-top: 18px;
+    padding: 14px 16px;
+    background: #eff6ff;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    color: var(--gray-700);
+    line-height: 1.65;
+    border-left: 3px solid var(--blue);
+  }
+  .benchmark-callout strong { color: #1e40af; }
+
+  /* ── Internal notes (hidden) ── */
+  .internal-notes {
+    margin-top: 28px;
+    padding-top: 28px;
+    border-top: 2px dashed var(--gray-300);
+  }
+  .internal-notes.hidden { display: none; }
+  .internal-notes .section {
+    border: 1px solid var(--amber);
+    background: #fffbeb;
+  }
+  .internal-notes .section-header h2 { color: #92400e; }
+  .internal-intro { margin-bottom: 18px; }
+  .internal-badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    background: #fef3c7;
+    color: #92400e;
+  }
+  .int-table { margin-top: 12px; }
+  .int-table td { font-size: 13px; }
+  .int-table td:first-child { font-weight: 600; color: var(--gray-800); }
+  .int-subhead { font-size: 13px; font-weight: 600; color: var(--gray-700); margin-top: 16px; margin-bottom: 4px; }
+  .int-list { font-size: 13px; color: var(--gray-600); padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }
+
+  /* ── Footer ── */
+  .report-footer {
+    text-align: center;
+    padding: 32px 0 16px;
+    color: var(--gray-400);
+    font-size: 12px;
+  }
+  .report-footer p + p { margin-top: 4px; }
+
+  /* ── Focus / a11y ── */
+  button:focus-visible, summary:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+  .btn-print:focus-visible { outline-color: var(--navy); }
+
+  @media (prefers-reduced-motion: reduce) {
+    html:not(.no-js) .reveal,
+    html:not(.no-js) .reveal-stagger > * { opacity: 1 !important; transform: none !important; transition: none !important; }
+    html:not(.no-js) .cover > *,
+    html:not(.no-js) .gauges-grid .gauge,
+    html:not(.no-js) details.finding[open] .finding-body { animation: none !important; opacity: 1 !important; }
+    .gauge-fill, .opp-card, .offer-card, .quick-wins-list li, .opp-num, .badge, .effort { transition: none !important; }
+    .scroll-progress > div { transition: none !important; }
+    * { scroll-behavior: auto !important; }
+  }
+
+  /* ── Very small screens — keep toolbar on one row ── */
+  @media (max-width: 400px) {
+    .toolbar { padding: 8px 12px; gap: 6px; }
+    .toolbar .brand { font-size: 12px; max-width: 90px; overflow: hidden; text-overflow: ellipsis; }
+    .toolbar button { padding: 6px 10px; font-size: 12px; }
+  }
+
+  /* ── Tablet & up ── */
+  @media (min-width: 640px) {
+    .toolbar { padding: 10px 24px; padding-left: max(24px, env(safe-area-inset-left)); padding-right: max(24px, env(safe-area-inset-right)); }
+    .report { padding: 32px 24px 80px; }
+    .cover { padding: 48px 40px 40px; }
+    .cover-meta { grid-template-columns: repeat(3, auto); gap: 14px 32px; }
+    .info-bar { grid-template-columns: repeat(3, 1fr); align-items: center; padding: 20px 28px; }
+    .section { padding: 30px 32px; margin-bottom: 22px; }
+    .section-icon { width: 40px; height: 40px; }
+    .section-icon svg { width: 20px; height: 20px; }
+    .opp-cards { gap: 14px; }
+    .opp-card { padding: 20px 24px; }
+    .opp-card:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+    .offer-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .competitor-cards { grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .competitor-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .finding-body { padding: 20px 24px; }
+
+    /* tables become real tables */
+    table.responsive thead { display: table-header-group; }
+    table.responsive tr { display: table-row; padding: 0; border-bottom: none; }
+    table.responsive td {
+      display: table-cell;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--gray-100);
+      text-align: left;
+    }
+    table.responsive td::before { content: none; margin-bottom: 0; }
+    table.responsive td:first-child { font-weight: 500; color: var(--gray-700); padding-top: 10px; }
+    table.responsive th {
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--gray-400);
+      font-weight: 600;
+      background: var(--gray-50);
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .action-plan-table td[data-label="#"] { font-size: 18px; }
+    .int-table td:first-child { width: 220px; }
+  }
+
+  /* ── Desktop ── */
+  @media (min-width: 900px) {
+    .cover h1 { font-size: 38px; }
+    .gauges-grid { grid-template-columns: repeat(5, 1fr); gap: 20px 16px; }
+  }
+
+  /* ── Scroll progress bar ── */
+  .scroll-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: rgba(255,255,255,0.08);
+    overflow: hidden;
+  }
+  .scroll-progress > div {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, var(--coral), var(--amber));
+    transition: width 0.1s linear;
+  }
+
+  /* ── Reveal animations (scroll-triggered) ── */
+  html:not(.no-js) .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  html:not(.no-js) .reveal.in-view {
+    opacity: 1;
+    transform: none;
+  }
+  html:not(.no-js) .reveal-stagger > * {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  html:not(.no-js) .reveal-stagger.in-view > * { opacity: 1; transform: none; }
+  html:not(.no-js) .reveal-stagger.in-view > *:nth-child(1) { transition-delay: 0.05s; }
+  html:not(.no-js) .reveal-stagger.in-view > *:nth-child(2) { transition-delay: 0.13s; }
+  html:not(.no-js) .reveal-stagger.in-view > *:nth-child(3) { transition-delay: 0.21s; }
+  html:not(.no-js) .reveal-stagger.in-view > *:nth-child(4) { transition-delay: 0.29s; }
+  html:not(.no-js) .reveal-stagger.in-view > *:nth-child(5) { transition-delay: 0.37s; }
+  html:not(.no-js) .reveal-stagger.in-view > *:nth-child(6) { transition-delay: 0.45s; }
+
+  /* ── Cover cascade entrance (on load) ── */
+  @keyframes coverIn {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: none; }
+  }
+  html:not(.no-js) .cover > * { animation: coverIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
+  html:not(.no-js) .cover > *:nth-child(1) { animation-delay: 0.05s; }
+  html:not(.no-js) .cover > *:nth-child(2) { animation-delay: 0.15s; }
+  html:not(.no-js) .cover > *:nth-child(3) { animation-delay: 0.25s; }
+  html:not(.no-js) .cover > *:nth-child(4) { animation-delay: 0.35s; }
+  html:not(.no-js) .cover > *:nth-child(5) { animation-delay: 0.45s; }
+
+  /* ── Gauge pop on enter ── */
+  @keyframes gaugePop {
+    from { opacity: 0; transform: scale(0.82); }
+    to   { opacity: 1; transform: none; }
+  }
+  html:not(.no-js) .gauges-grid .gauge {
+    opacity: 0;
+    animation: gaugePop 0.6s cubic-bezier(0.34, 1.3, 0.64, 1) both;
+    animation-play-state: paused;
+  }
+  html:not(.no-js) .gauges-grid.in-view .gauge { animation-play-state: running; }
+  html:not(.no-js) .gauges-grid.in-view .gauge:nth-child(2) { animation-delay: 0.08s; }
+  html:not(.no-js) .gauges-grid.in-view .gauge:nth-child(3) { animation-delay: 0.16s; }
+  html:not(.no-js) .gauges-grid.in-view .gauge:nth-child(4) { animation-delay: 0.24s; }
+  html:not(.no-js) .gauges-grid.in-view .gauge:nth-child(5) { animation-delay: 0.32s; }
+
+  /* ── Details accordion open ── */
+  @keyframes findingIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: none; }
+  }
+  html:not(.no-js) details.finding[open] .finding-body {
+    animation: findingIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* ── Hover micro-interactions ── */
+  .opp-card, .offer-card, .quick-wins-list li {
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .opp-num, .badge, .effort { transition: transform 0.18s cubic-bezier(0.34, 1.4, 0.64, 1); }
+  .opp-card:hover .opp-num { transform: scale(1.1); }
+  .opp-card:hover, .offer-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+  /* ── Print styles ── */
+  @media print {
+    .toolbar { display: none !important; }
+    body { background: #fff; font-size: 13px; }
+    .report { max-width: 100%; padding: 0; }
+    .section, .cover { box-shadow: none; break-inside: avoid; }
+    .cover { background: var(--navy) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .cover::after, .cover::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .section { border: 1px solid var(--gray-200); margin-bottom: 16px; }
+    .internal-notes, .internal-notes.hidden { display: block !important; }
+
+    /* force real table layout in print */
+    table.responsive thead { display: table-header-group !important; }
+    table.responsive tr { display: table-row !important; padding: 0 !important; border-bottom: none !important; }
+    table.responsive td {
+      display: table-cell !important;
+      padding: 8px 12px !important;
+      border-bottom: 1px solid var(--gray-100) !important;
+    }
+    table.responsive td::before { content: none !important; }
+    table.responsive th { display: table-cell !important; }
+
+    .gauge-fill { -webkit-print-color-adjust: exact; print-color-adjust: exact; stroke-dashoffset: var(--gauge-target, var(--gauge-circ)) !important; }
+    .gauge-num, .badge, .effort, .opp-num, .section-icon { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .reveal, .reveal-stagger > * { opacity: 1 !important; transform: none !important; }
+    .gauges-grid .gauge { opacity: 1 !important; animation: none !important; }
+    details.finding { break-inside: avoid; }
+    details.finding[open] summary { background: #fff !important; -webkit-print-color-adjust: exact; }
+    .opp-card, .offer-card, .quick-wins-list li { break-inside: avoid; }
+    .competitor-card, .benchmark-callout { break-inside: avoid; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    @page { margin: 18mm; }
+  }
+</style>
+<script>document.documentElement.classList.remove('no-js');</script>
+</head>
+<body>
+
+<!-- ═══════════════ TOOLBAR ═══════════════ -->
+<div class="toolbar">
+  <span class="brand">Audit Report</span>
+  <button class="btn-int" id="btnInternal" onclick="toggleInternal()">Show Internal Notes</button>
+  <button class="btn-print" onclick="window.print()">Print / Save PDF</button>
+  <div class="scroll-progress"><div id="scrollProgress"></div></div>
+</div>
+
+<!-- ═══════════════ REPORT ═══════════════ -->
+<div class="report">
+
+  <!-- ── Cover ── -->
+  <header class="cover">
+    <div class="cover-label">Local Business Digital Audit</div>
+    <h1>{{BUSINESS_NAME}}</h1>
+    <div class="subtitle">{{BUSINESS_TYPE}} &middot; {{TOWN}}</div>
+    <div class="cover-risk">
+      <span class="risk-tag">Risk level</span>
+      <span class="badge badge-{{RISK_CLASS}}">{{RISK_LEVEL}}</span>
+    </div>
+    <div class="cover-meta">
+      <div class="cover-meta-item">
+        <span class="label">Website</span>
+        <span class="value">{{WEBSITE_URL}}</span>
+      </div>
+      <div class="cover-meta-item">
+        <span class="label">Date</span>
+        <span class="value">{{DATE}}</span>
+      </div>
+      <div class="cover-meta-item">
+        <span class="label">Google Reviews</span>
+        <span class="value">{{REVIEW_COUNT}} &middot; {{AVERAGE_RATING}}</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Executive Summary ── -->
+  <section class="section reveal exec-summary">
+    <div class="section-header">
+      <div class="section-icon icon-summary"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+      <h2>Executive Summary</h2>
+    </div>
+    {{EXECUTIVE_SUMMARY}}
+  </section>
+
+  <!-- ── Score Snapshot ── -->
+  <section class="section reveal">
+    <div class="section-header">
+      <div class="section-icon icon-scores"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+      <h2>Score Snapshot</h2>
+    </div>
+    <div class="gauges-grid">
+      <div class="gauge score-band-{{SCORE_BAND_1}}">
+        <div class="gauge-ring">
+          <svg class="gauge-svg" viewBox="0 0 100 100" role="img" aria-label="{{SCORE_LABEL_1}}: {{SCORE_VALUE_1}} out of 10">
+            <circle class="gauge-track" cx="50" cy="50" r="42"/>
+            <circle class="gauge-fill" cx="50" cy="50" r="42" style="--gauge-target: calc(var(--gauge-circ) * (1 - {{SCORE_VALUE_1}} / 10))"/>
+          </svg>
+          <div class="gauge-num">{{SCORE_VALUE_1}}<span class="gauge-max">/10</span></div>
+        </div>
+        <div class="gauge-label">{{SCORE_LABEL_1}}</div>
+      </div>
+      <div class="gauge score-band-{{SCORE_BAND_2}}">
+        <div class="gauge-ring">
+          <svg class="gauge-svg" viewBox="0 0 100 100" role="img" aria-label="{{SCORE_LABEL_2}}: {{SCORE_VALUE_2}} out of 10">
+            <circle class="gauge-track" cx="50" cy="50" r="42"/>
+            <circle class="gauge-fill" cx="50" cy="50" r="42" style="--gauge-target: calc(var(--gauge-circ) * (1 - {{SCORE_VALUE_2}} / 10))"/>
+          </svg>
+          <div class="gauge-num">{{SCORE_VALUE_2}}<span class="gauge-max">/10</span></div>
+        </div>
+        <div class="gauge-label">{{SCORE_LABEL_2}}</div>
+      </div>
+      <div class="gauge score-band-{{SCORE_BAND_3}}">
+        <div class="gauge-ring">
+          <svg class="gauge-svg" viewBox="0 0 100 100" role="img" aria-label="{{SCORE_LABEL_3}}: {{SCORE_VALUE_3}} out of 10">
+            <circle class="gauge-track" cx="50" cy="50" r="42"/>
+            <circle class="gauge-fill" cx="50" cy="50" r="42" style="--gauge-target: calc(var(--gauge-circ) * (1 - {{SCORE_VALUE_3}} / 10))"/>
+          </svg>
+          <div class="gauge-num">{{SCORE_VALUE_3}}<span class="gauge-max">/10</span></div>
+        </div>
+        <div class="gauge-label">{{SCORE_LABEL_3}}</div>
+      </div>
+      <div class="gauge score-band-{{SCORE_BAND_4}}">
+        <div class="gauge-ring">
+          <svg class="gauge-svg" viewBox="0 0 100 100" role="img" aria-label="{{SCORE_LABEL_4}}: {{SCORE_VALUE_4}} out of 10">
+            <circle class="gauge-track" cx="50" cy="50" r="42"/>
+            <circle class="gauge-fill" cx="50" cy="50" r="42" style="--gauge-target: calc(var(--gauge-circ) * (1 - {{SCORE_VALUE_4}} / 10))"/>
+          </svg>
+          <div class="gauge-num">{{SCORE_VALUE_4}}<span class="gauge-max">/10</span></div>
+        </div>
+        <div class="gauge-label">{{SCORE_LABEL_4}}</div>
+      </div>
+      <div class="gauge score-band-{{SCORE_BAND_5}}">
+        <div class="gauge-ring">
+          <svg class="gauge-svg" viewBox="0 0 100 100" role="img" aria-label="{{SCORE_LABEL_5}}: {{SCORE_VALUE_5}} out of 10">
+            <circle class="gauge-track" cx="50" cy="50" r="42"/>
+            <circle class="gauge-fill" cx="50" cy="50" r="42" style="--gauge-target: calc(var(--gauge-circ) * (1 - {{SCORE_VALUE_5}} / 10))"/>
+          </svg>
+          <div class="gauge-num">{{SCORE_VALUE_5}}<span class="gauge-max">/10</span></div>
+        </div>
+        <div class="gauge-label">{{SCORE_LABEL_5}}</div>
+      </div>
+    </div>
+    <p class="score-note">Scores are directional — use them to prioritise, not to grade.</p>
+  </section>
+
+  <!-- ── What's Working Well ── -->
+  <section class="section reveal working-well">
+    <div class="section-header">
+      <div class="section-icon icon-good"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+      <h2>What's Working Well</h2>
+    </div>
+    <ul class="reveal-stagger">
+      {{WORKING_WELL_ITEMS}}
+    </ul>
+  </section>
+
+  <!-- ── Local Competitive Context ── -->
+  <section class="section reveal">
+    <div class="section-header">
+      <div class="section-icon icon-comp"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      <h2>Local Competitive Context</h2>
+    </div>
+    <p class="comp-intro">The 3 businesses most likely to appear when someone in {{TOWN}} searches for {{BUSINESS_TYPE}}:</p>
+    <div class="competitor-cards reveal-stagger">
+      <div class="competitor-card">
+        <h4>{{COMPETITOR_1_NAME}}</h4>
+        <div class="competitor-stats">
+          <span class="comp-rating">&#9733; {{COMPETITOR_1_RATING}}</span>
+          <span class="comp-reviews">{{COMPETITOR_1_REVIEWS}} reviews</span>
+          <span class="comp-distance">{{COMPETITOR_1_DISTANCE}}</span>
+        </div>
+        <p class="competitor-note">{{COMPETITOR_1_NOTE}}</p>
+      </div>
+      <div class="competitor-card">
+        <h4>{{COMPETITOR_2_NAME}}</h4>
+        <div class="competitor-stats">
+          <span class="comp-rating">&#9733; {{COMPETITOR_2_RATING}}</span>
+          <span class="comp-reviews">{{COMPETITOR_2_REVIEWS}} reviews</span>
+          <span class="comp-distance">{{COMPETITOR_2_DISTANCE}}</span>
+        </div>
+        <p class="competitor-note">{{COMPETITOR_2_NOTE}}</p>
+      </div>
+      <div class="competitor-card">
+        <h4>{{COMPETITOR_3_NAME}}</h4>
+        <div class="competitor-stats">
+          <span class="comp-rating">&#9733; {{COMPETITOR_3_RATING}}</span>
+          <span class="comp-reviews">{{COMPETITOR_3_REVIEWS}} reviews</span>
+          <span class="comp-distance">{{COMPETITOR_3_DISTANCE}}</span>
+        </div>
+        <p class="competitor-note">{{COMPETITOR_3_NOTE}}</p>
+      </div>
+    </div>
+    <div class="benchmark-callout">
+      <strong>How you compare:</strong> {{COMPETITOR_BENCHMARK}}
+    </div>
+  </section>
+
+  <!-- ── 3 Biggest Opportunities ── -->
+  <section class="section reveal">
+    <div class="section-header">
+      <div class="section-icon icon-opp"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+      <h2>The 3 Biggest Opportunities</h2>
+    </div>
+    <div class="opp-cards reveal-stagger">
+      <div class="opp-card">
+        <div class="opp-num">1</div>
+        <div class="opp-content">
+          <h4>{{OPPORTUNITY_1_TITLE}}</h4>
+          <p>{{OPPORTUNITY_1_FIX}}</p>
+        </div>
+      </div>
+      <div class="opp-card">
+        <div class="opp-num">2</div>
+        <div class="opp-content">
+          <h4>{{OPPORTUNITY_2_TITLE}}</h4>
+          <p>{{OPPORTUNITY_2_FIX}}</p>
+        </div>
+      </div>
+      <div class="opp-card">
+        <div class="opp-num">3</div>
+        <div class="opp-content">
+          <h4>{{OPPORTUNITY_3_TITLE}}</h4>
+          <p>{{OPPORTUNITY_3_FIX}}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Findings ── -->
+  <section class="section reveal">
+    <div class="section-header">
+      <div class="section-icon icon-find"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+      <h2>Detailed Findings</h2>
+    </div>
+
+    <!-- GBP -->
+    <details class="finding" open>
+      <summary>1. Google Business Profile</summary>
+      <div class="finding-body">
+        <table class="responsive">
+          <thead><tr><th>Element</th><th>Status</th><th>Notes</th></tr></thead>
+          <tbody>{{GBP_TABLE_ROWS}}</tbody>
+        </table>
+        <div class="finding-issue"><strong>The main GBP issue:</strong> {{GBP_MAIN_ISSUE}}</div>
+      </div>
+    </details>
+
+    <!-- Reviews -->
+    <details class="finding" open>
+      <summary>2. Reviews &amp; Trust</summary>
+      <div class="finding-body">
+        <table class="responsive">
+          <thead><tr><th>Element</th><th>Status</th><th>Notes</th></tr></thead>
+          <tbody>{{REVIEWS_TABLE_ROWS}}</tbody>
+        </table>
+        <div class="finding-issue"><strong>The main review issue:</strong> {{REVIEWS_MAIN_ISSUE}}</div>
+      </div>
+    </details>
+
+    <!-- Website -->
+    <details class="finding" open>
+      <summary>3. Website &amp; Mobile Journey</summary>
+      <div class="finding-body">
+        <table class="responsive">
+          <thead><tr><th>Element</th><th>Status</th><th>Notes</th></tr></thead>
+          <tbody>{{WEBSITE_TABLE_ROWS}}</tbody>
+        </table>
+        <div class="finding-issue"><strong>The main website issue:</strong> {{WEBSITE_MAIN_ISSUE}}</div>
+      </div>
+    </details>
+
+    <!-- Contact -->
+    <details class="finding">
+      <summary>4. Contact &amp; Ordering Flow</summary>
+      <div class="finding-body">
+        <table class="responsive">
+          <thead><tr><th>Element</th><th>Status</th><th>Notes</th></tr></thead>
+          <tbody>{{CONTACT_TABLE_ROWS}}</tbody>
+        </table>
+        <div class="finding-issue"><strong>The main flow issue:</strong> {{CONTACT_MAIN_ISSUE}}</div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ── Priority Action Plan ── -->
+  <section class="section reveal">
+    <div class="section-header">
+      <div class="section-icon icon-plan"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+      <h2>Priority Action Plan</h2>
+    </div>
+    <table class="responsive action-plan-table">
+      <thead><tr><th>#</th><th>Fix</th><th>Why it matters</th><th>Effort</th><th>Who</th></tr></thead>
+      <tbody>{{ACTION_PLAN_ROWS}}</tbody>
+    </table>
+  </section>
+
+  <!-- ── Quick Wins ── -->
+  <section class="section reveal">
+    <div class="section-header">
+      <div class="section-icon icon-quick"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+      <h2>Quick Wins</h2>
+    </div>
+    <p class="quick-wins-intro">Things you can fix in under an hour:</p>
+    <ul class="quick-wins-list reveal-stagger">
+      {{QUICK_WIN_ITEMS}}
+    </ul>
+  </section>
+
+  <!-- ── Optional Service Offer ── -->
+  <section class="section reveal">
+    <div class="section-header">
+      <div class="section-icon icon-offer"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+      <h2>Optional Done-For-You Support</h2>
+    </div>
+    <p class="offer-intro">If you would rather not do this yourself, I can help with:</p>
+    <div class="offer-grid reveal-stagger">
+      <div class="offer-card">
+        <h4>{{OFFER_1_TITLE}}</h4>
+        <ul><li>{{OFFER_1_DESC}}</li></ul>
+      </div>
+      <div class="offer-card">
+        <h4>{{OFFER_2_TITLE}}</h4>
+        <ul><li>{{OFFER_2_DESC}}</li></ul>
+      </div>
+      <div class="offer-card">
+        <h4>{{OFFER_3_TITLE}}</h4>
+        <ul><li>{{OFFER_3_DESC}}</li></ul>
+      </div>
+      <div class="offer-card">
+        <h4>{{OFFER_4_TITLE}}</h4>
+        <ul><li>{{OFFER_4_DESC}}</li></ul>
+      </div>
+    </div>
+    <p class="offer-foot">Price on request — ask me for a fixed quote based on what you want done.</p>
+  </section>
+
+  <!-- ── Notes & Limitations ── -->
+  <section class="section reveal notes-section">
+    <div class="section-header">
+      <div class="section-icon icon-notes"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
+      <h2>Notes &amp; Limitations</h2>
+    </div>
+    {{NOTES}}
+  </section>
+
+  <!-- ═══════════════ INTERNAL NOTES ═══════════════ -->
+  <div class="internal-notes hidden" id="internalNotes">
+    <div class="internal-intro">
+      <span class="internal-badge">Internal — Not for client delivery</span>
+    </div>
+
+    <!-- Evidence Quality -->
+    <section class="section reveal">
+      <div class="section-header"><h2>Evidence Quality</h2></div>
+      <table class="responsive int-table">
+        <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td data-label="Metric">Data completeness</td><td data-label="Value">{{EVIDENCE_QUALITY}}</td></tr>
+          <tr><td data-label="Metric">Sources accessed</td><td data-label="Value">{{SOURCES_COUNT}}</td></tr>
+        </tbody>
+      </table>
+      <h4 class="int-subhead">Evidence supplied:</h4>
+      <ul class="int-list">
+        {{EVIDENCE_SUPPLIED_ITEMS}}
+      </ul>
+    </section>
+
+    <!-- Risk Matrix -->
+    <section class="section reveal">
+      <div class="section-header"><h2>Risk Matrix</h2></div>
+      <table class="responsive">
+        <thead><tr><th>Flag</th><th>Severity</th><th>Detail</th></tr></thead>
+        <tbody>{{RISK_MATRIX_ROWS}}</tbody>
+      </table>
+    </section>
+
+    <!-- Multi-Platform Review Snapshot (internal only) -->
+    <section class="section reveal">
+      <div class="section-header"><h2>Multi-Platform Review Snapshot</h2></div>
+      <table class="responsive">
+        <thead><tr><th>Platform</th><th>Reviews</th><th>Rating</th><th>Last active</th><th>Reply activity</th><th>Notes</th></tr></thead>
+        <tbody>{{MULTI_PLATFORM_REVIEW_ROWS}}</tbody>
+      </table>
+      <div class="finding-issue"><strong>Rating disparity:</strong> {{REVIEW_DISPARITY_NOTE}}</div>
+    </section>
+
+    <!-- Main Issues (internal detail) -->
+    <section class="section reveal">
+      <div class="section-header"><h2>Main Issues &amp; Analysis</h2></div>
+      <ol class="int-list" style="list-style:decimal;padding-left:22px;">
+        {{MAIN_ISSUES_LIST}}
+      </ol>
+    </section>
+
+    <!-- Missing Evidence -->
+    <section class="section reveal">
+      <div class="section-header"><h2>Missing Evidence &amp; Manual Checks</h2></div>
+      <ul class="int-list">
+        {{MISSING_EVIDENCE_ITEMS}}
+      </ul>
+    </section>
+
+    <!-- Sources -->
+    <section class="section reveal">
+      <div class="section-header"><h2>Research Sources</h2></div>
+      <table class="responsive" style="font-size:12px;">
+        <thead><tr><th>Source</th><th>Data Gathered</th><th>Status</th><th>Timestamp</th></tr></thead>
+        <tbody>{{SOURCES_TABLE_ROWS}}</tbody>
+      </table>
+    </section>
+
+    <!-- Limitations -->
+    <section class="section reveal">
+      <div class="section-header"><h2>Limitations &amp; Caveats</h2></div>
+      {{LIMITATIONS}}
+    </section>
+  </div>
+
+  <!-- ── Footer ── -->
+  <div class="report-footer">
+    <p>Local Business Digital Audit &middot; {{BUSINESS_NAME}} &middot; {{DATE}}</p>
+    <p>Generated from publicly available evidence. Scores are directional — not a guarantee of any outcome.</p>
+  </div>
+
+</div>
+
+<script>
+  function toggleInternal() {
+    var el = document.getElementById('internalNotes');
+    var btn = document.getElementById('btnInternal');
+    var isHidden = el.classList.contains('hidden');
+    el.classList.toggle('hidden');
+    btn.textContent = isHidden ? 'Hide Internal Notes' : 'Show Internal Notes';
+    btn.classList.toggle('active', isHidden);
+    if (isHidden) {
+      el.querySelectorAll('.reveal:not(.in-view), .reveal-stagger:not(.in-view)').forEach(function(s){ s.classList.add('in-view'); });
+    }
+  }
+
+  (function() {
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var progressEl = document.getElementById('scrollProgress');
+    var targets = document.querySelectorAll('.reveal, .reveal-stagger, .gauges-grid');
+
+    if (reduceMotion || !('requestAnimationFrame' in window)) {
+      targets.forEach(function(el){ el.classList.add('in-view'); });
+      if (progressEl) progressEl.style.width = '100%';
+      return;
+    }
+
+    // capture each gauge target, then zero the displayed number for count-up
+    document.querySelectorAll('.gauges-grid .gauge-num').forEach(function(numEl) {
+      var raw = numEl.textContent.replace(/\/.*/, '').trim();
+      var target = parseInt(raw, 10);
+      if (!isNaN(target)) {
+        numEl.dataset.target = target;
+        if (numEl.firstChild && numEl.firstChild.nodeType === 3) numEl.firstChild.nodeValue = '0';
+      }
+    });
+
+    var ticking = false;
+    function onFrame() {
+      var h = document.documentElement;
+      var scrolled = h.scrollTop || document.body.scrollTop;
+      var max = (h.scrollHeight - h.clientHeight) || 1;
+      if (progressEl) progressEl.style.width = Math.min((scrolled / max) * 100, 100) + '%';
+      var vh = window.innerHeight;
+      targets.forEach(function(el) {
+        if (el.classList.contains('in-view')) return;
+        if (el.getBoundingClientRect().top < vh - 40) {
+          el.classList.add('in-view');
+          if (el.classList.contains('gauges-grid')) startCountUp(el);
+        }
+      });
+      ticking = false;
+    }
+    function onScroll() { if (!ticking) { requestAnimationFrame(onFrame); ticking = true; } }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    onFrame();
+
+    function startCountUp(grid) {
+      if (!grid) return;
+      var nums = grid.querySelectorAll('.gauge-num');
+      nums.forEach(function(numEl, i) {
+        var target = parseInt(numEl.dataset.target, 10);
+        if (isNaN(target)) return;
+        setTimeout(function(){ countUp(numEl, target, 1100); }, i * 110 + 200);
+      });
+    }
+
+    function countUp(el, target, duration) {
+      var start = null;
+      var firstNode = el.firstChild;
+      function frame(ts) {
+        if (!start) start = ts;
+        var t = Math.min((ts - start) / duration, 1);
+        var eased = 1 - Math.pow(1 - t, 3);
+        var val = Math.round(target * eased);
+        if (firstNode && firstNode.nodeType === 3) firstNode.nodeValue = val;
+        if (t < 1) requestAnimationFrame(frame);
+        else if (firstNode && firstNode.nodeType === 3) firstNode.nodeValue = target;
+      }
+      requestAnimationFrame(frame);
+    }
+  })();
+</script>
+
+</body>
+</html>

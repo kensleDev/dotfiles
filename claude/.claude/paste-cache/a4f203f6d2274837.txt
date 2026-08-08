@@ -1,0 +1,639 @@
+> tidydown@1.0.0 build
+> tsup
+
+CLI Building entry: src/cli/index.ts
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.5.1
+CLI Using tsup config: /Users/kd/Library/Application Support/Claude/local-agent-mode-sessions/ce87c264-50f0-4146-acaa-2349f1064621/4b5b85ae-ce98-43ac-a07a-6af6f7b9abf6/local_3d3d085f-05a8-4b15-92a3-b58ed4297e21/outputs/tidydown/tsup.config.ts
+CLI Target: node20
+CLI Cleaning output folder
+ESM Build start
+ESM dist/index.js     105.20 KB
+ESM dist/index.js.map 232.67 KB
+ESM ⚡️ Build success in 20ms
+➜  tidydown git:(dev) ✗ npm run type-check
+
+> tidydown@1.0.0 type-check
+> tsc --noEmit
+
+src/cli/commands/config.ts:9:5 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+9     process.exit(1);
+      ~~~~~~~
+
+src/cli/commands/config.ts:14:37 - error TS2339: Property 'value' does not exist on type 'Result<ResolvedConfig, ConfigError>'.
+  Property 'value' does not exist on type 'Err<ConfigError>'.
+
+14   console.log(YAML.stringify(result.value));
+                                       ~~~~~
+
+src/cli/commands/config.ts:22:5 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+22     process.exit(1);
+       ~~~~~~~
+
+src/cli/commands/config.ts:25:61 - error TS2339: Property 'value' does not exist on type 'Result<string, ConfigError>'.
+  Property 'value' does not exist on type 'Err<ConfigError>'.
+
+25   console.log(`\x1b[32m✓\x1b[0m Config created at: ${result.value}`);
+                                                               ~~~~~
+
+src/cli/commands/install.ts:12:5 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+12     process.exit(1);
+       ~~~~~~~
+
+src/cli/commands/install.ts:27:9 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+27         process.exit(1);
+           ~~~~~~~
+
+src/cli/commands/install.ts:39:9 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+39         process.exit(1);
+           ~~~~~~~
+
+src/cli/commands/install.ts:48:5 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+48     process.exit(1);
+       ~~~~~~~
+
+src/cli/commands/sort.ts:1:22 - error TS2307: Cannot find module 'node:readline' or its corresponding type declarations.
+
+1 import readline from "node:readline";
+                       ~~~~~~~~~~~~~~~
+
+src/cli/commands/sort.ts:2:16 - error TS2307: Cannot find module 'node:fs' or its corresponding type declarations.
+
+2 import fs from "node:fs";
+                 ~~~~~~~~~
+
+src/cli/commands/sort.ts:10:18 - error TS2307: Cannot find module 'node:path' or its corresponding type declarations.
+
+10 import path from "node:path";
+                    ~~~~~~~~~~~
+
+src/cli/commands/sort.ts:11:19 - error TS2307: Cannot find module 'chalk' or its corresponding type declarations.
+
+11 import chalk from "chalk";
+                     ~~~~~~~
+
+src/cli/commands/sort.ts:47:12 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+47     input: process.stdin,
+              ~~~~~~~
+
+src/cli/commands/sort.ts:48:13 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+48     output: process.stdout,
+               ~~~~~~~
+
+src/cli/commands/sort.ts:52:62 - error TS7006: Parameter 'answer' implicitly has an 'any' type.
+
+52     rl.question('Lock appears abandoned. Continue? (y/n) ', (answer) => {
+                                                                ~~~~~~
+
+src/cli/commands/sort.ts:100:5 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+100     process.exitCode = 1;
+        ~~~~~~~
+
+src/cli/commands/sort.ts:152:9 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+152         process.exitCode = 0; // Exit 0 on cancel (user decision)
+            ~~~~~~~
+
+src/cli/commands/sort.ts:179:11 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+179           process.exitCode = 1;
+              ~~~~~~~
+
+src/cli/commands/sort.ts:187:11 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+187           process.exitCode = 1;
+              ~~~~~~~
+
+src/cli/commands/sort.ts:193:9 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+193         process.exitCode = 1;
+            ~~~~~~~
+
+src/cli/commands/sort.ts:199:7 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+199       process.exitCode = 1;
+          ~~~~~~~
+
+src/cli/commands/start.ts:10:5 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+10     process.exit(1);
+       ~~~~~~~
+
+src/cli/commands/start.ts:13:31 - error TS2339: Property 'value' does not exist on type 'Result<ResolvedConfig, ConfigError>'.
+  Property 'value' does not exist on type 'Err<ConfigError>'.
+
+13   const config = configResult.value;
+                                 ~~~~~
+
+src/cli/commands/start.ts:22:5 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+22     process.exit(0);
+       ~~~~~~~
+
+src/cli/commands/start.ts:25:3 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+25   process.on("SIGINT", shutdown);
+     ~~~~~~~
+
+src/cli/commands/start.ts:26:3 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+26   process.on("SIGTERM", shutdown);
+     ~~~~~~~
+
+src/cli/commands/start.ts:50:5 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+50     process.exit(1);
+       ~~~~~~~
+
+src/cli/commands/uninstall.ts:15:9 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+15         process.exit(1);
+           ~~~~~~~
+
+src/cli/commands/uninstall.ts:22:9 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+22         process.exit(1);
+           ~~~~~~~
+
+src/cli/commands/uninstall.ts:30:5 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+30     process.exit(1);
+       ~~~~~~~
+
+src/cli/index.ts:1:19 - error TS7016: Could not find a declaration file for module 'yargs'. '/Users/kd/Library/Application Support/Claude/local-agent-mode-sessions/ce87c264-50f0-4146-acaa-2349f1064621/4b5b85ae-ce98-43ac-a07a-6af6f7b9abf6/local_3d3d085f-05a8-4b15-92a3-b58ed4297e21/outputs/tidydown/node_modules/yargs/index.mjs' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/yargs` if it exists or add a new declaration (.d.ts) file containing `declare module 'yargs';`
+
+1 import yargs from "yargs";
+                    ~~~~~~~
+
+src/cli/index.ts:2:25 - error TS7016: Could not find a declaration file for module 'yargs/helpers'. '/Users/kd/Library/Application Support/Claude/local-agent-mode-sessions/ce87c264-50f0-4146-acaa-2349f1064621/4b5b85ae-ce98-43ac-a07a-6af6f7b9abf6/local_3d3d085f-05a8-4b15-92a3-b58ed4297e21/outputs/tidydown/node_modules/yargs/helpers/helpers.mjs' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/yargs` if it exists or add a new declaration (.d.ts) file containing `declare module 'yargs/helpers';`
+
+2 import { hideBin } from "yargs/helpers";
+                          ~~~~~~~~~~~~~~~
+
+src/cli/index.ts:18:23 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+18   await yargs(hideBin(process.argv))
+                         ~~~~~~~
+
+src/cli/index.ts:26:8 - error TS7006: Parameter 'yargs' implicitly has an 'any' type.
+
+26       (yargs) =>
+          ~~~~~
+
+src/cli/index.ts:32:14 - error TS7006: Parameter 'argv' implicitly has an 'any' type.
+
+32       async (argv) => {
+                ~~~~
+
+src/cli/index.ts:41:8 - error TS7006: Parameter 'yargs' implicitly has an 'any' type.
+
+41       (yargs) =>
+          ~~~~~
+
+src/cli/index.ts:47:14 - error TS7006: Parameter 'argv' implicitly has an 'any' type.
+
+47       async (argv) => {
+                ~~~~
+
+src/cli/index.ts:66:8 - error TS7006: Parameter 'yargs' implicitly has an 'any' type.
+
+66       (yargs) =>
+          ~~~~~
+
+src/cli/index.ts:72:14 - error TS7006: Parameter 'argv' implicitly has an 'any' type.
+
+72       async (argv) => {
+                ~~~~
+
+src/cli/index.ts:78:49 - error TS7006: Parameter 'yargs' implicitly has an 'any' type.
+
+78     .command("config", "Manage configuration", (yargs) =>
+                                                   ~~~~~
+
+src/cli/index.ts:83:12 - error TS7006: Parameter 'yargs' implicitly has an 'any' type.
+
+83           (yargs) =>
+              ~~~~~
+
+src/cli/index.ts:89:12 - error TS7006: Parameter 'argv' implicitly has an 'any' type.
+
+89           (argv) => {
+              ~~~~
+
+src/cli/index.ts:108:8 - error TS7006: Parameter 'yargs' implicitly has an 'any' type.
+
+108       (yargs) =>
+           ~~~~~
+
+src/cli/index.ts:142:14 - error TS7006: Parameter 'argv' implicitly has an 'any' type.
+
+142       async (argv) => {
+                 ~~~~
+
+src/cli/index.ts:165:3 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+165   process.exit(1);
+      ~~~~~~~
+
+src/cli/prompts/confirm.ts:1:27 - error TS2307: Cannot find module 'node:readline/promises' or its corresponding type declarations.
+
+1 import * as readline from 'node:readline/promises';
+                            ~~~~~~~~~~~~~~~~~~~~~~~~
+
+src/cli/prompts/confirm.ts:2:50 - error TS2307: Cannot find module 'node:process' or its corresponding type declarations.
+
+2 import { stdin as input, stdout as output } from 'node:process';
+                                                   ~~~~~~~~~~~~~~
+
+src/cli/prompts/confirm.ts:3:18 - error TS2307: Cannot find module 'node:path' or its corresponding type declarations.
+
+3 import path from 'node:path';
+                   ~~~~~~~~~~~
+
+src/cli/prompts/confirm.ts:4:19 - error TS2307: Cannot find module 'chalk' or its corresponding type declarations.
+
+4 import chalk from 'chalk';
+                    ~~~~~~~
+
+src/config/loader.ts:1:16 - error TS2307: Cannot find module 'node:fs' or its corresponding type declarations.
+
+1 import fs from "node:fs";
+                 ~~~~~~~~~
+
+src/config/loader.ts:2:18 - error TS2307: Cannot find module 'node:path' or its corresponding type declarations.
+
+2 import path from "node:path";
+                   ~~~~~~~~~~~
+
+src/config/loader.ts:3:16 - error TS2307: Cannot find module 'node:os' or its corresponding type declarations.
+
+3 import os from "node:os";
+                 ~~~~~~~~~
+
+src/config/loader.ts:20:21 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+20   const xdgConfig = process.env.XDG_CONFIG_HOME || path.join(os.homedir(), ".config");
+                       ~~~~~~~
+
+src/config/loader.ts:23:7 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+23   if (process.platform === "darwin") {
+         ~~~~~~~
+
+src/config/loader.ts:40:21 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+40   const xdgConfig = process.env.XDG_CONFIG_HOME || path.join(os.homedir(), ".config");
+                       ~~~~~~~
+
+src/core/categorizer.ts:1:18 - error TS2307: Cannot find module 'node:path' or its corresponding type declarations.
+
+1 import path from "node:path";
+                   ~~~~~~~~~~~
+
+src/core/conflict-resolver.ts:1:16 - error TS2307: Cannot find module 'node:fs' or its corresponding type declarations.
+
+1 import fs from "node:fs";
+                 ~~~~~~~~~
+
+src/core/conflict-resolver.ts:2:18 - error TS2307: Cannot find module 'node:path' or its corresponding type declarations.
+
+2 import path from "node:path";
+                   ~~~~~~~~~~~
+
+src/core/lock.ts:2:16 - error TS2307: Cannot find module 'node:os' or its corresponding type declarations.
+
+2 import os from "node:os";
+                 ~~~~~~~~~
+
+src/core/lock.ts:3:20 - error TS2307: Cannot find module 'node:crypto' or its corresponding type declarations.
+
+3 import crypto from "node:crypto";
+                     ~~~~~~~~~~~~~
+
+src/core/lock.ts:4:18 - error TS2307: Cannot find module 'node:path' or its corresponding type declarations.
+
+4 import path from "node:path";
+                   ~~~~~~~~~~~
+
+src/core/lock.ts:5:16 - error TS2307: Cannot find module 'node:fs' or its corresponding type declarations.
+
+5 import fs from "node:fs";
+                 ~~~~~~~~~
+
+src/core/lock.ts:62:40 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+62       fs.writeFileSync(pidFile, String(process.pid), "utf-8");
+                                          ~~~~~~~
+
+src/core/lock.ts:67:14 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+67         pid: process.pid,
+                ~~~~~~~
+
+src/core/mover.ts:1:16 - error TS2307: Cannot find module 'node:fs' or its corresponding type declarations.
+
+1 import fs from "node:fs";
+                 ~~~~~~~~~
+
+src/core/mover.ts:2:18 - error TS2307: Cannot find module 'node:path' or its corresponding type declarations.
+
+2 import path from "node:path";
+                   ~~~~~~~~~~~
+
+src/core/mover.ts:94:40 - error TS2503: Cannot find namespace 'NodeJS'.
+
+94 function isNodeError(e: unknown): e is NodeJS.ErrnoException {
+                                          ~~~~~~
+
+src/core/queue.ts:1:16 - error TS2307: Cannot find module 'node:fs/promises' or its corresponding type declarations.
+
+1 import fs from "node:fs/promises";
+                 ~~~~~~~~~~~~~~~~~~
+
+src/core/queue.ts:2:16 - error TS2307: Cannot find module 'node:os' or its corresponding type declarations.
+
+2 import os from "node:os";
+                 ~~~~~~~~~
+
+src/core/queue.ts:3:20 - error TS2307: Cannot find module 'node:crypto' or its corresponding type declarations.
+
+3 import crypto from "node:crypto";
+                     ~~~~~~~~~~~~~
+
+src/core/queue.ts:4:18 - error TS2307: Cannot find module 'node:path' or its corresponding type declarations.
+
+4 import path from "node:path";
+                   ~~~~~~~~~~~
+
+src/core/queue.ts:155:9 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+155     if (process.platform === "win32") {
+            ~~~~~~~
+
+src/core/queue.ts:156:14 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+156       return process.env.LOCALAPPDATA || path.join(os.homedir(), "AppData", "Local");
+                 ~~~~~~~
+
+src/core/queue.ts:159:12 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+159     return process.env.XDG_DATA_HOME || path.join(os.homedir(), ".local", "share");
+               ~~~~~~~
+
+src/core/scanner.ts:1:25 - error TS2307: Cannot find module 'node:fs/promises' or its corresponding type declarations.
+
+1 import { opendir } from "node:fs/promises";
+                          ~~~~~~~~~~~~~~~~~~
+
+src/core/scanner.ts:2:18 - error TS2307: Cannot find module 'node:path' or its corresponding type declarations.
+
+2 import path from "node:path";
+                   ~~~~~~~~~~~
+
+src/core/watcher.ts:2:16 - error TS2307: Cannot find module 'node:fs' or its corresponding type declarations.
+
+2 import fs from "node:fs";
+                 ~~~~~~~~~
+
+src/core/watcher.ts:3:18 - error TS2307: Cannot find module 'node:path' or its corresponding type declarations.
+
+3 import path from "node:path";
+                   ~~~~~~~~~~~
+
+src/core/watcher.ts:25:22 - error TS2503: Cannot find namespace 'chokidar'.
+
+25   private fsWatcher: chokidar.FSWatcher | null = null;
+                        ~~~~~~~~
+
+src/core/watcher.ts:59:39 - error TS7006: Parameter 'filePath' implicitly has an 'any' type.
+
+59       this.fsWatcher.on("add", async (filePath) => {
+                                         ~~~~~~~~
+
+src/core/watcher.ts:82:35 - error TS7006: Parameter 'error' implicitly has an 'any' type.
+
+82       this.fsWatcher.on("error", (error) => {
+                                     ~~~~~
+
+src/progress/colors.ts:1:19 - error TS2307: Cannot find module 'chalk' or its corresponding type declarations.
+
+1 import chalk from 'chalk';
+                    ~~~~~~~
+
+src/progress/summary.ts:1:19 - error TS2307: Cannot find module 'chalk' or its corresponding type declarations.
+
+1 import chalk from 'chalk';
+                    ~~~~~~~
+
+src/progress/task-runner.ts:1:23 - error TS2307: Cannot find module 'listr2' or its corresponding type declarations.
+
+1 import { Listr } from 'listr2';
+                        ~~~~~~~~
+
+src/progress/task-runner.ts:4:30 - error TS2459: Module '"./summary.js"' declares 'SortStatistics' locally, but it is not exported.
+
+4 import { formatSummary, type SortStatistics } from './summary.js';
+                               ~~~~~~~~~~~~~~
+
+  src/progress/summary.ts:3:15
+    3 import type { SortStatistics } from './statistics.js';
+                    ~~~~~~~~~~~~~~
+    'SortStatistics' is declared here.
+
+src/progress/task-runner.ts:128:17 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+128       forceTTY: process.env.FORCE_TTY === '1',
+                    ~~~~~~~
+
+src/progress/task-runner.ts:131:19 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+131       forceColor: process.env.FORCE_COLOR === '1',
+                      ~~~~~~~
+
+src/progress/verbose.ts:1:19 - error TS2307: Cannot find module 'chalk' or its corresponding type declarations.
+
+1 import chalk from 'chalk';
+                    ~~~~~~~
+
+src/progress/verbosity.ts:44:7 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+44   if (process.env.FORCE_TTY === '1') return true;
+         ~~~~~~~
+
+src/progress/verbosity.ts:45:7 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+45   if (process.env.FORCE_TTY === '0') return false;
+         ~~~~~~~
+
+src/progress/verbosity.ts:46:18 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+46   return Boolean(process.stdout.isTTY);
+                    ~~~~~~~
+
+src/progress/verbosity.ts:58:21 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+58   if ('NO_COLOR' in process.env) return false;
+                       ~~~~~~~
+
+src/progress/verbosity.ts:59:7 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+59   if (process.env.FORCE_COLOR === '1') return true;
+         ~~~~~~~
+
+src/progress/verbosity.ts:60:7 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+60   if (process.env.FORCE_COLOR === '0') return false;
+         ~~~~~~~
+
+src/service/detector.ts:1:16 - error TS2307: Cannot find module 'node:os' or its corresponding type declarations.
+
+1 import os from "node:os";
+                 ~~~~~~~~~
+
+src/service/detector.ts:2:22 - error TS2307: Cannot find module 'node:child_process' or its corresponding type declarations.
+
+2 import { exec } from "node:child_process";
+                       ~~~~~~~~~~~~~~~~~~~~
+
+src/service/detector.ts:3:27 - error TS2307: Cannot find module 'node:util' or its corresponding type declarations.
+
+3 import { promisify } from "node:util";
+                            ~~~~~~~~~~~
+
+src/service/launchd.ts:1:16 - error TS2307: Cannot find module 'node:fs' or its corresponding type declarations.
+
+1 import fs from "node:fs";
+                 ~~~~~~~~~
+
+src/service/launchd.ts:2:18 - error TS2307: Cannot find module 'node:path' or its corresponding type declarations.
+
+2 import path from "node:path";
+                   ~~~~~~~~~~~
+
+src/service/launchd.ts:3:16 - error TS2307: Cannot find module 'node:os' or its corresponding type declarations.
+
+3 import os from "node:os";
+                 ~~~~~~~~~
+
+src/service/launchd.ts:4:22 - error TS2307: Cannot find module 'node:child_process' or its corresponding type declarations.
+
+4 import { exec } from "node:child_process";
+                       ~~~~~~~~~~~~~~~~~~~~
+
+src/service/launchd.ts:5:27 - error TS2307: Cannot find module 'node:util' or its corresponding type declarations.
+
+5 import { promisify } from "node:util";
+                            ~~~~~~~~~~~
+
+src/service/launchd.ts:22:22 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+22   const mainScript = process.argv[1];
+                        ~~~~~~~
+
+src/service/launchd.ts:26:10 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+26   return process.execPath;
+            ~~~~~~~
+
+src/service/systemd.ts:1:16 - error TS2307: Cannot find module 'node:fs' or its corresponding type declarations.
+
+1 import fs from "node:fs";
+                 ~~~~~~~~~
+
+src/service/systemd.ts:2:18 - error TS2307: Cannot find module 'node:path' or its corresponding type declarations.
+
+2 import path from "node:path";
+                   ~~~~~~~~~~~
+
+src/service/systemd.ts:3:16 - error TS2307: Cannot find module 'node:os' or its corresponding type declarations.
+
+3 import os from "node:os";
+                 ~~~~~~~~~
+
+src/service/systemd.ts:4:22 - error TS2307: Cannot find module 'node:child_process' or its corresponding type declarations.
+
+4 import { exec } from "node:child_process";
+                       ~~~~~~~~~~~~~~~~~~~~
+
+src/service/systemd.ts:5:27 - error TS2307: Cannot find module 'node:util' or its corresponding type declarations.
+
+5 import { promisify } from "node:util";
+                            ~~~~~~~~~~~
+
+src/service/systemd.ts:13:3 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+13   process.env.XDG_CONFIG_HOME || path.join(os.homedir(), ".config"),
+     ~~~~~~~
+
+src/service/systemd.ts:20:22 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+20   const mainScript = process.argv[1];
+                        ~~~~~~~
+
+src/service/systemd.ts:22:10 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+22   return process.execPath;
+            ~~~~~~~
+
+src/utils/ci.ts:24:14 - error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+24   const ci = process.env.CI;
+                ~~~~~~~
+
+src/utils/logger.ts:1:16 - error TS2307: Cannot find module 'node:fs' or its corresponding type declarations.
+
+1 import fs from "node:fs";
+                 ~~~~~~~~~
+
+src/utils/logger.ts:2:18 - error TS2307: Cannot find module 'node:path' or its corresponding type declarations.
+
+2 import path from "node:path";
+                   ~~~~~~~~~~~
+
+src/utils/shutdown.ts:1:21 - error TS2307: Cannot find module 'node:process' or its corresponding type declarations.
+
+1 import process from "node:process";
+                      ~~~~~~~~~~~~~~
+
+
+Found 116 errors in 26 files.
+
+Errors  Files
+     4  src/cli/commands/config.ts:9
+     4  src/cli/commands/install.ts:12
+    13  src/cli/commands/sort.ts:1
+     6  src/cli/commands/start.ts:10
+     3  src/cli/commands/uninstall.ts:15
+    15  src/cli/index.ts:1
+     4  src/cli/prompts/confirm.ts:1
+     6  src/config/loader.ts:1
+     1  src/core/categorizer.ts:1
+     2  src/core/conflict-resolver.ts:1
+     6  src/core/lock.ts:2
+     3  src/core/mover.ts:1
+     7  src/core/queue.ts:1
+     2  src/core/scanner.ts:1
+     5  src/core/watcher.ts:2
+     1  src/progress/colors.ts:1
+     1  src/progress/summary.ts:1
+     4  src/progress/task-runner.ts:1
+     1  src/progress/verbose.ts:1
+     6  src/progress/verbosity.ts:44
+     3  src/service/detector.ts:1
+     7  src/service/launchd.ts:1
+     8  src/service/systemd.ts:1
+     1  src/utils/ci.ts:24
+     2  src/utils/logger.ts:1
+     1  src/utils/shutdown.ts:1
+➜  tidydown git:(dev) ✗

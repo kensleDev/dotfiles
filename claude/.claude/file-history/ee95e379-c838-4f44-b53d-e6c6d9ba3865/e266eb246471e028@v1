@@ -1,0 +1,62 @@
+---
+name: nextjs-use-search-params-suspense
+# IMPORTANT: Keep description on ONE line for Claude Code compatibility
+# prettier-ignore
+description: "useSearchParams hook in Next.js. REQUIRES 'use client' + Suspense wrapper. Read URL query params: .get(), .getAll(), .has(). Update via router.push()."
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
+---
+
+# Next.js: useSearchParams with Suspense
+
+## Quick Start
+
+**⚠️ TWO requirements:** `'use client'` + `<Suspense>` wrapper (both required!)
+
+```typescript
+// app/page.tsx
+import { Suspense } from 'react';
+import SearchComponent from './SearchComponent';
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SearchComponent />
+    </Suspense>
+  );
+}
+
+// SearchComponent.tsx
+'use client';
+import { useSearchParams } from 'next/navigation';
+
+export default function SearchComponent() {
+  const searchParams = useSearchParams();
+  const query = searchParams.get('q') || '';
+  return <div>Search: {query}</div>;
+}
+```
+
+## Reference Files
+
+- [url-parameter-methods.md](references/url-parameter-methods.md) - get(), getAll(),
+  has(), forEach(), entries()
+- [real-world-examples.md](references/real-world-examples.md) - Search, filters,
+  pagination, debounce patterns
+- [updating-parameters.md](references/updating-parameters.md) - Update URL params
+  with router.push()
+- [common-mistakes.md](references/common-mistakes.md) - Common errors and fixes
+
+## Notes
+
+- **Server components:** Use `searchParams` prop instead (no 'use client' needed)
+- **Always wrap:** Component using useSearchParams must be in Suspense
+- **Last verified:** 2025-01-11
+
+<!--
+PROGRESSIVE DISCLOSURE GUIDELINES:
+- Keep this file ~50 lines total (max ~150 lines)
+- Use 1-2 code blocks only (recommend 1)
+- Keep description <200 chars for Level 1 efficiency
+- Move detailed docs to references/ for Level 3 loading
+- This is Level 2 - quick reference ONLY, not a manual
+-->

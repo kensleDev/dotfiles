@@ -1,0 +1,139 @@
+/**
+ * Job status enum
+ */
+export type JobStatus =
+	| 'pending'
+	| 'queued'
+	| 'uploading'
+	| 'printing'
+	| 'cooling'
+	| 'clearing'
+	| 'complete'
+	| 'failed'
+	| 'cancelled';
+
+/**
+ * Clearing method for job completion
+ */
+export type ClearingMethod = 'actuator' | 'gcode';
+
+/**
+ * Job entity from the API
+ */
+export interface Job {
+	id: number;
+	display_name: string;
+	file_path: string;
+	assigned_printer: number | null;
+	status: JobStatus;
+	loop_count: number;
+	current_loop: number;
+	priority: number;
+	error_message: string | null;
+	thumbnail: string | null;
+	file_size: number | null;
+	print_time_estimate: number | null;
+	clearing_method: ClearingMethod;
+	processing_options: string[];
+	cooldown_time: number | null;
+	scheduled_at: string | null;
+	created_at: string;
+	updated_at: string;
+	started_at: string | null;
+	completed_at: string | null;
+}
+
+/**
+ * Job with associated printer information
+ */
+export interface JobWithPrinter extends Job {
+	printer: {
+		id: number;
+		name: string;
+		model_type: string;
+	} | null;
+}
+
+/**
+ * Job with file existence information
+ */
+export interface JobWithFileInfo extends JobWithPrinter {
+	file_exists: boolean;
+	actual_file_size?: number;
+}
+
+/**
+ * Filter options for querying jobs
+ */
+export interface JobFilter {
+	status?: JobStatus | JobStatus[];
+	printer_id?: number;
+	limit?: number;
+	offset?: number;
+}
+
+/**
+ * Input for creating a job via file upload or library file
+ */
+export interface CreateJobInput {
+	display_name?: string;
+	assigned_printer?: number | null;
+	loop_count?: number;
+	cooldown_time?: number | null;
+	clearing_method?: ClearingMethod;
+	processing_options?: string[];
+}
+
+/**
+ * Input for updating a job
+ */
+export interface UpdateJobInput {
+	id: number;
+	display_name?: string;
+	assigned_printer?: number | null;
+	status?: JobStatus;
+	loop_count?: number;
+	current_loop?: number;
+	priority?: number;
+	error_message?: string | null;
+	clearing_method?: ClearingMethod;
+	cooldown_time?: number | null;
+	scheduled_at?: string | null;
+}
+
+/**
+ * Input for reordering jobs
+ */
+export interface ReorderJobsInput {
+	jobIds: number[];
+}
+
+/**
+ * Response for bulk operations
+ */
+export interface BulkOperationResponse {
+	success: boolean;
+	count?: number;
+}
+
+/**
+ * Generic success response
+ */
+export interface SuccessResponse {
+	success: boolean;
+}
+
+/**
+ * Input for detecting printer type from a 3MF file
+ */
+export interface DetectPrinterTypeInput {
+	fileDataBase64: string;
+	fileName: string;
+}
+
+/**
+ * Response from printer type detection
+ */
+export interface DetectPrinterTypeResponse {
+	printer_type: string | null;
+}

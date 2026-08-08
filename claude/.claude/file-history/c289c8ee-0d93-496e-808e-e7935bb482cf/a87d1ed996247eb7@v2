@@ -1,0 +1,95 @@
+/**
+ * MCP Tool: create_workflow
+ * Creates a workflow orchestrator prompt that guides users through the entire prompt creation process
+ */
+
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { getCurrentBranch } from '../lib/git.js';
+import { createWorkflowPrompt } from '../lib/prompts.js';
+import { CreateWorkflowSchema } from '../schemas/tools.js';
+
+/**
+ * Handle the create_workflow tool call
+ */
+export async function handleCreateWorkflow(
+  args: unknown,
+  repoRoot: string = process.cwd()
+): Promise<CallToolResult> {
+  // Validate input
+  const validationResult = CreateWorkflowSchema.safeParse(args);
+  if (!validationResult.success) {
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify({
+            error: 'Invalid input',
+            details: validationResult.error.errors,
+          }),
+        },
+      ],
+      isError: true,
+    };
+  }
+
+  const { task, invocationMethod, autoMode } = validationResult.data;
+
+  try {
+    // Detect current git branch
+    const branch = await getCurrentBranch(repoRoot);
+
+    // Create the workflow prompt
+    const { filePath, promptNumber } = await createWorkflowPrompt(
+      repoRoot,
+      branch,
+      task,
+      invocationMethod,
+      autoMode
+    );
+
+    // Make path relative for cleaner output
+    const relativePath = filePath.replace(repoRoot + '/', '');
+
+    // Return structured response with agent spawn instructions
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(
+            {
+              prompt_file: relativePath,
+              agent_spawn_request: {
+                agent_type: 'orchestrator',
+                reason: `Workflow orchestrator created for: ${task}`,
+                next_action: 'Review the workflow orchestrator prompt, then execute it to guide through the prompt creation process',
+              },
+              metadata: {
+                branch,
+                prompt_number: promptNumber,
+                invocation_method: invocationMethod,
+                auto_mode: autoMode ?? false,
+                created_at: new Date().toISOString(),
+              },
+            },
+            null,
+            2
+          ),
+        },
+      ],
+      isError: false,
+    };
+  } catch (error) {
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify({
+            error: 'Failed to create workflow prompt',
+            message: error instanceof Error ? error.message : 'Unknown error',
+          }),
+        },
+      ],
+      isError: true,
+    };
+  }
+}

@@ -1,0 +1,70 @@
+2026-01-17T16:16:18.148Z [sse-client] INFO: SSE connection established
+camera:1  GET http://localhost:3001/api/printers/3/camera 404 (Not Found)Understand this error
+installHook.js:1 2026-01-17T16:16:18.150Z [CameraFeed] WARN: Camera stream error, retrying | {"printerId":3,"delay":5000,"attempt":1,"maxRetries":3}
+overrideMethod @ installHook.js:1
+warn @ client.js?v=200b118b:3208
+log @ logger.ts:76
+childLogger.log @ logger.ts:127
+warn @ logger.ts:101
+handleErrorEvent @ CameraFeed.svelte:101
+(anonymous) @ chunk-P7RLDOER.js?v=200b118b:4293
+without_reactive_context @ chunk-P7RLDOER.js?v=200b118b:2781
+target_handler @ chunk-P7RLDOER.js?v=200b118b:4292Understand this warning
+camera:1  GET http://localhost:3001/api/printers/3/camera 404 (Not Found)
+Image
+startStream @ CameraFeed.svelte:73
+$effect @ CameraFeed.svelte:164
+update_reaction @ chunk-P7RLDOER.js?v=200b118b:3367
+update_effect @ chunk-P7RLDOER.js?v=200b118b:3492
+flush_queued_effects @ chunk-P7RLDOER.js?v=200b118b:2507
+process @ chunk-P7RLDOER.js?v=200b118b:2172
+flush_effects @ chunk-P7RLDOER.js?v=200b118b:2465
+flush @ chunk-P7RLDOER.js?v=200b118b:2262
+(anonymous) @ chunk-P7RLDOER.js?v=200b118b:2383
+run_all @ chunk-P7RLDOER.js?v=200b118b:72
+run_micro_tasks @ chunk-P7RLDOER.js?v=200b118b:666
+(anonymous) @ chunk-P7RLDOER.js?v=200b118b:672
+setTimeout
+handleErrorEvent @ CameraFeed.svelte:108
+(anonymous) @ chunk-P7RLDOER.js?v=200b118b:4293
+without_reactive_context @ chunk-P7RLDOER.js?v=200b118b:2781
+target_handler @ chunk-P7RLDOER.js?v=200b118b:4292Understand this error
+installHook.js:1 2026-01-17T16:16:23.157Z [CameraFeed] WARN: Camera stream error, retrying | {"printerId":3,"delay":5000,"attempt":1,"maxRetries":3}
+overrideMethod @ installHook.js:1
+warn @ client.js?v=200b118b:3208
+log @ logger.ts:76
+childLogger.log @ logger.ts:127
+warn @ logger.ts:101
+handleErrorEvent @ CameraFeed.svelte:101
+(anonymous) @ chunk-P7RLDOER.js?v=200b118b:4293
+without_reactive_context @ chunk-P7RLDOER.js?v=200b118b:2781
+target_handler @ chunk-P7RLDOER.js?v=200b118b:4292Understand this warning
+camera:1  GET http://localhost:3001/api/printers/3/camera 404 (Not Found)
+Image
+startStream @ CameraFeed.svelte:73
+$effect @ CameraFeed.svelte:164
+update_reaction @ chunk-P7RLDOER.js?v=200b118b:3367
+update_effect @ chunk-P7RLDOER.js?v=200b118b:3492
+flush_queued_effects @ chunk-P7RLDOER.js?v=200b118b:2507
+process @ chunk-P7RLDOER.js?v=200b118b:2172
+flush_effects @ chunk-P7RLDOER.js?v=200b118b:2465
+flush @ chunk-P7RLDOER.js?v=200b118b:2262
+(anonymous) @ chunk-P7RLDOER.js?v=200b118b:2383
+run_all @ chunk-P7RLDOER.js?v=200b118b:72
+run_micro_tasks @ chunk-P7RLDOER.js?v=200b118b:666
+(anonymous) @ chunk-P7RLDOER.js?v=200b118b:672
+setTimeout
+handleErrorEvent @ CameraFeed.svelte:108
+(anonymous) @ chunk-P7RLDOER.js?v=200b118b:4293
+without_reactive_context @ chunk-P7RLDOER.js?v=200b118b:2781
+target_handler @ chunk-P7RLDOER.js?v=200b118b:4292Understand this error
+installHook.js:1 2026-01-17T16:16:28.166Z [CameraFeed] WARN: Camera stream error, retrying | {"printerId":3,"delay":5000,"attempt":1,"maxRetries":3}
+overrideMethod @ installHook.js:1
+warn @ client.js?v=200b118b:3208
+log @ logger.ts:76
+childLogger.log @ logger.ts:127
+warn @ logger.ts:101
+handleErrorEvent @ CameraFeed.svelte:101
+(anonymous) @ chunk-P7RLDOER.js?v=200b118b:4293
+without_reactive_context @ chunk-P7RLDOER.js?v=200b118b:2781
+target_handler @ chunk-P7RLDOER.js?v=200b118b:4292Understand this warning

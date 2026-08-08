@@ -1,0 +1,119 @@
+/**
+ * Bambu Lab HTTP Client
+ *
+ * HTTP-based file upload client for Bambu Lab printers.
+ * Uses the local API endpoint on port 6000.
+ */
+
+import type { Printer } from '../../../printer/types/printer';
+import { createLogger } from '../../../shared/utils/logger';
+import { tryPromise } from '@julian-i/try-error';
+import { readFileSync } from 'fs';
+import FormData from 'form-data-node';
+import { fetch } from 'undici';
+
+const logger = createLogger('bambu-http-client');
+
+export interface UploadProgress {
+	loaded: number;
+	total: number;
+	percent: number;
+}
+
+export interface UploadOptions {
+	onProgress?: (progress: UploadProgress) => void;
+}
+
+export class BambuHttpClient {
+	/**
+	 * Upload a file to the Bambu printer via HTTP API
+	 * This uses the /upload endpoint on port 6000
+	 */
+	async uploadFile(
+		printer: Printer,
+		filePath: string,
+		fileName: string,
+		options?: UploadOptions
+	): Promise<boolean> {
+		logger.info(`Uploading via Bambu HTTP API`, { printerId: printer.id, ip: printer.ip, fileName });
+
+		// Try port 6000 first (standard Bambu local API)
+		const url = `https://${printer.ip}:6000/upload`;
+
+		// Read file content
+		const [fileBuffer, readError] = await tryPromise(() => Promise.resolve(readFileSync(filePath)));
+		if (readError) {
+			logger.error(`Failed to read file`, {
+				printerId: printer.id,
+				fileName,
+				error: readError.message
+			});
+			throw new Error(`Failed to read file: ${readError.message}`);
+		}
+
+		// Create form data
+		const form = new FormData();
+		form.append('file', fileBuffer, {
+			filename: fileName,
+			contentType: 'application/octet-stream'
+		});
+
+		// Convert form to blob for upload
+		const [formDataBlob, formError] = await tryPromise(() => Promise.resolve(form));
+		if (formError) {
+			throw new Error(`Failed to create form data: ${formError.message}`);
+		}
+
+		// Make upload request
+		const [response, fetchError] = await tryPromise(
+			fetch(url, {
+				method: 'POST',
+				headers: {
+					'Authorization': `Bearer ${printer.access_code}`,
+					// Content-Type is set by fetch when using body
+				},
+				body: formDataBlob as unknown as BodyInit,
+				// @ts-ignore - undici supports duplex
+				duplex: 'half',
+				// Disable TLS verification for local network
+				dispatcher: new (fetch as any).Agent({
+					connect: {
+						rejectUnauthorized: false
+					}
+				})
+			})
+		);
+
+		if (fetchError) {
+			logger.error(`HTTP upload request failed`, {
+				printerId: printer.id,
+				fileName,
+				error: fetchError.message,
+				stack: fetchError.stack
+			});
+			throw new Error(`HTTP upload failed: ${fetchError.message}`);
+		}
+
+		if (!response!.ok) {
+			const errorText = await response!.text();
+			logger.error(`HTTP upload returned error`, {
+				printerId: printer.id,
+				fileName,
+				status: response!.status,
+				statusText: response!.statusText,
+				body: errorText.substring(0, 500)
+			});
+			throw new Error(`HTTP upload failed with status ${response!.status}: ${response!.statusText}`);
+		}
+
+		logger.info(`HTTP upload completed successfully`, {
+			printerId: printer.id,
+			fileName,
+			status: response!.status
+		});
+
+		return true;
+	}
+}
+
+export const bambuHttpClient = new BambuHttpClient();

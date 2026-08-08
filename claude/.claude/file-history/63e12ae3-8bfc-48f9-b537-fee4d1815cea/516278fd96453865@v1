@@ -1,0 +1,7 @@
+{
+  "model": "haiku",
+  "statusLine": {
+    "type": "command",
+    "command": "echo '🤖 Haiku | 📍 '$(basename \"$PWD\")' | ⚙️ Development Ready' && echo '═══════════════════════════════════════'"
+  }
+}

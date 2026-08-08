@@ -1,0 +1,160 @@
+import lockfile from "proper-lockfile";
+import os from "node:os";
+import crypto from "node:crypto";
+import path from "node:path";
+import fs from "node:fs";
+import { Result, ok, err } from "../utils/result.js";
+import { Logger } from "../utils/logger.js";
+
+/**
+ * Inter-process file lock manager for coordinating sort operations.
+ *
+ * Uses proper-lockfile for cross-platform locking (works on NFS, Windows, Unix).
+ * Locks are stored in the system temp directory, not in user folders.
+ * Each folder gets a unique lock name based on its SHA-256 hash.
+ *
+ * Key features:
+ * - 30-minute stale lock detection
+ * - Force override capability for recovery
+ * - Automatic lock renewal (update mtime every minute)
+ * - Per-folder lock naming for multi-folder scenarios
+ */
+export class LockManager {
+  private readonly lockFilePath: string;
+  private releaseFn: (() => Promise<void>) | null = null;
+
+  constructor(
+    private readonly watchPath: string,
+    private readonly logger: Logger,
+  ) {
+    // Generate unique lock name per folder using SHA-256 hash
+    const hash = crypto.createHash("sha256").update(watchPath).digest("hex").slice(0, 16);
+    const lockFileName = `tidydown-${hash}.lock`;
+    this.lockFilePath = path.join(os.tmpdir(), lockFileName);
+  }
+
+  /**
+   * Acquire an exclusive lock on the watch folder.
+   *
+   * @param options - Optional configuration
+   * @param options.force - If true, skip retries and acquire immediately
+   * @returns Ok(undefined) on success, Err with error message on failure
+   */
+  async acquire(options?: { force?: boolean }): Promise<Result<void>> {
+    const force = options?.force ?? false;
+
+    try {
+      const release = await lockfile.lock(this.lockFilePath, {
+        stale: 30 * 60 * 1000, // 30 minutes
+        update: 60 * 1000, // Update mtime every minute
+        retries: force ? 0 : 3, // No retries if force flag
+        onCompromised: (err) => {
+          this.logger.error(`Lock compromise detected: ${err.message}`, {
+            lockPath: this.lockFilePath,
+          });
+        },
+      });
+
+      this.releaseFn = release;
+
+      // Write process.pid to lock directory for stale detection
+      const pidFile = path.join(this.lockFilePath, ".pid");
+      fs.writeFileSync(pidFile, String(process.pid), "utf-8");
+
+      this.logger.debug(`Lock acquired`, {
+        lockPath: this.lockFilePath,
+        watchPath: this.watchPath,
+        pid: process.pid,
+      });
+
+      return ok(undefined);
+    } catch (error) {
+      const errMessage = error instanceof Error ? error.message : String(error);
+
+      if (errMessage.includes("ELOCKED") || errMessage.includes("lock is already held")) {
+        this.logger.warn(`Lock held by another process`, {
+          lockPath: this.lockFilePath,
+          watchPath: this.watchPath,
+        });
+        return err(new Error("Lock held by another process. Use --force to override."));
+      }
+
+      if (errMessage.includes("EACCES") || errMessage.includes("permission denied")) {
+        this.logger.error(`Cannot create lock file. Temp directory is not writable.`, {
+          lockPath: this.lockFilePath,
+          tmpdir: os.tmpdir(),
+        });
+        return err(new Error("Cannot create lock file. Temp directory is not writable."));
+      }
+
+      this.logger.error(`Failed to acquire lock: ${errMessage}`, {
+        lockPath: this.lockFilePath,
+        watchPath: this.watchPath,
+      });
+      return err(new Error(`Failed to acquire lock: ${errMessage}`));
+    }
+  }
+
+  /**
+   * Release the lock.
+   *
+   * Should be called when done with the protected operation.
+   * Caller should handle errors.
+   */
+  async release(): Promise<void> {
+    if (this.releaseFn === null) {
+      this.logger.warn(`Attempted to release lock that is not held`, {
+        lockPath: this.lockFilePath,
+      });
+      return;
+    }
+
+    try {
+      await this.releaseFn();
+      this.releaseFn = null;
+      this.logger.debug(`Lock released`, {
+        lockPath: this.lockFilePath,
+        watchPath: this.watchPath,
+      });
+    } catch (error) {
+      this.logger.error(`Failed to release lock: ${error}`, {
+        lockPath: this.lockFilePath,
+        watchPath: this.watchPath,
+      });
+      throw error;
+    }
+  }
+
+  /**
+   * Check if the lock is currently held by this process.
+   *
+   * @returns true if this process holds the lock
+   */
+  isLocked(): boolean {
+    return this.releaseFn !== null;
+  }
+
+  /**
+   * Check if the lock is held by ANY process (not just this one).
+   *
+   * Uses proper-lockfile's check() method to detect locks across processes.
+   * This is different from isLocked() which only checks if the current
+   * process holds the lock.
+   *
+   * @returns Promise<true> if lock exists, Promise<false> otherwise
+   */
+  async isLockHeld(): Promise<boolean> {
+    try {
+      return await lockfile.check(this.lockFilePath);
+    } catch {
+      return false; // Lock doesn't exist or error checking
+    }
+  }
+
+  /**
+   * Get the lock file path for debugging/logging purposes.
+   */
+  getLockPath(): string {
+    return this.lockFilePath;
+  }
+}

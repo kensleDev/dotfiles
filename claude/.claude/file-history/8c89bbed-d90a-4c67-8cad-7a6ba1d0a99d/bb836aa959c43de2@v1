@@ -1,0 +1,252 @@
+import readline from "node:readline";
+import fs from "node:fs";
+import { LockManager } from "../../core/lock.js";
+import { DirectoryScanner } from "../../core/scanner.js";
+import { FileMover } from "../../core/mover.js";
+import { TaskRunner, type TaskContext, type Task, detectVerbosity, StatisticsCollector, formatSummary } from "../../progress/index.js";
+import { Logger } from "../../utils/logger.js";
+import { loadConfig } from "../../config/loader.js";
+import { Categorizer } from "../../core/categorizer.js";
+import path from "node:path";
+import chalk from "chalk";
+import { CATEGORY_COLORS } from "../../progress/colors.js";
+import { promptConfirmation, promptFileList } from "../prompts/confirm.js";
+import { isInCI } from "../../utils/ci.js";
+
+/**
+ * Stale lock threshold in milliseconds (30 minutes).
+ * Locks older than this are considered abandoned and can be overridden.
+ */
+const STALE_THRESHOLD = 30 * 60 * 1000;
+
+/**
+ * Check if a lock file is stale (older than 30 minutes).
+ *
+ * @param lockPath - Path to the lock file
+ * @returns true if lock is stale, false otherwise
+ */
+async function checkStaleLock(lockPath: string): Promise<boolean> {
+  try {
+    const stats = await fs.promises.stat(lockPath);
+    const lockAge = Date.now() - stats.mtimeMs;
+    return lockAge > STALE_THRESHOLD;
+  } catch {
+    return false; // Lock doesn't exist or can't stat
+  }
+}
+
+/**
+ * Prompt user to confirm override of a stale lock.
+ *
+ * Uses node:readline for interactive y/n confirmation without external dependencies.
+ *
+ * @returns true if user confirms (y), false otherwise (n)
+ */
+async function promptStaleLock(): Promise<boolean> {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  return new Promise((resolve) => {
+    rl.question('Lock appears abandoned. Continue? (y/n) ', (answer) => {
+      rl.close();
+      resolve(answer.toLowerCase() === 'y');
+    });
+  });
+}
+
+/**
+ * Command options for the sort command.
+ *
+ * These are parsed from yargs argv by the CLI handler.
+ */
+export interface SortOptions {
+  /** Path to config file (optional) */
+  folder?: string;
+  /** If true, actually move files; if false, dry-run preview only */
+  execute: boolean;
+  /** Enable verbose logging (-v flag) */
+  verbose: boolean;
+  /** Suppress all output except summary (--silent flag) */
+  silent: boolean;
+}
+
+/**
+ * Main entry point for the sort command.
+ *
+ * Orchestrates the manual file reorganization workflow:
+ * 1. Load configuration
+ * 2. Initialize components (LockManager, DirectoryScanner, FileMover)
+ * 3. Acquire lock (COORD-01)
+ * 4. Run file processing via TaskRunner
+ * 5. Release lock (in finally block for guarantee)
+ *
+ * Per user locked decisions:
+ * - Command is "sort" (already defined in cli/index.ts)
+ * - Lock detected message: "Sort in progress. Try again later."
+ * - No force override (exit immediately on lock held)
+ * - Dry-run by default (execute: false means preview only)
+ *
+ * @param options - Parsed command line options
+ */
+export async function sortCommand(options: SortOptions): Promise<void> {
+  // Step 1: Load config
+  const configResult = loadConfig(options.folder ?? undefined);
+  if (!configResult.ok) {
+    console.error(`Config error: ${configResult.error.message}`);
+    process.exitCode = 1;
+    return;
+  }
+
+  const config = configResult.value;
+  const watchPath = config.watchPath;
+
+  // Step 2: Initialize components
+  const logger = new Logger(config.logLevel);
+  const lockManager = new LockManager(watchPath, logger);
+  const scanner = new DirectoryScanner(config, logger);
+  const mover = new FileMover(config, logger);
+
+  // Step 3: Detect verbosity level
+  const verbosity = detectVerbosity({
+    verbose: options.verbose,
+    silent: options.silent,
+  });
+
+  // Step 4: Acquire lock before processing (COORD-01)
+  const lockResult = await lockManager.acquire();
+  if (!lockResult.ok) {
+    const errMessage = lockResult.error.message;
+
+    // Check for lock held error - handle stale vs active lock
+    if (
+      errMessage.includes("ELOCKED") ||
+      errMessage.includes("lock is already held") ||
+      errMessage.includes("Lock held by another process")
+    ) {
+      const lockPath = lockManager.getLockPath();
+      const isStale = await checkStaleLock(lockPath);
+
+      if (isStale) {
+        // Stale lock: prompt user to confirm override
+        console.warn('Lock appears abandoned (older than 30 minutes).');
+        const shouldContinue = await promptStaleLock();
+
+        if (!shouldContinue) {
+          console.error('Sort cancelled.');
+          process.exitCode = 1;
+          return;
+        }
+
+        // Force acquire stale lock
+        const forceResult = await lockManager.acquire({ force: true });
+        if (!forceResult.ok) {
+          console.error(`Failed to acquire lock: ${forceResult.error.message}`);
+          process.exitCode = 1;
+          return;
+        }
+      } else {
+        // Active lock: exit immediately (per user decision)
+        console.error('Sort in progress. Try again later.');
+        process.exitCode = 1;
+        return;
+      }
+    } else {
+      // Other lock errors
+      console.error(errMessage);
+      process.exitCode = 1;
+      return;
+    }
+  }
+
+  // Step 5: Process files with try-finally for guaranteed lock release
+  try {
+    // Create initial context for TaskRunner
+    const initialContext: TaskContext = {
+      totalFiles: 0,
+      filesProcessed: 0,
+      errors: [],
+    };
+
+    // Initialize statistics collector for tracking moves, skips, and errors
+    const stats = new StatisticsCollector();
+
+    // Create categorizer for determining file categories
+    const categorizer = new Categorizer(config);
+
+    // Define task pipeline for file processing
+    const tasks: Task[] = [
+      {
+        title: 'Scanning directory',
+        task: async (ctx) => {
+          const files: string[] = [];
+          for await (const file of scanner.scan()) {
+            files.push(file);
+          }
+          ctx.totalFiles = files.length;
+          // Store files array on context for processing task
+          (ctx as any).files = files;
+        },
+      },
+      {
+        title: 'Processing files',
+        task: async (ctx, task) => {
+          const files = (ctx as any).files as string[];
+
+          for (const file of files) {
+            ctx.filesProcessed++;
+            task.title = `Processing [${ctx.filesProcessed}/${ctx.totalFiles}]`;
+
+            const basename = path.basename(file);
+            const category = categorizer.categorize(file);
+
+            if (options.execute) {
+              // Execute mode: actually move the file
+              const result = await mover.moveFile(file);
+
+              if (result.ok) {
+                if (result.value !== null) {
+                  // File was moved
+                  stats.recordMove(category, file);
+                  task.output(`${basename} ${chalk.dim('->')} ${CATEGORY_COLORS[category as keyof typeof CATEGORY_COLORS]?.(category + '/') ?? category + '/'}`);
+                } else {
+                  // File was skipped (duplicate)
+                  stats.recordSkip(file, 'duplicate');
+                }
+              } else {
+                // File move error
+                stats.recordError(file, result.error.message);
+                // EXIT-03: Individual errors don't set exit code
+              }
+            } else {
+              // Dry-run mode: preview what would happen
+              stats.recordMove(category, file);
+              const categoryColor = CATEGORY_COLORS[category as keyof typeof CATEGORY_COLORS] ?? chalk.white;
+              console.log(`${basename} ${chalk.dim('->')} ${categoryColor(category + '/')}`);
+            }
+          }
+        },
+        options: { rendererOptions: { outputBar: true } }
+      },
+    ];
+
+    const runner = new TaskRunner(tasks, verbosity);
+    runner.attachStatistics(stats);
+
+    // Run the task pipeline
+    await runner.run();
+
+    // Display summary after tasks complete
+    const summary = formatSummary(stats.complete());
+    console.log(summary);
+
+    // Step 6: Dry-run completion message
+    if (!options.execute) {
+      console.log('\nDry-run preview complete. Use --execute to apply changes.');
+    }
+  } finally {
+    // Always release lock, even on error (COORD-01)
+    await lockManager.release();
+  }
+}

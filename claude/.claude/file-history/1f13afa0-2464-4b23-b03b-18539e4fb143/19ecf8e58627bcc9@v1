@@ -1,0 +1,69 @@
+/**
+ * Home Assistant Database Operations
+ *
+ * Database operations specific to Home Assistant integration.
+ *
+ * STATUS: Stub implementation - needs full migration from SvelteKit app
+ */
+
+import { getDB } from '../db';
+import { printers } from '../db';
+import { eq } from 'drizzle-orm';
+import { createLogger } from '../shared/utils/logger';
+import { tryPromise } from '@julian-i/try-error';
+
+const logger = createLogger('ha-database');
+
+export async function updatePrinterHASettings(
+  printerId: number,
+  settings: {
+    homeAssistantEntityId?: string;
+    autoShutdownEnabled?: boolean;
+    shutdownDelayMinutes?: number;
+    powerThresholdWatts?: number;
+    powerVerificationSeconds?: number;
+  }
+): Promise<void> {
+  const db = getDB();
+  const [_, error] = await tryPromise(
+    db.update(printers).set(settings).where(eq(printers.id, printerId))
+  );
+
+  if (error) {
+    logger.error('Failed to update printer HA settings', {
+      printerId,
+      error: error.message
+    });
+    throw error;
+  }
+}
+
+export async function getPrinterHASettings(printerId: number) {
+  const db = getDB();
+  const [result, error] = await tryPromise(
+    db
+      .select({
+        homeAssistantEntityId: printers.home_assistant_entity_id,
+        autoShutdownEnabled: printers.auto_shutdown_enabled,
+        shutdownDelayMinutes: printers.shutdown_delay_minutes,
+        powerThresholdWatts: printers.power_threshold_watts,
+        powerVerificationSeconds: printers.power_verification_seconds
+      })
+      .from(printers)
+      .where(eq(printers.id, printerId))
+      .limit(1)
+  );
+
+  if (error) {
+    logger.error('Failed to get printer HA settings', {
+      printerId,
+      error: error.message
+    });
+    return null;
+  }
+
+  return result[0] || null;
+}
+
+// Alias for compatibility with existing imports
+export const getPrinterHAConfig = getPrinterHASettings;

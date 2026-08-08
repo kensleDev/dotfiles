@@ -1,0 +1,57 @@
+import { Hono } from 'hono';
+import { streamSSE } from 'hono/streaming';
+import { tryPromise } from '@julian-i/try-error';
+import { createLogger } from '../lib/shared/utils/logger';
+import { sseManager } from '../lib/shared/services/sse-manager';
+import { eventBus } from '../lib/shared/services/event-bus';
+import type {
+	PrinterState,
+	PrinterError,
+	FilamentState
+} from '../lib/printer/types/printer';
+import type { Job } from '../lib/job/types/job';
+
+const logger = createLogger('routes:events');
+const app = new Hono();
+
+// GET /api/events - SSE stream for real-time updates
+app.get('/', async (c) => {
+	return streamSSE(c, async (stream) => {
+		const clientId = Math.random().toString(36).substring(2);
+
+		logger.info(`SSE client connected: ${clientId}`);
+
+		// Add client to SSE manager
+		sseManager.addClient(clientId, stream);
+
+		// Send initial connection message
+		await stream.writeSSE({
+			event: 'connected',
+			data: { clientId, timestamp: Date.now() }
+		});
+
+		// Keepalive messages every 30 seconds
+		const keepaliveInterval = setInterval(() => {
+			if (tryCatch(() =>
+				stream.writeSSE({
+					event: 'keepalive',
+					data: { timestamp: Date.now() }
+				})
+			)[1]) {
+				logger.warn('Failed to send keepalive', { clientId });
+			}
+		}, 30000);
+
+		// Keep the stream open indefinitely - wait for client to disconnect
+		await new Promise<void>((resolve) => {
+			stream.onAbort(() => {
+				logger.info(`SSE client disconnected: ${clientId}`);
+				clearInterval(keepaliveInterval);
+				sseManager.removeClient(clientId);
+				resolve();
+			});
+		});
+	});
+});
+
+export default app;

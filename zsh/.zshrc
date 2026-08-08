@@ -46,3 +46,9 @@ source <(NODE_NO_WARNINGS=1 openclaw completion --shell zsh 2>/dev/null)
 
 # opencode
 export PATH=/home/kd/.opencode/bin:$PATH
+
+# nanobrew
+export PATH="/opt/nanobrew/prefix/bin:$PATH"
+
+# opencode
+export PATH=/Users/kd/.opencode/bin:$PATH

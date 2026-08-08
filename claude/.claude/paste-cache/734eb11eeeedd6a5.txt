@@ -1,0 +1,31 @@
+ncaught (in promise) Error: No checkout popup config found
+    at core.js:297:55043
+    at async Y1 (core.js:297:54962)
+(anonymous) @ core.js:297
+await in (anonymous)
+Y1 @ core.js:297
+V1 @ core.js:336
+(anonymous) @ core.js:342
+Promise.then
+(anonymous) @ core.js:342Understand this error
+client.ts:44  POST http://localhost:3001/api/model-files/upload 500 (Internal Server Error)
+window.fetch @ fetcher.js?v=c3fd337c:66
+apiRequest @ client.ts:44
+postForm @ client.ts:114
+mutationFn @ mutations.ts:12
+fn @ @tanstack_svelte-query.js?v=c3fd337c:2028
+run @ @tanstack_svelte-query.js?v=c3fd337c:837
+start @ @tanstack_svelte-query.js?v=c3fd337c:879
+execute @ @tanstack_svelte-query.js?v=c3fd337c:2067
+await in execute
+mutate @ @tanstack_svelte-query.js?v=c3fd337c:2403
+handleUpload @ LibraryPage.svelte:137
+handle_event_propagation @ chunk-X2I32M26.js?v=c3fd337c:4390Understand this error
+installHook.js:1 2026-01-17T23:02:07.376Z [model.library-page] ERROR: Upload failed: | {"error":"Internal Server Error","stack":"ApiRequestError: Internal Server Error\n    at apiRequest (http://localhost:5173/src/lib/api/client.ts?t=1768690506777:46:11)"}
+overrideMethod @ installHook.js:1
+log @ logger.ts:73
+childLogger.log @ logger.ts:127
+error @ logger.ts:113
+handleUpload @ LibraryPage.svelte:141
+await in handleUpload
+handle_event_propagation @ chunk-X2I32M26.js?v=c3fd337c:4390Understand this error

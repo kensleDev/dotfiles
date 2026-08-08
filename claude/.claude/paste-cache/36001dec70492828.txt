@@ -1,0 +1,153 @@
+bun run --hot src/index.ts
+2026-01-17T11:51:39.132Z [metrics] INFO: Metrics initialized
+2026-01-17T11:51:39.133Z [app] INFO: Starting Print Farm API | {"port":5173,"host":"0.0.0.0"}
+Started development server: http://localhost:5173
+2026-01-17T11:51:40.134Z [app] INFO: Initializing services...
+2026-01-17T11:51:40.134Z [service-initializer] INFO: Initializing services...
+2026-01-17T11:51:40.134Z [service-initializer] INFO: Initializing MQTT manager...
+2026-01-17T11:51:40.139Z [service-initializer] INFO: Found 1 enabled printers
+2026-01-17T11:51:40.139Z [mqtt-manager] INFO: Connecting to printer | {"printerId":3,"ip":"192.168.0.235","serial":"0309BA582800050"}
+2026-01-17T11:51:40.186Z [service-initializer] INFO: Connected to printer: The Baby (3)
+2026-01-17T11:51:40.187Z [service-initializer] INFO: MQTT manager initialized: 1/1 printers connected
+2026-01-17T11:51:40.187Z [service-initializer] INFO: Initializing queue processor...
+2026-01-17T11:51:40.187Z [queue-processor] INFO: Starting queue processor...
+2026-01-17T11:51:40.187Z [service-initializer] INFO: Queue processor initialized
+2026-01-17T11:51:40.187Z [service-initializer] INFO: Initializing Home Assistant client...
+2026-01-17T11:51:40.208Z [homeassistant-client] WARN: Home Assistant URL or token not configured
+2026-01-17T11:51:40.208Z [service-initializer] INFO: Home Assistant client not configured
+2026-01-17T11:51:40.208Z [service-initializer] INFO: Camera proxy is a stub implementation
+2026-01-17T11:51:40.208Z [app] INFO: Services initialized: 2 running, 2 stopped, 0 errors
+2026-01-17T11:51:40.969Z [mqtt-manager] INFO: Connected to printer | {"printerId":3}
+2026-01-17T11:51:40.980Z [mqtt-manager] INFO: Subscribed to report topic | {"printerId":3,"topic":"device/0309BA582800050/report"}
+2026-01-17T11:51:40.982Z [mqtt-manager] INFO: Sent pushall request | {"printerId":3,"topic":"device/0309BA582800050/request"}
+2026-01-17T11:51:45.191Z [queue-processor] INFO: Checking for stuck jobs
+2026-01-17T11:51:45.193Z [queue-processor] INFO: Reset stuck printing job | {"jobId":5}
+2026-01-17T11:51:50.190Z [queue-processor] INFO: Starting job | {"jobId":5,"printerId":3}
+2026-01-17T11:51:50.190Z [queue-processor] INFO: Uploading job | {"jobId":5,"printerId":3}
+2026-01-17T11:51:50.191Z [gcode-processor] INFO: Processing job 5 with options:  | {"jobId":5,"processingOptions":[],"shouldProcessGcode":false}
+2026-01-17T11:51:50.191Z [gcode-processor] INFO: Skipping gcode processing for job 5 | {"jobId":5,"reason":"process_gcode not in options","loopCount":1}
+2026-01-17T11:51:50.191Z [ftps-client] INFO: Connecting to FTPS server | {"printerId":3,"ip":"192.168.0.235","port":990}
+< 220 BBL-P003 FTP Server
+
+> OPTS UTF8 ON
+Connected to 192.168.0.235:990 (TLSv1.2)
+< 332
+
+Login security: TLSv1.2
+> USER bblp
+< 331
+
+> PASS ###
+< 230
+
+> FEAT
+< 502 no-features
+
+> TYPE I
+< 200
+
+> STRU F
+< 502
+
+> OPTS UTF8 ON
+< 502
+
+> PBSZ 0
+< 200
+
+> PROT P
+< 200
+
+2026-01-17T11:51:51.008Z [ftps-client] INFO: Starting file upload | {"printerId":3,"fileName":"5_Respooler Set PETG.gcode.3mf"}
+2026-01-17T11:51:51.010Z [ftps-client] ERROR: File upload failed | {"printerId":3,"fileName":"5_Respooler Set PETG.gcode.3mf","error":"ENOENT: no such file or directory, open 'uploads/25ad36b0-358a-493d-ac9f-0b38a5e49312_Respooler_Set_PETG.gcode.3mf'"}
+> QUIT
+2026-01-17T11:51:51.010Z [queue-processor] ERROR: FTPS upload failed: | {"jobId":5,"printerId":3,"error":"File upload failed - ENOENT: no such file or directory, open 'uploads/25ad36b0-358a-493d-ac9f-0b38a5e49312_Respooler_Set_PETG.gcode.3mf'","stack":"Error: File upload failed - ENOENT: no such file or directory, open 'uploads/25ad36b0-358a-493d-ac9f-0b38a5e49312_Respooler_Set_PETG.gcode.3mf'\n    at uploadFile (/Users/kd/repos/print/print/apps/api/src/lib/queue/services/ftps-client.ts:85:14)\n    at async <anonymous> (/Users/kd/repos/print/print/node_modules/.bun/@julian-i+try-error@0.1.11+1fb4c65d43e298b9/node_modules/@julian-i/try-error/dist/src/try.js:14:27)\n    at async uploadJob (/Users/kd/repos/print/print/apps/api/src/lib/queue/services/queue-processor.ts:383:36)\n    at async <anonymous> (/Users/kd/repos/print/print/node_modules/.bun/@julian-i+try-error@0.1.11+1fb4c65d43e298b9/node_modules/@julian-i/try-error/dist/src/try.js:14:27)\n    at async startJob (/Users/kd/repos/print/print/apps/api/src/lib/queue/services/queue-processor.ts:335:36)\n    at async <anonymous> (/Users/kd/repos/print/print/node_modules/.bun/@julian-i+try-error@0.1.11+1fb4c65d43e298b9/node_modules/@julian-i/try-error/dist/src/try.js:14:27)\n    at async processQueue (/Users/kd/repos/print/print/apps/api/src/lib/queue/services/queue-processor.ts:294:39)\n    at processTicksAndRejections (native:7:39)"}
+2026-01-17T11:51:51.010Z [queue-processor] ERROR: Failed to upload job: | {"jobId":5,"error":"Failed to transfer file to printer - check printer connection","stack":"Error: Failed to transfer file to printer - check printer connection\n    at uploadJob (/Users/kd/repos/print/print/apps/api/src/lib/queue/services/queue-processor.ts:393:17)\n    at async <anonymous> (/Users/kd/repos/print/print/node_modules/.bun/@julian-i+try-error@0.1.11+1fb4c65d43e298b9/node_modules/@julian-i/try-error/dist/src/try.js:14:27)\n    at async startJob (/Users/kd/repos/print/print/apps/api/src/lib/queue/services/queue-processor.ts:335:36)\n    at async <anonymous> (/Users/kd/repos/print/print/node_modules/.bun/@julian-i+try-error@0.1.11+1fb4c65d43e298b9/node_modules/@julian-i/try-error/dist/src/try.js:14:27)\n    at async processQueue (/Users/kd/repos/print/print/apps/api/src/lib/queue/services/queue-processor.ts:294:39)\n    at processTicksAndRejections (native:7:39)"}
+2026-01-17T11:51:51.010Z [queue-processor] ERROR: Job failed | {"jobId":5,"error":"Failed to upload job file to printer"}
+2026-01-17T11:51:51.010Z [queue-processor] INFO: Retrying job | {"jobId":5,"retryCount":1,"maxRetries":3}
+2026-01-17T11:51:55.189Z [queue-processor] INFO: Starting job | {"jobId":5,"printerId":3}
+2026-01-17T11:51:55.189Z [queue-processor] INFO: Uploading job | {"jobId":5,"printerId":3}
+2026-01-17T11:51:55.190Z [gcode-processor] INFO: Processing job 5 with options:  | {"jobId":5,"processingOptions":[],"shouldProcessGcode":false}
+2026-01-17T11:51:55.190Z [gcode-processor] INFO: Skipping gcode processing for job 5 | {"jobId":5,"reason":"process_gcode not in options","loopCount":1}
+2026-01-17T11:51:55.190Z [ftps-client] INFO: Connecting to FTPS server | {"printerId":3,"ip":"192.168.0.235","port":990}
+< 220 BBL-P003 FTP Server
+
+> OPTS UTF8 ON
+Connected to 192.168.0.235:990 (TLSv1.2)
+< 332
+
+Login security: TLSv1.2
+> USER bblp
+< 331
+
+> PASS ###
+< 230
+
+> FEAT
+< 502 no-features
+
+> TYPE I
+< 200
+
+> STRU F
+< 502
+
+> OPTS UTF8 ON
+< 502
+
+> PBSZ 0
+< 200
+
+> PROT P
+< 200
+
+2026-01-17T11:51:56.026Z [ftps-client] INFO: Starting file upload | {"printerId":3,"fileName":"5_Respooler Set PETG.gcode.3mf"}
+2026-01-17T11:51:56.027Z [ftps-client] ERROR: File upload failed | {"printerId":3,"fileName":"5_Respooler Set PETG.gcode.3mf","error":"ENOENT: no such file or directory, open 'uploads/25ad36b0-358a-493d-ac9f-0b38a5e49312_Respooler_Set_PETG.gcode.3mf'"}
+> QUIT
+2026-01-17T11:51:56.027Z [queue-processor] ERROR: FTPS upload failed: | {"jobId":5,"printerId":3,"error":"File upload failed - ENOENT: no such file or directory, open 'uploads/25ad36b0-358a-493d-ac9f-0b38a5e49312_Respooler_Set_PETG.gcode.3mf'","stack":"Error: File upload failed - ENOENT: no such file or directory, open 'uploads/25ad36b0-358a-493d-ac9f-0b38a5e49312_Respooler_Set_PETG.gcode.3mf'\n    at uploadFile (/Users/kd/repos/print/print/apps/api/src/lib/queue/services/ftps-client.ts:85:14)\n    at async <anonymous> (/Users/kd/repos/print/print/node_modules/.bun/@julian-i+try-error@0.1.11+1fb4c65d43e298b9/node_modules/@julian-i/try-error/dist/src/try.js:14:27)\n    at async uploadJob (/Users/kd/repos/print/print/apps/api/src/lib/queue/services/queue-processor.ts:383:36)\n    at async <anonymous> (/Users/kd/repos/print/print/node_modules/.bun/@julian-i+try-error@0.1.11+1fb4c65d43e298b9/node_modules/@julian-i/try-error/dist/src/try.js:14:27)\n    at async startJob (/Users/kd/repos/print/print/apps/api/src/lib/queue/services/queue-processor.ts:335:36)\n    at async <anonymous> (/Users/kd/repos/print/print/node_modules/.bun/@julian-i+try-error@0.1.11+1fb4c65d43e298b9/node_modules/@julian-i/try-error/dist/src/try.js:14:27)\n    at async processQueue (/Users/kd/repos/print/print/apps/api/src/lib/queue/services/queue-processor.ts:294:39)\n    at processTicksAndRejections (native:7:39)"}
+2026-01-17T11:51:56.027Z [queue-processor] ERROR: Failed to upload job: | {"jobId":5,"error":"Failed to transfer file to printer - check printer connection","stack":"Error: Failed to transfer file to printer - check printer connection\n    at uploadJob (/Users/kd/repos/print/print/apps/api/src/lib/queue/services/queue-processor.ts:393:17)\n    at async <anonymous> (/Users/kd/repos/print/print/node_modules/.bun/@julian-i+try-error@0.1.11+1fb4c65d43e298b9/node_modules/@julian-i/try-error/dist/src/try.js:14:27)\n    at async startJob (/Users/kd/repos/print/print/apps/api/src/lib/queue/services/queue-processor.ts:335:36)\n    at async <anonymous> (/Users/kd/repos/print/print/node_modules/.bun/@julian-i+try-error@0.1.11+1fb4c65d43e298b9/node_modules/@julian-i/try-error/dist/src/try.js:14:27)\n    at async processQueue (/Users/kd/repos/print/print/apps/api/src/lib/queue/services/queue-processor.ts:294:39)\n    at processTicksAndRejections (native:7:39)"}
+2026-01-17T11:51:56.027Z [queue-processor] ERROR: Job failed | {"jobId":5,"error":"Failed to upload job file to printer"}
+2026-01-17T11:51:56.027Z [queue-processor] INFO: Retrying job | {"jobId":5,"retryCount":1,"maxRetries":3}
+2026-01-17T11:52:00.190Z [queue-processor] INFO: Starting job | {"jobId":5,"printerId":3}
+2026-01-17T11:52:00.190Z [queue-processor] INFO: Uploading job | {"jobId":5,"printerId":3}
+2026-01-17T11:52:00.190Z [gcode-processor] INFO: Processing job 5 with options:  | {"jobId":5,"processingOptions":[],"shouldProcessGcode":false}
+2026-01-17T11:52:00.190Z [gcode-processor] INFO: Skipping gcode processing for job 5 | {"jobId":5,"reason":"process_gcode not in options","loopCount":1}
+2026-01-17T11:52:00.190Z [ftps-client] INFO: Connecting to FTPS server | {"printerId":3,"ip":"192.168.0.235","port":990}
+< 220 BBL-P003 FTP Server
+
+> OPTS UTF8 ON
+Connected to 192.168.0.235:990 (TLSv1.2)
+< 332
+
+Login security: TLSv1.2
+> USER bblp
+< 331
+
+> PASS ###
+< 230
+
+> FEAT
+< 502 no-features
+
+> TYPE I
+< 200
+
+> STRU F
+< 502
+
+> OPTS UTF8 ON
+< 502
+
+> PBSZ 0
+< 200
+
+> PROT P
+< 200
+
+2026-01-17T11:52:01.049Z [ftps-client] INFO: Starting file upload | {"printerId":3,"fileName":"5_Respooler Set PETG.gcode.3mf"}
+2026-01-17T11:52:01.049Z [ftps-client] ERROR: File upload failed | {"printerId":3,"fileName":"5_Respooler Set PETG.gcode.3mf","error":"ENOENT: no such file or directory, open 'uploads/25ad36b0-358a-493d-ac9f-0b38a5e49312_Respooler_Set_PETG.gcode.3mf'"}
+> QUIT
+2026-01-17T11:52:01.049Z [queue-processor] ERROR: FTPS upload failed: | {"jobId":5,"printerId":3,"error":"File upload failed - ENOENT: no such file or directory, open 'uploads/25ad36b0-358a-493d-ac9f-0b38a5e49312_Respooler_Set_PETG.gcode.3mf'","stack":"Error: File upload failed - ENOENT: no such file or directory, open 'uploads/25ad36b0-358a-493d-ac9f-0b38a5e49312_Respooler_Set_PETG.gcode.3mf'\n    at uploadFile (/Users/kd/repos/print/print/apps/api/src/lib/queue/services/ftps-client.ts:85:14)\n    at async <anonymous> (/Users/kd/repos/print/print/node_modules/.bun/@julian-i+try-error@0.1.11+1fb4c65d43e298b9/node_modules/@julian-i/try-error/dist/src/try.js:14:27)\n    at async uploadJob (/Users/kd/repos/print/print/apps/api/src/lib/queue/services/queue-processor.ts:383:36)\n    at async <anonymous> (/Users/kd/repos/print/print/node_modules/.bun/@julian-i+try-error@0.1.11+1fb4c65d43e298b9/node_modules/@julian-i/try-error/dist/src/try.js:14:27)\n    at async startJob (/Users/kd/repos/print/print/apps/api/src/lib/queue/services/queue-processor.ts:335:36)\n    at async <anonymous> (/Users/kd/repos/print/print/node_modules/.bun/@julian-i+try-error@0.1.11+1fb4c65d43e298b9/node_modules/@julian-i/try-error/dist/src/try.js:14:27)\n    at async processQueue (/Users/kd/repos/print/print/apps/api/src/lib/queue/services/queue-processor.ts:294:39)\n    at processTicksAndRejections (native:7:39)"}
+2026-01-17T11:52:01.050Z [queue-processor] ERROR: Failed to upload job: | {"jobId":5,"error":"Failed to transfer file to printer - check printer connection","stack":"Error: Failed to transfer file to printer - check printer connection\n    at uploadJob (/Users/kd/repos/print/print/apps/api/src/lib/queue/services/queue-processor.ts:393:17)\n    at async <anonymous> (/Users/kd/repos/print/print/node_modules/.bun/@julian-i+try-error@0.1.11+1fb4c65d43e298b9/node_modules/@julian-i/try-error/dist/src/try.js:14:27)\n    at async startJob (/Users/kd/repos/print/print/apps/api/src/lib/queue/services/queue-processor.ts:335:36)\n    at async <anonymous> (/Users/kd/repos/print/print/node_modules/.bun/@julian-i+try-error@0.1.11+1fb4c65d43e298b9/node_modules/@julian-i/try-error/dist/src/try.js:14:27)\n    at async processQueue (/Users/kd/repos/print/print/apps/api/src/lib/queue/services/queue-processor.ts:294:39)\n    at processTicksAndRejections (native:7:39)"}
+2026-01-17T11:52:01.050Z [queue-processor] ERROR: Job failed | {"jobId":5,"error":"Failed to upload job file to printer"}
+2026-01-17T11:52:01.050Z [queue-processor] INFO: Retrying job | {"jobId":5,"retryCount":1,"maxRetries":3}

@@ -1,0 +1,61 @@
+# Phase 3: Progress & Logging - Context
+
+**Gathered:** 2026-02-07
+**Status:** Ready for planning
+
+<domain>
+## Phase Boundary
+
+Visual progress display and verbose logging for bulk file operations. This phase delivers user-facing feedback during the sort process — TUI progress bars, color-coded logging, summary reports, and TTY detection. No file-moving logic (that's Phase 4).
+
+</domain>
+
+<decisions>
+## Implementation Decisions
+
+### Progress Display Style
+- Multi-task list view using listr2 (not single bar or log-only)
+- Phase-level tasks: "Scanning directory", "Categorizing files", "Moving X files"
+- Always-visible counter: "Processed 47/150 files" (separate from task title)
+- During "Moving files" task, show current file with full path: "Moving: Downloads/screenshot.png → Images/screenshot.png"
+
+### Verbosity Levels
+- Silent (no flags): Summary only — "Moved 150 files in 2.3 seconds"
+- Normal (default): Full TUI progress with multi-task list view
+- Verbose (-v): TUI with log panel showing detailed operations with timestamps
+
+### Summary Reporting
+- Category breakdown format: "Images: 47, Documents: 23, Videos: 5..."
+- Always show count and reasons for skipped files (already categorized, excluded pattern, etc.)
+- List all errors in summary with file path and reason
+
+### Color Scheme
+- Both combined: category color for file info, status color for success/error indicators
+- Muted, softer colors for eye comfort during long-running operations
+
+### Claude's Discretion
+- Specific color palette for each category
+- Exact TUI layout and spacing
+- Log panel content density in verbose mode
+- Timestamp format in verbose logging
+
+</decisions>
+
+<specifics>
+## Specific Ideas
+
+No specific requirements — open to standard approaches for CLI progress display.
+
+</specifics>
+
+<deferred>
+## Deferred Ideas
+
+None — discussion stayed within phase scope.
+
+</deferred>
+
+---
+
+*Phase: 03-progress-logging*
+*Context gathered: 2026-02-07*

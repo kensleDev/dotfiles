@@ -1,0 +1,156 @@
+<agent_allocation>
+Primary: researcher
+Output: structured implementation prompt
+Workflow: research-to-prompt
+</agent_allocation>
+
+<objective>
+Research and create a structured implementation prompt for: MCP Server for Prompt Workflow Management
+
+Design an MCP server that integrates with the existing `.agent/prompts/` workflow, enabling the same prompt-driven agent orchestration that currently works via Claude Code custom commands to work with any MCP-compatible client.
+</objective>
+
+<research_objective>
+Investigate:
+
+**MCP Server Architecture:**
+- TypeScript MCP server SDK (official @modelcontextprotocol/sdk)
+- Best practices for MCP server implementation with Bun/Node
+- SSE (stdio) vs direct tool invocation patterns
+- How to structure tools vs a single workflow tool
+
+**Integration with Existing Workflow:**
+- The `.agent/prompts/{branch}/` folder structure
+- How the current /create-prompt command works (see this prompt as reference)
+- Prompt file naming and numbering conventions
+- How to maintain user control over prompts (100% user control requirement)
+
+**Agent Spawning Pattern:**
+- How should MCP signal to client that an agent should be spawned?
+- MCP doesn't directly support spawning sub-agents - what's the pattern?
+- Should the MCP return agent spawn instructions as tool results?
+- How does the client interpret these instructions?
+
+**Key Questions:**
+- What's the best way to structure tools: granular (create_research_task, create_implementation_task) vs monolithic (workflow)?
+- How should the MCP server handle the branch detection and folder creation?
+- What information does the MCP need to return to enable client-side agent spawning?
+- Should prompts be created as files, or returned as structured data?
+- How to handle the sequential flow (research -> implementation) via MCP tools?
+
+**Technical Considerations:**
+- Bun vs Node.js for MCP server runtime
+- TypeScript configuration for MCP
+- Error handling and validation
+- File system operations (prompt folder management)
+- Git branch detection
+</research_objective>
+
+<research_scope>
+Sources to prioritize:
+- Official MCP TypeScript SDK documentation
+- MCP specification (Model Context Protocol)
+- Existing MCP server examples in the wild
+- Context7 for official docs
+- web-search-prime for community knowledge
+
+Focus on:
+- @modelcontextprotocol/sdk (TypeScript)
+- MCP tool definition patterns
+- File system operations through MCP
+- Best practices for state management in MCP servers
+- Integration patterns with agent workflows
+
+The codebase already has:
+- `.agent/prompts/` folder structure (just created)
+- This file as an example of the prompt format
+- Current workflow is command-based, needs to become tool-based
+</research_scope>
+
+<prompt_requirements>
+The structured implementation prompt you create MUST include:
+
+1. **XML tag structure** with clear semantic tags:
+   - <agent_allocation> - Assign to fullstack-developer
+   - <objective> - Clear statement of what needs to be built
+   - <context> - Why this matters, tech stack, MCP patterns
+   - <requirements> - Specific functional requirements
+   - <architecture> - How components fit together
+   - <constraints> - What to avoid and WHY
+   - <output> - File paths and content descriptions
+   - <success_criteria> - How to verify completion
+
+2. **MCP-specific considerations:**
+   - Tool definitions (input schemas, output schemas)
+   - Server initialization and configuration
+   - Transport layer handling (stdio/SSE)
+   - How to signal agent spawn instructions to client
+
+3. **File paths** - Use relative paths like `./src/server.ts`
+
+4. **Success criteria** - Clear, measurable criteria for completion including:
+   - MCP server can be started and connects to clients
+   - Tools are properly registered and callable
+   - Prompt files are created in correct format
+   - Agent spawn instructions are returned correctly
+
+5. **Verification steps** - How to test with an MCP client
+</prompt_requirements>
+
+<context>
+**Current Workflow (via Claude Code commands):**
+1. User calls `/create-prompt "{task}"`
+2. Creates research prompt at `.agent/prompts/{branch}/001-research-{topic}.md`
+3. User runs researcher agent (or runs in auto mode)
+4. Researcher creates implementation prompt at `.agent/prompts/{branch}/002-{name}.md`
+5. User reviews, then runs fullstack-developer agent
+6. Completed prompts moved to completed/ folder
+
+**Goal:** Make this workflow work via MCP tools so any MCP client can use it.
+
+**Key Constraint:** User must remain 100% in control of prompts - they can review/edit before agents run.
+</context>
+
+<requirements>
+Functional requirements:
+1. MCP server written in TypeScript (Bun or Node runtime)
+2. Tools: `create_research_task`, `create_implementation_task`, and/or `workflow`
+3. Support both SSE (stdio) and direct tool invocation
+4. Detect git branch and manage `.agent/prompts/{branch}/` folder structure
+5. Auto-generate prompt numbers (001, 002, etc.)
+6. Return instructions for agent spawning (not spawn agents directly)
+7. User can review prompts before agents execute
+8. Move completed prompts to completed/ folder
+9. Handle --auto flag for auto-execution (optional)
+
+**Agent Spawn Callback Pattern:**
+The MCP should return structured data telling the client what agent to spawn,
+not spawn agents itself. Example:
+```json
+{
+  "agent_spawn_request": {
+    "agent_type": "researcher",
+    "prompt_file": ".agent/prompts/dev/001-research-mcp-server.md",
+    "reason": "Research task created, needs investigation"
+  }
+}
+```
+</requirements>
+
+<output>
+Save your structured implementation prompt to:
+`.agent/prompts/dev/002-prompt-workflow-mcp.md`
+
+The prompt should contain ONLY the structured prompt for fullstack-developer,
+no preamble or metadata.
+</output>
+
+<success_criteria>
+Your research is complete when:
+- MCP TypeScript SDK patterns are understood
+- Tool design is finalized (granular vs monolithic approach)
+- Agent spawn callback pattern is clearly defined
+- Best practices for file operations in MCP are identified
+- A complete, executable prompt is written for fullstack-developer
+- The prompt includes file structure, dependencies, and verification steps
+</success_criteria>

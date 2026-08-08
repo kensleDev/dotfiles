@@ -1,0 +1,528 @@
+import * as mqtt from 'mqtt';
+import { eventBus } from '../../shared/services/event-bus';
+import type {
+	Printer,
+	PrinterState,
+	PrinterConnectionStatus,
+	MQTTMessage,
+	PrinterCommand,
+	PrinterStatus
+} from '../types/printer';
+import type { FilamentState } from '../types/filament';
+import { parseFilamentFromMQTT } from './filament-parser';
+import { createLogger } from '../../shared/utils/logger';
+import { tryCatch, tryPromise } from '@julian-i/try-error';
+
+const logger = createLogger('mqtt-manager');
+
+interface MQTTClient {
+	client: mqtt.MqttClient;
+	printer: Printer;
+	state: PrinterState;
+	lastMessage: MQTTMessage | null;
+	connectionStatus: PrinterConnectionStatus;
+	reconnectAttempts: number;
+	reconnectTimer?: NodeJS.Timeout;
+}
+
+class MQTTManager {
+	private clients = new Map<number, MQTTClient>();
+	private readonly MAX_RECONNECT_ATTEMPTS = 10;
+	private readonly INITIAL_RECONNECT_DELAY = 1000;
+
+	async connectPrinter(printer: Printer): Promise<boolean> {
+		if (this.clients.has(printer.id)) {
+			logger.info('Printer already connected, disconnecting first', {
+				printerId: printer.id
+			});
+			this.disconnectPrinter(printer.id);
+		}
+
+		const connectionStatus: PrinterConnectionStatus = {
+			printerId: printer.id,
+			connected: false,
+			connecting: true,
+			lastError: null
+		};
+
+		const defaultState: PrinterState = {
+			printerId: printer.id,
+			status: 'UNKNOWN',
+			progress: 0,
+			remainingTime: 0,
+			currentFile: null,
+			bedTemp: 0,
+			bedTargetTemp: 0,
+			nozzleTemp: 0,
+			nozzleTargetTemp: 0,
+			chamberTemp: 0,
+			chamberTargetTemp: 0,
+			layerCount: 0,
+			totalLayers: 0,
+			errorCode: null,
+			errorMessage: null,
+			lastUpdate: new Date()
+		};
+
+		logger.info('Connecting to printer', {
+			printerId: printer.id,
+			ip: printer.ip,
+			serial: printer.serial
+		});
+
+		const [setupResult, setupError] = tryCatch(() => {
+			// Use callback-based connect instead of connectAsync for better compatibility
+			const client = mqtt.connect({
+				host: printer.ip,
+				port: 8883,
+				protocol: 'mqtts',
+				clientId: `bblp_${printer.serial}_${Date.now()}`,
+				username: 'bblp',
+				password: printer.access_code,
+				rejectUnauthorized: false,
+				keepalive: 30,
+				reconnectPeriod: 0,
+				connectTimeout: 10000
+			});
+
+			const mqttClient: MQTTClient = {
+				client,
+				printer,
+				state: defaultState,
+				lastMessage: null,
+				connectionStatus,
+				reconnectAttempts: 0
+			};
+
+			this.clients.set(printer.id, mqttClient);
+
+			// Return the client for event handler setup
+			return { client, mqttClient };
+		});
+
+		if (setupError) {
+			logger.error('Failed to initialize MQTT client', {
+				printerId: printer.id,
+				error: setupError.message,
+				stack: setupError.stack
+			});
+			connectionStatus.connecting = false;
+			connectionStatus.lastError = setupError.message;
+			eventBus.emit('printer:error', {
+				printerId: printer.id,
+				code: 'CONNECTION_ERROR',
+				message: setupError.message,
+				timestamp: new Date()
+			});
+			return false;
+		}
+
+		const { client, mqttClient } = setupResult!;
+
+		client.on('connect', () => {
+			logger.info('Connected to printer', { printerId: printer.id });
+			connectionStatus.connected = true;
+			connectionStatus.connecting = false;
+			connectionStatus.lastError = null;
+			mqttClient.reconnectAttempts = 0;
+
+			const reportTopic = `device/${printer.serial}/report`;
+			client.subscribe(reportTopic, (err) => {
+				if (err) {
+					logger.error('Subscribe failed', {
+						printerId: printer.id,
+						error: err.message
+					});
+					connectionStatus.lastError = err.message;
+				} else {
+					logger.info('Subscribed to report topic', {
+						printerId: printer.id,
+						topic: reportTopic
+					});
+
+					// Request full status from printer on connect
+					const requestTopic = `device/${printer.serial}/request`;
+					const pushallPayload = JSON.stringify({
+						pushing: {
+							sequence_id: '0',
+							command: 'pushall'
+						}
+					});
+					client.publish(requestTopic, pushallPayload, (pubErr) => {
+						if (pubErr) {
+							logger.error('Pushall failed', {
+								printerId: printer.id,
+								error: pubErr.message
+							});
+						} else {
+							logger.info('Sent pushall request', {
+								printerId: printer.id,
+								topic: requestTopic
+							});
+						}
+					});
+				}
+			});
+
+			eventBus.emit('printer:connected', { printerId: printer.id });
+		});
+
+		client.on('message', (topic: string, message: Buffer) => {
+			if (topic === `device/${printer.serial}/report`) {
+				const [data, parseError] = tryCatch<MQTTMessage>(() => JSON.parse(message.toString()));
+				if (parseError) {
+					logger.error('Failed to parse MQTT message', {
+						printerId: printer.id,
+						error: parseError.message,
+						rawMessage: message.toString().substring(0, 200)
+					});
+					return;
+				}
+				this.updatePrinterState(printer.id, data);
+			}
+		});
+
+		client.on('error', (error) => {
+			logger.error('MQTT client error', {
+				printerId: printer.id,
+				error: error instanceof Error ? error.message : error
+			});
+			connectionStatus.lastError = error instanceof Error ? error.message : 'Unknown error';
+		});
+
+		client.on('close', () => {
+			logger.info('MQTT connection closed', { printerId: printer.id });
+			connectionStatus.connected = false;
+			connectionStatus.connecting = false;
+			eventBus.emit('printer:disconnected', {
+				printerId: printer.id,
+				reason: 'Connection closed'
+			});
+			this.scheduleReconnect(printer.id);
+		});
+
+		client.on('offline', () => {
+			logger.info('MQTT client offline', { printerId: printer.id });
+		});
+
+		client.on('disconnect', () => {
+			logger.info('MQTT disconnected from broker', { printerId: printer.id });
+		});
+
+		client.on('reconnect', () => {
+			logger.info('MQTT reconnecting', { printerId: printer.id });
+		});
+
+		return true;
+	}
+
+	disconnectPrinter(printerId: number): void {
+		const mqttClient = this.clients.get(printerId);
+		if (mqttClient) {
+			if (mqttClient.reconnectTimer) {
+				clearTimeout(mqttClient.reconnectTimer);
+			}
+			mqttClient.client.end(true);
+			this.clients.delete(printerId);
+			logger.info('Disconnected printer', { printerId });
+		}
+	}
+
+	async sendCommand(printerId: number, command: PrinterCommand): Promise<boolean> {
+		const mqttClient = this.clients.get(printerId);
+		if (!mqttClient) {
+			logger.error('Printer not connected', { printerId });
+			return false;
+		}
+
+		const topic = `device/${mqttClient.printer.serial}/request`;
+		let payload: Record<string, unknown> = {
+			pushing: { sequence_id: '0', command: 'gcode_line' }
+		};
+
+		switch (command.type) {
+			case 'pause':
+				payload = {
+					printing: {
+						command: 'pause',
+						sequence_id: '0'
+					}
+				};
+				break;
+			case 'resume':
+				payload = {
+					printing: {
+						command: 'resume',
+						sequence_id: '0'
+					}
+				};
+				break;
+			case 'stop':
+				payload = {
+					printing: {
+						command: 'stop',
+						sequence_id: '0'
+					}
+				};
+				break;
+			case 'start':
+				if (command.fileName) {
+					payload = {
+						print: {
+							command: 'project_file',
+							sequence_id: '0',
+							file: command.fileName,
+							url: `local://${command.fileName}`
+						}
+					};
+				} else {
+					logger.error('Start command requires fileName parameter');
+					return false;
+				}
+				break;
+			case 'gcode':
+				if (command.gcode) {
+					payload = {
+						printing: {
+							command: 'gcode_line',
+							param: command.gcode,
+							sequence_id: '0'
+						}
+					};
+				} else {
+					logger.error('G-code command requires gcode parameter');
+					return false;
+				}
+				break;
+		}
+
+		const [payloadJson, stringifyError] = tryCatch(() => JSON.stringify(payload));
+		if (stringifyError) {
+			logger.error('Failed to serialize command payload', {
+				printerId,
+				commandType: command.type,
+				error: stringifyError.message
+			});
+			return false;
+		}
+
+		mqttClient.client.publish(topic, payloadJson);
+		logger.info('Sent command to printer', {
+			printerId,
+			commandType: command.type
+		});
+		return true;
+	}
+
+	getPrinterStatus(printerId: number): PrinterState | null {
+		const mqttClient = this.clients.get(printerId);
+		return mqttClient ? mqttClient.state : null;
+	}
+
+	getLastMessage(printerId: number): MQTTMessage | null {
+		const mqttClient = this.clients.get(printerId);
+		return mqttClient ? mqttClient.lastMessage : null;
+	}
+
+	isConnected(printerId: number): boolean {
+		const mqttClient = this.clients.get(printerId);
+		return mqttClient ? mqttClient.connectionStatus.connected : false;
+	}
+
+	isConnecting(printerId: number): boolean {
+		const mqttClient = this.clients.get(printerId);
+		return mqttClient ? mqttClient.connectionStatus.connecting : false;
+	}
+
+	getConnectionError(printerId: number): string | null {
+		const mqttClient = this.clients.get(printerId);
+		return mqttClient ? mqttClient.connectionStatus.lastError : null;
+	}
+
+	getAllConnectedPrinters(): Map<number, PrinterState> {
+		const states = new Map<number, PrinterState>();
+		for (const [id, client] of this.clients) {
+			if (client.connectionStatus.connected) {
+				states.set(id, client.state);
+			}
+		}
+		return states;
+	}
+
+	private scheduleReconnect(printerId: number): void {
+		const mqttClient = this.clients.get(printerId);
+		if (!mqttClient) return;
+
+		if (mqttClient.reconnectAttempts >= this.MAX_RECONNECT_ATTEMPTS) {
+			logger.warn('Max reconnect attempts reached', { printerId });
+			eventBus.emit('printer:error', {
+				printerId,
+				code: 'MAX_RECONNECT_ATTEMPTS',
+				message: 'Maximum reconnection attempts reached',
+				timestamp: new Date()
+			});
+			return;
+		}
+
+		const delay = this.INITIAL_RECONNECT_DELAY * Math.pow(2, mqttClient.reconnectAttempts);
+		logger.info('Scheduling reconnect', {
+			printerId,
+			delayMs: delay,
+			attempt: mqttClient.reconnectAttempts + 1
+		});
+
+		mqttClient.reconnectTimer = setTimeout(async () => {
+			mqttClient.reconnectAttempts++;
+			logger.info('Reconnecting to printer', {
+				printerId,
+				attempt: mqttClient.reconnectAttempts
+			});
+
+			const [_, reconnectError] = await tryPromise(this.connectPrinter(mqttClient.printer));
+			if (reconnectError) {
+				logger.error('Reconnect failed', {
+					printerId,
+					error: reconnectError.message,
+					stack: reconnectError.stack
+				});
+			}
+		}, delay);
+	}
+
+	private updatePrinterState(printerId: number, message: MQTTMessage): void {
+		const mqttClient = this.clients.get(printerId);
+		if (!mqttClient) return;
+
+		// Store the last message for external print tracking
+		mqttClient.lastMessage = message;
+
+		const newState = { ...mqttClient.state };
+
+		if (message.print) {
+			const print = message.print;
+
+			// Update status if gcode_state is present
+			if (print.gcode_state) {
+				newState.status = this.mapGcodeState(print.gcode_state);
+			}
+
+			if (print.mc_percent !== undefined) {
+				newState.progress = print.mc_percent;
+			}
+
+			if (print.mc_remaining_time !== undefined) {
+				// mc_remaining_time is in minutes, convert to seconds for consistency
+				newState.remainingTime = print.mc_remaining_time * 60;
+			}
+
+			if (print.subtask_name) {
+				newState.currentFile = print.subtask_name;
+			}
+
+			if (print.layer_num !== undefined) {
+				newState.layerCount = print.layer_num;
+			}
+
+			if (print.total_layer_num !== undefined) {
+				newState.totalLayers = print.total_layer_num;
+			}
+
+			// Temperatures are in the print object for Bambu printers (not separate temps object)
+			if (print.bed_temper !== undefined) {
+				newState.bedTemp = print.bed_temper;
+			}
+			if (print.bed_target_temper !== undefined) {
+				newState.bedTargetTemp = print.bed_target_temper;
+			}
+			if (print.nozzle_temper !== undefined) {
+				newState.nozzleTemp = print.nozzle_temper;
+			}
+			if (print.nozzle_target_temper !== undefined) {
+				newState.nozzleTargetTemp = print.nozzle_target_temper;
+			}
+			if (print.chamber_temper !== undefined) {
+				newState.chamberTemp = print.chamber_temper;
+			}
+		}
+
+		// Legacy temps format (for backwards compatibility if needed)
+		if (message.temps) {
+			const temps = message.temps;
+			newState.bedTemp = temps.bed || 0;
+			newState.bedTargetTemp = temps.bed_target || 0;
+			newState.nozzleTemp = temps.nozzle || 0;
+			newState.nozzleTargetTemp = temps.nozzle_target || 0;
+			newState.chamberTemp = temps.chamber || 0;
+			newState.chamberTargetTemp = temps.chamber_target || 0;
+		}
+
+		// Parse and update filament data
+		// Debug: Log the raw message structure to understand filament data location
+		if (message.print) {
+			logger.debug('MQTT print message keys', {
+				printerId,
+				keys: Object.keys(message.print),
+				hasAms: !!message.print.ams,
+				hasVtTray: !!message.print.vt_tray,
+				amsSample: message.print.ams ? JSON.stringify(message.print.ams).substring(0, 200) : undefined,
+				vtTraySample: message.print.vt_tray ? JSON.stringify(message.print.vt_tray).substring(0, 200) : undefined
+			});
+		}
+
+		const { amsData, externalSpool, activeFilament } = parseFilamentFromMQTT(message);
+
+		if (amsData || externalSpool || activeFilament) {
+			const filamentState: FilamentState = {
+				printerId,
+				activeFilament,
+				amsData,
+				externalSpool,
+				lastUpdate: new Date()
+			};
+
+			// Check if filament state changed
+			const previousFilament = mqttClient.state.filament;
+			const filamentChanged =
+				JSON.stringify(previousFilament) !== JSON.stringify(filamentState);
+
+			newState.filament = filamentState;
+
+			if (filamentChanged) {
+				eventBus.emit('printer:filament', filamentState);
+			}
+		}
+
+		newState.lastUpdate = new Date();
+
+		const stateChanged = JSON.stringify(mqttClient.state) !== JSON.stringify(newState);
+		mqttClient.state = newState;
+
+		if (stateChanged) {
+			eventBus.emit('printer:state', mqttClient.state);
+		}
+	}
+
+	private mapGcodeState(gcodeState: string): PrinterStatus {
+		switch (gcodeState) {
+			case 'IDLE':
+				return 'IDLE';
+			case 'PREPARE':
+				return 'PREPARE';
+			case 'PRINTING':
+				return 'PRINTING';
+			case 'PAUSE':
+				return 'PAUSED';
+			case 'FINISH':
+				return 'FINISH';
+			case 'STOP':
+				return 'STOP';
+			case 'ERROR':
+				return 'ERROR';
+			default:
+				return 'UNKNOWN';
+		}
+	}
+
+}
+
+export const mqttManager = new MQTTManager();

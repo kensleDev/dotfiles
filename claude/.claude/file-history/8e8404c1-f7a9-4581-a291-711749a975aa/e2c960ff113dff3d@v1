@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "prompt-workflow": {
+      "command": "bun",
+      "args": ["src/index.ts"],
+      "cwd": "/Users/kd/repos/mcp/prompt-workflow"
+    }
+  }
+}

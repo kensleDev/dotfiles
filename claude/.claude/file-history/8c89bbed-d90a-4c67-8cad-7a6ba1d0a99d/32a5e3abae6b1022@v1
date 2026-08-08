@@ -1,0 +1,217 @@
+import * as readline from 'node:readline/promises';
+import { stdin as input, stdout as output } from 'node:process';
+import path from 'node:path';
+import chalk from 'chalk';
+import { CATEGORY_COLORS } from '../../progress/colors.js';
+import { isInCI } from '../../utils/ci.js';
+
+/**
+ * Parse a user's confirmation response.
+ *
+ * Pure function for easy testing. Handles various yes/no inputs
+ * with case-insensitive matching and defaults.
+ *
+ * @param input - User's raw input string
+ * @param defaultYes - If true, empty string (Enter) returns true
+ * @returns true if user confirmed, false otherwise
+ *
+ * @example
+ * ```ts
+ * parseConfirmationResponse('') // true (default yes)
+ * parseConfirmationResponse('y') // true
+ * parseConfirmationResponse('n') // false
+ * ```
+ */
+export function parseConfirmationResponse(input: string, defaultYes: boolean = true): boolean {
+  const trimmed = input.trim().toLowerCase();
+
+  // Empty string (Enter key) uses default
+  if (trimmed === '') {
+    return defaultYes;
+  }
+
+  // Positive responses
+  if (trimmed === 'y' || trimmed === 'yes') {
+    return true;
+  }
+
+  // Negative responses
+  if (trimmed === 'n' || trimmed === 'no') {
+    return false;
+  }
+
+  // Any other input uses default
+  return defaultYes;
+}
+
+/**
+ * Format file list for display with category colors.
+ *
+ * Shows files in "basename -> category" format with colored categories.
+ * Truncates at limit and returns remaining count for "view more" prompt.
+ *
+ * @param files - Array of file paths to display
+ * @param categories - Map of file path -> category name
+ * @param limit - Number of files to show before truncating (default: 10)
+ * @returns Object with display lines and remaining count
+ *
+ * @example
+ * ```ts
+ * const result = formatFileList(['/a/file.png'], new Map([['/a/file.png', 'Images']]));
+ * // result.display: ['file.png -> Images']
+ * // result.remaining: 0
+ * ```
+ */
+export function formatFileList(
+  files: string[],
+  categories: Map<string, string>,
+  limit: number = 10
+): { display: string[]; remaining: number } {
+  const display: string[] = [];
+
+  if (files.length <= limit) {
+    // Show all files
+    for (const file of files) {
+      const basename = path.basename(file);
+      const category = categories.get(file) || 'Other';
+      const colorFn = CATEGORY_COLORS[category as keyof typeof CATEGORY_COLORS] ?? chalk.white;
+      display.push(`${basename} ${chalk.dim('->')} ${colorFn(category)}`);
+    }
+    return { display, remaining: 0 };
+  }
+
+  // Show first N files
+  for (let i = 0; i < limit; i++) {
+    const file = files[i];
+    const basename = path.basename(file);
+    const category = categories.get(file) || 'Other';
+    const colorFn = CATEGORY_COLORS[category as keyof typeof CATEGORY_COLORS] ?? chalk.white;
+    display.push(`${basename} ${chalk.dim('->')} ${colorFn(category)}`);
+  }
+
+  return { display, remaining: files.length - limit };
+}
+
+/**
+ * Prompt user for basic y/n confirmation.
+ *
+ * Uses node:readline/promises for modern async/await pattern.
+ * Ensures readline interface is closed via try-finally.
+ *
+ * @param message - Prompt message to display
+ * @param options - Optional settings
+ * @returns Promise resolving to true if confirmed, false otherwise
+ *
+ * @example
+ * ```ts
+ * const confirmed = await promptConfirmation('Proceed?', { defaultYes: true });
+ * ```
+ */
+export async function promptConfirmation(
+  message: string,
+  options: { defaultYes?: boolean } = {}
+): Promise<boolean> {
+  const { defaultYes = true } = options;
+
+  // Check CI environment for auto-confirm
+  if (isInCI()) {
+    console.warn('CI detected: auto-confirming. Use --yes flag to silence this warning.');
+    return true;
+  }
+
+  const rl = readline.createInterface({ input, output });
+
+  try {
+    // Build prompt with appropriate default indicator
+    const prompt = defaultYes
+      ? `${message} (Y/n) `
+      : `${message} (y/N) `;
+
+    const answer = await rl.question(prompt);
+    return parseConfirmationResponse(answer, defaultYes);
+  } finally {
+    rl.close();
+  }
+}
+
+/**
+ * Prompt user for confirmation with file list display.
+ *
+ * Shows count of files, formatted file list (truncated if > 10),
+ * offers to view full list, then prompts for final confirmation.
+ *
+ * Handles special cases:
+ * - 20+ files: Show first 10, offer 'v' to view all
+ * - 'v' response: Show full list, then prompt again
+ * - Empty file list: Still prompt user
+ *
+ * @param files - Array of file paths to display
+ * @param categories - Map of file path -> category name
+ * @param options - Optional settings
+ * @returns Promise resolving to true if user confirmed, false if cancelled
+ *
+ * @example
+ * ```ts
+ * const confirmed = await promptFileList(files, categories);
+ * ```
+ */
+export async function promptFileList(
+  files: string[],
+  categories: Map<string, string>,
+  options: { limit?: number } = {}
+): Promise<boolean> {
+  const { limit = 10 } = options;
+  const totalCount = files.length;
+
+  // Check CI environment for auto-confirm
+  if (isInCI()) {
+    console.warn('CI detected: auto-confirming. Use --yes flag to silence this warning.');
+    return true;
+  }
+
+  const rl = readline.createInterface({ input, output });
+
+  try {
+    // Display header
+    console.log(`\n${totalCount} file${totalCount !== 1 ? 's' : ''} will be moved.\n`);
+
+    // Format file list
+    const { display, remaining } = formatFileList(files, categories, limit);
+
+    if (remaining > 0) {
+      // Show first N files
+      for (const line of display) {
+        console.log(`  ${line}`);
+      }
+      console.log(`  ... and ${remaining} more file${remaining !== 1 ? 's' : ''}.\n`);
+
+      // Offer to view full list
+      const viewAnswer = await rl.question(`View all ${totalCount} files? (v/n) `);
+      const viewMore = viewAnswer.trim().toLowerCase() === 'v' || viewAnswer.trim().toLowerCase() === 'view';
+
+      if (viewMore) {
+        // Show all files
+        console.log('');
+        for (const file of files) {
+          const basename = path.basename(file);
+          const category = categories.get(file) || 'Other';
+          const colorFn = CATEGORY_COLORS[category as keyof typeof CATEGORY_COLORS] ?? chalk.white;
+          console.log(`  ${basename} ${chalk.dim('->')} ${colorFn(category)}`);
+        }
+        console.log('');
+      }
+    } else {
+      // Show all files (<= limit)
+      for (const line of display) {
+        console.log(`  ${line}`);
+      }
+      console.log('');
+    }
+
+    // Final confirmation prompt
+    const answer = await rl.question(`Proceed with these ${totalCount} changes? (Y/n) `);
+    return parseConfirmationResponse(answer, true);
+  } finally {
+    rl.close();
+  }
+}

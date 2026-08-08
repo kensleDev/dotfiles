@@ -1,0 +1,62 @@
+---
+name: nextjs-dynamic-routes-params
+# IMPORTANT: Keep description on ONE line for Claude Code compatibility
+# prettier-ignore
+description: "Next.js dynamic routes with [param] folders. Access via params prop (Server) or useParams() (Client). Next.js 15+: await params. Default to app/[id]/ not app/products/[id]/."
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
+---
+
+# Next.js Dynamic Routes and Parameters
+
+## Quick Start
+
+**Dynamic folder:** `app/[id]/page.tsx` → URL segment becomes `params`
+
+**Key rule:** Default to `app/[id]/page.tsx` unless URL structure explicitly requires nesting like `app/products/[id]/page.tsx`
+
+```typescript
+// app/[id]/page.tsx
+export default async function ProductPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;  // Next.js 15+: must await
+  const product = await fetch(`https://api.example.com/products/${id}`)
+    .then(r => r.json());
+  return <div><h1>{product.name}</h1></div>;
+}
+```
+
+## Route Syntax
+
+| Syntax | Matches | Example |
+|--------|---------|---------|
+| `[id]` | `/value` | `/123` |
+| `[...slug]` | `/a/b/c` | `/docs/getting-started/install` |
+| `[[...slug]]` | `/` or `/a/b/c` | `/shop` or `/shop/electronics/phones` |
+
+## Reference Files
+
+- [route-patterns.md](references/route-patterns.md) - Route syntax, decision tree,
+  common patterns (catch-all, optional)
+- [accessing-params.md](references/accessing-params.md) - Server vs Client access,
+  Next.js 15+ async params
+- [typescript-best-practices.md](references/typescript-best-practices.md) - Type safety,
+  pitfalls, quick reference
+
+## Notes
+
+- **Server Components:** Use `params` prop (await in Next.js 15+)
+- **Client Components:** Use `useParams()` hook
+- **Keep structure simple:** Use `app/[id]/` unless explicitly told otherwise
+- **Last verified:** 2025-01-11
+
+<!--
+PROGRESSIVE DISCLOSURE GUIDELINES:
+- Keep this file ~50 lines total (max ~150 lines)
+- Use 1-2 code blocks only (recommend 1)
+- Keep description <200 chars for Level 1 efficiency
+- Move detailed docs to references/ for Level 3 loading
+- This is Level 2 - quick reference ONLY, not a manual
+-->

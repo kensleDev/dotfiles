@@ -1,0 +1,658 @@
+/**
+ * Prompt file operations
+ * This module handles creating, reading, and moving prompt files
+ */
+
+import { promises as fs } from 'fs';
+import { join, dirname, basename } from 'path';
+import { getNextPromptNumber } from './numbers.js';
+
+const AGENT_DIR = '.agent';
+const PROMPTS_BASE_DIR = join(AGENT_DIR, 'prompts');
+
+/**
+ * Sanitize a string for use in a filename
+ * @param str - The string to sanitize
+ * @returns A filename-safe string
+ */
+export function sanitizeForFilename(str: string): string {
+  return str
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+    .substring(0, 50); // Limit length
+}
+
+/**
+ * Get the prompts directory for a specific branch
+ * @param repoRoot - Repository root directory
+ * @param branch - Git branch name
+ * @returns Absolute path to the branch's prompts directory
+ */
+export function getPromptsDir(repoRoot: string, branch: string): string {
+  return join(repoRoot, PROMPTS_BASE_DIR, branch);
+}
+
+/**
+ * Get the completed directory for a specific branch
+ * @param repoRoot - Repository root directory
+ * @param branch - Git branch name
+ * @returns Absolute path to the branch's completed directory
+ */
+export function getCompletedDir(repoRoot: string, branch: string): string {
+  return join(repoRoot, PROMPTS_BASE_DIR, branch, 'completed');
+}
+
+/**
+ * Ensure the prompts directory exists for a branch
+ * @param repoRoot - Repository root directory
+ * @param branch - Git branch name
+ */
+export async function ensurePromptsDir(repoRoot: string, branch: string): Promise<void> {
+  const promptsDir = getPromptsDir(repoRoot, branch);
+  await fs.mkdir(promptsDir, { recursive: true });
+}
+
+/**
+ * Generate research prompt content
+ * @param task - Research task description
+ * @param priority - Optional priority level
+ * @param context - Optional additional context
+ * @returns Formatted prompt content
+ */
+export function generateResearchPromptContent(
+  task: string,
+  priority?: string,
+  context?: string
+): string {
+  const prioritySection = priority ? `Priority: ${priority}\n` : '';
+  const contextSection = context || 'No additional context provided.';
+
+  return `<agent_allocation>
+Primary: researcher
+Output: research findings
+Workflow: research-to-prompt
+</agent_allocation>
+
+<objective>
+Research and investigate: ${task}
+</objective>
+
+<context>
+${contextSection}
+
+${prioritySection}
+</context>
+
+<requirements>
+1. Conduct thorough research on the specified topic
+2. Gather information from multiple reliable sources
+3. Document findings in a structured format
+4. Identify key concepts, patterns, and best practices
+5. Note any potential challenges or considerations
+</requirements>
+
+<output>
+Save research findings to: .agent/research/${sanitizeForFilename(task)}.md
+
+Include in your research:
+- Overview and background
+- Key concepts and terminology
+- Technical details and implementation patterns
+- Code examples where applicable
+- Potential challenges and solutions
+- References and resources
+</output>
+
+<success_criteria>
+1. Research covers all aspects of the topic
+2. Findings are well-organized and documented
+3. Technical details are accurate and up-to-date
+4. Code examples are functional and tested
+5. References are from reliable sources
+</success_criteria>
+`;
+}
+
+/**
+ * Generate implementation prompt content
+ * @param task - Implementation task description
+ * @param researchFindings - Optional research findings
+ * @param requirements - Optional specific requirements
+ * @returns Formatted prompt content
+ */
+export function generateImplementationPromptContent(
+  task: string,
+  researchFindings?: string,
+  requirements?: string
+): string {
+  const requirementsSection = requirements || '[Generate requirements based on task]';
+  const researchSection = researchFindings
+    ? `<research_findings>
+${researchFindings}
+</research_findings>
+
+`
+    : '';
+
+  return `<agent_allocation>
+Primary: fullstack-developer
+Output: implementation
+Workflow: build-and-test
+</agent_allocation>
+
+<objective>
+Implement: ${task}
+</objective>
+
+<context>
+${researchSection}<requirements>
+${requirementsSection}
+</requirements>
+</context>
+
+<architecture>
+Design and document the architecture before implementation.
+</architecture>
+
+<implementation_details>
+Break down the implementation into manageable tasks.
+</implementation_details>
+
+<output>
+Working implementation with:
+- Source code files
+- Tests (if applicable)
+- Documentation (README, comments)
+- Configuration files
+</output>
+
+<success_criteria>
+1. Implementation meets all requirements
+2. Code follows best practices
+3. Tests pass (if applicable)
+4. Documentation is complete
+5. Code is ready for review
+</success_criteria>
+`;
+}
+
+/**
+ * Create a research prompt file
+ * @param repoRoot - Repository root directory
+ * @param branch - Git branch name
+ * @param task - Research task description
+ * @param priority - Optional priority level
+ * @param context - Optional additional context
+ * @returns Object with file path and prompt number
+ */
+export async function createResearchPrompt(
+  repoRoot: string,
+  branch: string,
+  task: string,
+  priority?: string,
+  context?: string
+): Promise<{ filePath: string; promptNumber: string }> {
+  await ensurePromptsDir(repoRoot, branch);
+  const promptsDir = getPromptsDir(repoRoot, branch);
+  const promptNumber = await getNextPromptNumber(promptsDir);
+  const sanitizedTopic = sanitizeForFilename(task);
+  const filename = `${promptNumber}-research-${sanitizedTopic}.md`;
+  const filePath = join(promptsDir, filename);
+
+  const content = generateResearchPromptContent(task, priority, context);
+  await fs.writeFile(filePath, content, 'utf-8');
+
+  return { filePath, promptNumber };
+}
+
+/**
+ * Create an implementation prompt file
+ * @param repoRoot - Repository root directory
+ * @param branch - Git branch name
+ * @param task - Implementation task description
+ * @param researchFindings - Optional research findings
+ * @param requirements - Optional specific requirements
+ * @returns Object with file path and prompt number
+ */
+export async function createImplementationPrompt(
+  repoRoot: string,
+  branch: string,
+  task: string,
+  researchFindings?: string,
+  requirements?: string
+): Promise<{ filePath: string; promptNumber: string }> {
+  await ensurePromptsDir(repoRoot, branch);
+  const promptsDir = getPromptsDir(repoRoot, branch);
+  const promptNumber = await getNextPromptNumber(promptsDir);
+  const sanitizedName = sanitizeForFilename(task);
+  const filename = `${promptNumber}-${sanitizedName}.md`;
+  const filePath = join(promptsDir, filename);
+
+  const content = generateImplementationPromptContent(task, researchFindings, requirements);
+  await fs.writeFile(filePath, content, 'utf-8');
+
+  return { filePath, promptNumber };
+}
+
+/**
+ * List all prompts in a branch directory
+ * @param repoRoot - Repository root directory
+ * @param branch - Git branch name
+ * @returns Array of prompt metadata
+ */
+export async function listPrompts(
+  repoRoot: string,
+  branch: string
+): Promise<
+  Array<{
+    number: string;
+    title: string;
+    type: string;
+    status: string;
+    filePath: string;
+  }>
+> {
+  const promptsDir = getPromptsDir(repoRoot, branch);
+
+  try {
+    const entries = await fs.readdir(promptsDir, { withFileTypes: true });
+    const prompts: Array<{
+      number: string;
+      title: string;
+      type: string;
+      status: string;
+      filePath: string;
+    }> = [];
+
+    for (const entry of entries) {
+      if (entry.isFile() && entry.name.endsWith('.md')) {
+        const match = entry.name.match(/^(\d+)-(?:research-)?(.+?)\.md$/);
+        if (match) {
+          const [, number, title] = match;
+          const type = entry.name.includes('-research-') ? 'research' : 'implementation';
+          prompts.push({
+            number: number ?? '',
+            title: title ?? '',
+            type,
+            status: 'pending',
+            filePath: join(promptsDir, entry.name),
+          });
+        }
+      }
+    }
+
+    return prompts.sort((a, b) => parseInt(a.number) - parseInt(b.number));
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Get prompt content and metadata
+ * @param promptFilePath - Absolute path to the prompt file
+ * @returns Object with content and metadata
+ */
+export async function getPrompt(
+  promptFilePath: string
+): Promise<{ content: string; metadata: { number: string; title: string; type: string } }> {
+  const content = await fs.readFile(promptFilePath, 'utf-8');
+  const filename = basename(promptFilePath);
+  const match = filename.match(/^(\d+)-(?:research-)?(.+?)\.md$/);
+
+  if (!match) {
+    throw new Error(`Invalid prompt filename format: ${filename}`);
+  }
+
+  const [, number, title] = match;
+  const type = filename.includes('-research-') ? 'research' : 'implementation';
+
+  return { content, metadata: { number: number ?? '', title: title ?? '', type } };
+}
+
+/**
+ * Move a prompt to the completed folder
+ * @param promptFilePath - Absolute path to the prompt file
+ * @returns New file path
+ */
+export async function movePromptToCompleted(promptFilePath: string): Promise<string> {
+  const filename = basename(promptFilePath);
+  const dir = dirname(promptFilePath);
+  const completedDir = join(dir, 'completed');
+
+  // Ensure completed directory exists
+  await fs.mkdir(completedDir, { recursive: true });
+
+  // Move file
+  const newFilePath = join(completedDir, filename);
+  await fs.rename(promptFilePath, newFilePath);
+
+  return newFilePath;
+}
+
+/**
+ * Generate workflow orchestrator prompt content
+ * @param task - Workflow task description
+ * @param invocationMethod - How the orchestrator was invoked (command, mcp, natural_language)
+ * @param autoMode - Whether auto mode is enabled
+ * @returns Formatted prompt content
+ */
+export function generateWorkflowPromptContent(
+  task: string,
+  invocationMethod?: string,
+  autoMode?: boolean
+): string {
+  const method = invocationMethod ?? 'natural_language';
+  const auto = autoMode ?? false;
+
+  return `<agent_allocation>
+Primary: orchestrator
+Output: master workflow orchestrator
+Workflow: orchestrator-implementation
+</agent_allocation>
+
+<objective>
+Guide the user through creating a prompt for: ${task}
+
+The workflow orchestrator manages the entire prompt creation process from initial request
+through research, implementation, and completion while maintaining 100% user agency.
+</objective>
+
+<context>
+**Invocation Method:** ${method}
+**Auto Mode:** ${auto ? 'enabled' : 'disabled'}
+
+**Current State:**
+- MCP server with tools for creating research/implementation tasks
+- Prompt storage in .agent/prompts/{branch}/ structure
+- Two-agent workflow: researcher → fullstack-developer
+
+**Key Requirements:**
+- User must remain in control at every stage
+- Support both interactive and auto modes
+- Handle natural language triggering
+- Integrate with MCP tools when available
+- Preserve context across workflow stages
+- Provide clear choice points and guidance
+</context>
+
+<workflow_stages>
+**Stage 1: Request Analysis & Clarification**
+- Analyze task complexity and clarity
+- Ask clarifying questions if needed (Golden Rule: "Would a colleague understand?")
+- Determine if research is required
+- Handle auto mode detection
+
+**Stage 2: Research Task Creation** (if research needed)
+- Generate structured research prompt using XML template
+- Save to .agent/prompts/{branch}/###-research-{topic}.md
+- Present user choice: run researcher, review, or exit
+- Handle auto mode: automatically launch researcher
+
+**Stage 3: Research Completion & Pre-Implementation**
+- Receive implementation prompt from researcher
+- ALWAYS offer review/edit before implementation (even in auto mode)
+- Present user choice: review/edit, proceed to implementation, or exit
+- This is the critical "human-in-the-loop" checkpoint
+
+**Stage 4: Implementation Execution**
+- Confirm implementation agent (fullstack-developer or custom)
+- Ask about Ralph Wiggum loop for persistent execution
+- Launch implementation agent
+- Monitor completion
+
+**Stage 5: Completion & Cleanup**
+- Verify implementation success
+- Move completed prompts to .agent/prompts/{branch}/completed/
+- Provide summary and next steps
+</workflow_stages>
+
+<choice_points>
+${auto ? `**Auto Mode Enabled:**
+- Stage 2 choice will be skipped (researcher auto-launches)
+- Stage 3 choice (pre-implementation review) is ALWAYS shown
+- Implementation always requires confirmation
+
+` : ''}**Choice Point 1: After Research Task Creation**
+\`\`\`
+✓ Saved research task to .agent/prompts/{branch}/###-research-{topic}.md
+
+The researcher will:
+1. Investigate the topic
+2. Create a structured implementation prompt
+3. Save to .agent/prompts/{branch}/###-{name}.md
+
+What's next?
+1. Run researcher now (creates implementation prompt)
+2. Review/edit research task first
+3. Other
+
+Choose (1-3): _
+\`\`\`
+
+**Choice Point 2: After Research Completes (CRITICAL - Always Show)**
+\`\`\`
+Researcher created implementation prompt at:
+\`.agent/prompts/{branch}/###-{name}.md\`
+
+Before proceeding to implementation, you can:
+1. Review/edit the implementation prompt
+2. Add clarifications or adjustments
+3. Continue directly to implementation
+
+Choose (1-3) or just say 'continue' to proceed: _
+\`\`\`
+
+**Choice Point 3: Before Implementation**
+\`\`\`
+Run fullstack-developer to execute it? (y/n): _
+
+If user confirms:
+"Use Ralph Wiggum loop for persistent execution? (y/n): _
+\`\`\`
+</choice_points>
+
+<prompts>
+**Research Task Template:**
+\`\`\`xml
+<agent_allocation>
+Primary: researcher
+Output: structured implementation prompt
+Workflow: research-to-prompt
+</agent_allocation>
+
+<objective>
+Research and create a structured implementation prompt for: {task_summary}
+</objective>
+
+<research_objective>
+Investigate:
+- {key_questions}
+- Technical approaches and patterns
+- Best practices and constraints
+- Potential solutions with pros/cons
+</research_objective>
+
+<prompt_requirements>
+The structured prompt you create MUST include:
+
+1. **XML tag structure** with clear semantic tags
+2. **Explicit instructions** - Tell the implementation agent exactly what to do
+3. **File paths** - Use relative paths like ./src/components/Button.tsx
+4. **Success criteria** - Clear, measurable criteria for completion
+5. **Verification steps** - How to confirm the solution works
+</prompt_requirements>
+
+<output>
+Save your structured implementation prompt to:
+\`.agent/prompts/{branch}/#{number}-{name}.md\`
+</output>
+
+<success_criteria>
+Your research is complete when:
+- All key questions about implementation are answered
+- Multiple approaches have been considered and evaluated
+- Best practices for the tech stack are identified
+- A complete, executable prompt is written for the implementation agent
+</success_criteria>
+\`\`\`
+</prompts>
+
+<state_management>
+**State to Preserve Across Stages:**
+
+1. **Original User Request** - Keep track of initial task
+2. **Invocation Method** - ${method}
+3. **Auto Mode Flag** - ${auto}
+4. **Git Branch** - Current branch for prompt storage
+5. **Prompt Numbers** - Track sequence numbers
+6. **Stage Progress** - Which stage we're in
+7. **User Choices** - Record decisions made
+</state_management>
+
+<integration>
+**MCP Tool Integration:**
+
+The orchestrator should detect and use MCP tools when available:
+
+1. **Detection:**
+   - Check if MCP server is available via tool listing
+   - Gracefully fallback to direct file operations if not
+
+2. **Tool Usage:**
+   - \`create_research_task\` - When creating research prompts
+   - \`create_implementation_task\` - When researcher creates implementation prompt
+   - \`list_prompts\` - For status checks and verification
+   - \`get_prompt\` - For reading existing prompts
+   - \`move_prompt_to_completed\` - For cleanup
+</integration>
+
+<requirements>
+**Functional Requirements:**
+
+1. **Stage Management**
+   - Execute all 5 workflow stages
+   - Present choices at decision points
+   - Handle user responses correctly
+   - Support stage transitions
+
+2. **State Preservation**
+   - Maintain state across conversation turns
+   - Track progress and decisions
+   - Preserve original request context
+
+3. **MCP Integration**
+   - Detect MCP tool availability
+   - Use MCP tools when available
+   - Gracefully fallback when not
+   - Handle agent spawn callbacks
+
+4. **Auto Mode Support**
+   - Skip Stage 2 choice in auto mode
+   - Always show Stage 3 choice (pre-implementation)
+   - Maintain user control for implementation
+
+5. **User Agency**
+   - Always offer review before implementation
+   - Allow exit at any stage
+   - Support editing prompts
+   - Provide clear progress visibility
+</requirements>
+
+<constraints>
+**CRITICAL CONSTRAINTS:**
+
+1. **User Control is Paramount**
+   - User can always review/edit before implementation
+   - User can exit at any stage
+   - No irreversible actions without confirmation
+   - Clear visibility into what's happening
+
+2. **Stateless Between Sessions**
+   - Don't rely on persistent storage
+   - All state in conversation context
+   - Each conversation is independent
+
+3. **MCP is Optional**
+   - Must work without MCP server
+   - Direct file operations as fallback
+   - Graceful degradation
+
+4. **Auto Mode Limits**
+   - Auto mode only skips Stage 2 choice
+   - Stage 3 choice (pre-implementation) is ALWAYS shown
+   - Implementation always requires user confirmation
+</constraints>
+
+<success_criteria>
+**Workflow is successful when:**
+
+1. All stages are executed correctly
+2. User maintains agency throughout
+3. State is preserved across conversation turns
+4. MCP integration works when available
+5. Fallback to direct operations works
+6. User can review and edit before implementation
+7. Pre-implementation choice is always shown
+8. Implementation requires confirmation
+</success_criteria>
+
+<notes>
+**Implementation Notes:**
+
+1. Start with Stage 1: Ask clarifying questions if needed
+2. Use inline state tracking in responses
+3. Present numbered options with clear descriptions
+4. Try-catch pattern for MCP tools
+5. Always show Stage 3 choice (pre-implementation review)
+6. Provide specific error messages with recovery options
+7. Always show current state and what's next
+8. Use absolute paths, detect repository root
+</notes>
+`;
+}
+
+/**
+ * Create a workflow orchestrator prompt file
+ * @param repoRoot - Repository root directory
+ * @param branch - Git branch name
+ * @param task - Workflow task description
+ * @param invocationMethod - How the orchestrator was invoked
+ * @param autoMode - Whether auto mode is enabled
+ * @returns Object with file path and prompt number
+ */
+export async function createWorkflowPrompt(
+  repoRoot: string,
+  branch: string,
+  task: string,
+  invocationMethod?: string,
+  autoMode?: boolean
+): Promise<{ filePath: string; promptNumber: string }> {
+  await ensurePromptsDir(repoRoot, branch);
+  const promptsDir = getPromptsDir(repoRoot, branch);
+  const promptNumber = await getNextPromptNumber(promptsDir);
+  const sanitizedTopic = sanitizeForFilename(task);
+  const filename = `${promptNumber}-workflow-${sanitizedTopic}.md`;
+  const filePath = join(promptsDir, filename);
+
+  const content = generateWorkflowPromptContent(task, invocationMethod, autoMode);
+  await fs.writeFile(filePath, content, 'utf-8');
+
+  return { filePath, promptNumber };
+}
+
+/**
+ * Validate that a file path is within the .agent directory
+ * @param filePath - The file path to validate
+ * @param repoRoot - Repository root directory
+ * @throws Error if path is outside .agent directory
+ */
+export function validateAgentPath(filePath: string, repoRoot: string): void {
+  const agentDir = join(repoRoot, AGENT_DIR);
+  const resolvedPath = filePath.startsWith('/') ? filePath : join(repoRoot, filePath);
+  const resolvedAgentDir = agentDir.startsWith('/') ? agentDir : join(repoRoot, agentDir);
+
+  if (!resolvedPath.startsWith(resolvedAgentDir)) {
+    throw new Error('File path must be within the .agent directory');
+  }
+}

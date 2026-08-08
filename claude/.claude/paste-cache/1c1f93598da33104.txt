@@ -1,0 +1,22 @@
+Started development server: http://localhost:5173
+<-- GET /
+2026-01-17T11:12:13.986Z [request-logger] INFO: GET / | {"method":"GET","path":"/","status":200,"duration":2}
+--> GET / 200 2ms
+2026-01-17T11:12:14.895Z [app] INFO: Initializing services...
+2026-01-17T11:12:14.896Z [service-initializer] INFO: Initializing services...
+2026-01-17T11:12:14.896Z [service-initializer] INFO: Initializing MQTT manager...
+2026-01-17T11:12:14.908Z [service-initializer] ERROR: Failed to initialize MQTT manager | {"error":{}}
+2026-01-17T11:12:14.908Z [service-initializer] INFO: Queue processor initialization not yet implemented
+2026-01-17T11:12:14.908Z [service-initializer] INFO: Home Assistant initialization not yet implemented
+2026-01-17T11:12:14.908Z [service-initializer] INFO: Camera proxy initialization not yet implemented
+2026-01-17T11:12:14.908Z [app] INFO: Services initialized: 0 running, 3 stopped, 1 errors
+2026-01-17T11:12:14.908Z [app] WARN: Some services failed to initialize | {"errors":[{"name":"mqtt-manager","status":"error","error":"'better-sqlite3' is not yet supported in Bun.\nTrack the status in https://github.com/oven-sh/bun/issues/4290\nIn the meantime, you could try bun:sqlite which has a similar API."}]}
+<-- GET /
+2026-01-17T11:12:15.145Z [request-logger] INFO: GET / | {"method":"GET","path":"/","status":200,"duration":0}
+--> GET / 200 1ms
+<-- GET /
+2026-01-17T11:12:16.412Z [request-logger] INFO: GET / | {"method":"GET","path":"/","status":200,"duration":0}
+--> GET / 200 0ms
+<-- GET /
+2026-01-17T11:12:17.656Z [request-logger] INFO: GET / | {"method":"GET","path":"/","status":200,"duration":1}
+--> GET / 200 1ms

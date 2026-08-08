@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/cheats"
+CACHE_FILE="$CACHE_DIR/cheatsheet_index.txt"
+PID_FILE="$CACHE_DIR/.refresh_pid"
+
+# Create cache dir if it doesn't exist
+mkdir -p "$CACHE_DIR"
+
+# Async refresh in background
+async_refresh() {
+	# Check if already running
+	if [[ -f "$PID_FILE" ]]; then
+		old_pid=$(cat "$PID_FILE")
+		if kill -0 "$old_pid" 2>/dev/null; then
+			return  # Already running
+		fi
+	fi
+
+	echo $$ > "$PID_FILE"
+
+	new_files=$(find ~ -maxdepth 6 -name "CHEATSHEET.md" 2>/dev/null | sort)
+
+	# Only update if different
+	if ! diff -q "$CACHE_FILE" <(echo "$new_files") >/dev/null 2>&1; then
+		echo "$new_files" > "$CACHE_FILE"
+	fi
+
+	rm -f "$PID_FILE"
+}
+
+# Handle --refresh flag
+if [[ "$1" == "--refresh" ]]; then
+	async_refresh
+	wait
+	exit 0
+fi
+
+# Ensure cache exists for immediate load
+if [[ ! -f "$CACHE_FILE" ]]; then
+	find ~ -maxdepth 6 -name "CHEATSHEET.md" 2>/dev/null > "$CACHE_FILE"
+fi
+
+# Start async refresh in background
+async_refresh &
+
+# Load immediately from cache
+selected=$(cat "$CACHE_FILE" | fzf --preview 'bat --color=always {}' --preview-window=right:70%)
+
+if [[ -n "$selected" ]]; then
+	bat "$selected"
+fi

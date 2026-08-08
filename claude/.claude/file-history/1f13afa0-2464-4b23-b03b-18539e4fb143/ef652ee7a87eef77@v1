@@ -1,0 +1,83 @@
+// Server-side environment variables with validation
+class EnvConfig {
+  private validated = false;
+
+  private validate(): void {
+    if (this.validated) return;
+
+    // Validate required variables
+    if (!env.DATABASE_URL) {
+      throw new Error('DATABASE_URL is not set');
+    }
+
+    this.validated = true;
+  }
+
+  get databaseUrl(): string {
+    this.validate();
+    return env.DATABASE_URL!;
+  }
+
+  get port(): number {
+    return parseInt(env.PORT || '5173', 10);
+  }
+
+  get host(): string {
+    return env.HOST || '0.0.0.0';
+  }
+
+  get isDevelopment(): boolean {
+    return env.NODE_ENV === 'development';
+  }
+
+  get isProduction(): boolean {
+    return env.NODE_ENV === 'production';
+  }
+
+  // Optional Bambu MQTT settings (can be configured in Settings)
+  get bambuMqttHost(): string | undefined {
+    return env.BAMBU_MQTT_HOST;
+  }
+
+  get bambuMqttPort(): number | undefined {
+    return env.BAMBU_MQTT_PORT ? parseInt(env.BAMBU_MQTT_PORT, 10) : undefined;
+  }
+
+  get bambuRegion(): string | undefined {
+    return env.BAMBU_REGION;
+  }
+
+  // Optional Camera Proxy settings
+  get cameraProxyPort(): number | undefined {
+    return env.CAMERA_PROXY_PORT ? parseInt(env.CAMERA_PROXY_PORT, 10) : undefined;
+  }
+
+  get maxStreamingClients(): number {
+    return parseInt(env.MAX_STREAMING_CLIENTS || '5', 10);
+  }
+
+  // Optional GPIO settings
+  get gpioChip(): string | undefined {
+    return env.GPIO_CHIP;
+  }
+
+  get actuatorPins(): number[] | undefined {
+    if (!env.ACTUATOR_PINS) return undefined;
+    return env.ACTUATOR_PINS.split(',').map((pin) => parseInt(pin.trim(), 10));
+  }
+
+  // Home Assistant integration
+  get homeAssistantUrl(): string | undefined {
+    return env.HOME_ASSISTANT_URL;
+  }
+
+  get homeAssistantToken(): string | undefined {
+    return env.HOME_ASSISTANT_TOKEN;
+  }
+}
+
+// Singleton instance
+export const envConfig = new EnvConfig();
+
+// Type-safe access to environment variables
+export const getEnv = () => envConfig;
