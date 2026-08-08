@@ -5,15 +5,39 @@ require("catppuccin").setup({
 })
 vim.cmd.colorscheme("catppuccin")
 
-vim.g.netrw_banner = 0
-vim.g.netrw_liststyle = 3
-vim.g.netrw_winsize = 22
-vim.g.netrw_browse_split = 0
-vim.g.netrw_altfile = 1
-
-vim.keymap.set("n", "<leader>e", "<cmd>Lexplore!<cr>", {
-	desc = "Explorer",
+require("neo-tree").setup({
+	sources = { "filesystem", "buffers", "git_status" },
+	filesystem = {
+		bind_to_cwd = false,
+		follow_current_file = { enabled = true },
+		hijack_netrw_behavior = "open_default",
+		use_libuv_file_watcher = true,
+	},
+	window = { position = "right" },
 })
+
+local function project_root()
+	return vim.fs.root(0, ".git") or vim.uv.cwd()
+end
+
+local function neotree(opts)
+	require("neo-tree.command").execute(vim.tbl_extend("force", { toggle = true, position = "right" }, opts))
+end
+
+vim.keymap.set("n", "<leader>fe", function()
+	neotree({ source = "filesystem", dir = project_root() })
+end, { desc = "Explorer Neo-tree (Root Dir)" })
+vim.keymap.set("n", "<leader>fE", function()
+	neotree({ source = "filesystem", dir = vim.uv.cwd() })
+end, { desc = "Explorer Neo-tree (cwd)" })
+vim.keymap.set("n", "<leader>e", "<leader>fe", { desc = "Explorer Neo-tree (Root Dir)", remap = true })
+vim.keymap.set("n", "<leader>E", "<leader>fE", { desc = "Explorer Neo-tree (cwd)", remap = true })
+vim.keymap.set("n", "<leader>ge", function()
+	neotree({ source = "git_status" })
+end, { desc = "Git Explorer" })
+vim.keymap.set("n", "<leader>be", function()
+	neotree({ source = "buffers" })
+end, { desc = "Buffer Explorer" })
 
 local modes = { n = "NORMAL", i = "INSERT", v = "VISUAL", V = "V-LINE", c = "COMMAND", t = "TERMINAL", R = "REPLACE" }
 function _G.LeanStatusline()

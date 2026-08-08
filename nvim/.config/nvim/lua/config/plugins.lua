@@ -12,6 +12,10 @@ local plugins = {
 	{ src = "https://github.com/folke/flash.nvim" },
 	{ src = "https://github.com/nvim-mini/mini.pairs", version = "stable" },
 	{ src = "https://github.com/rickhowe/wrapwidth" },
+	{ src = "https://github.com/nvim-neo-tree/neo-tree.nvim", version = vim.version.range("3") },
+	{ src = "https://github.com/nvim-lua/plenary.nvim" },
+	{ src = "https://github.com/MunifTanjim/nui.nvim" },
+	{ src = "https://github.com/nvim-tree/nvim-web-devicons" },
 }
 
 vim.pack.add(plugins, { confirm = false, load = true })

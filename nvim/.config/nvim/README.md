@@ -4,7 +4,7 @@ This is a purpose-built replacement for the LazyVim configuration in
 `kensledev/dotfiles`. It keeps the unusual movement layout,
 tmux navigation, remote clipboard, fuzzy finding, Git signs, formatting,
 Treesitter and the language coverage from the enabled LazyVim extras, while
-cutting the managed plugin set from 51 to 13.
+cutting the managed plugin set from 51 to 17.
 
 ## What remains a plugin
 
@@ -23,8 +23,9 @@ cutting the managed plugin set from 51 to 13.
 | `nvim-lspconfig`       | Maintained server definitions for native Neovim LSP                 |
 | `mini.pairs`           | Smart insertion of matching quotes and brackets                     |
 | `wrapwidth`            | Visual wrapping toggle for selected code buffers                    |
+| `neo-tree.nvim` + dependencies | Right-side filesystem, Git and buffer explorer              |
 
-Native Neovim replaces Lazy.nvim/LazyVim, Blink, Neo-tree,
+Native Neovim replaces Lazy.nvim/LazyVim, Blink,
 Lualine, Trouble, persistence, vim-oscyank, tmux-navigation and the
 external-TUI wrapper.
 
@@ -57,7 +58,7 @@ ln -s /path/to/lean-nvim ~/.config/nvim
 nvim
 ```
 
-The first launch installs the thirteen plugins, configured language servers and
+The first launch installs the seventeen plugins, configured language servers and
 Treesitter parsers. Neovim
 0.12, Git, `rg`, `fzf`, a C compiler, `tar`, `curl`, and tree-sitter-cli 0.26.1+
 must already be available.
@@ -94,7 +95,9 @@ not available.
 | `<leader>p`, `<leader>/`              | files, live grep                         |
 | `<leader>P`, `<leader>fc`              | recent files, config files              |
 | `<leader>fk`                           | filterable keymap list                   |
-| `<leader>e`                           | native explorer                          |
+| `<leader>e`, `<leader>fe`              | project-root file explorer               |
+| `<leader>E`, `<leader>fE`              | cwd file explorer                        |
+| `<leader>ge`, `<leader>be`             | Git-status, buffer explorer              |
 | `<leader>d`                           | diagnostics in quickfix                  |
 | `<leader>cf`                          | format                                   |
 | `<leader>tw`                          | toggle 100-column visual wrapping        |
@@ -105,7 +108,7 @@ not available.
 
 - Native completion is LSP-only. It does not complete buffer words, paths,
   snippets or Copilot suggestions. Add Blink only if that becomes limiting.
-- Netrw replaces Neo-tree. Git and buffer views are available through fzf-lua.
+- Neo-tree replaces Netrw. fzf-lua remains available for picker-style Git and buffer views.
 - Diagnostics use quickfix rather than Trouble.
 - Mason manages language servers; project compilers, formatters and CLIs remain
   normal system or project dependencies.
