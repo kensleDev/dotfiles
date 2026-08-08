@@ -5,3 +5,13 @@
 opencode/.config/opencode/logs/
 opencode/.config/opencode/tmp/
 opencode/.config/opencode/node_modules/
+
+# Claude runtime artifacts
+claude/.claude/projects/
+
+# Generated binaries
+keyboard/.config/keyboard/klfc/kensleDev/bin/
+keyboard/.config/keyboard/klfc/klfc
+nvim/.config/coc/extensions/coc-tabnine-data/binaries/
+new_nvim/.config/coc/extensions/coc-tabnine-data/binaries/
+nvim/.config/nvim/nvim.appimage
