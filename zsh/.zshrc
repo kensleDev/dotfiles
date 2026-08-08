@@ -36,7 +36,8 @@ source ~/.config/zsh/aliases
 
 theme=agnoster
 
-# eval "$(mise activate zsh)"
+eval "$(mise activate zsh)"
+path=(${path:#${HOME}/.local/share/bob/nvim-bin})
 
 
 # OpenClaw Completion
