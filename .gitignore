@@ -15,3 +15,11 @@ keyboard/.config/keyboard/klfc/klfc
 nvim/.config/coc/extensions/coc-tabnine-data/binaries/
 new_nvim/.config/coc/extensions/coc-tabnine-data/binaries/
 nvim/.config/nvim/nvim.appimage
+
+# Generated or bundled non-source assets
+claude/.claude/debug/
+claude/.config/.claude/projects/
+fonts/.fonts/
+images-webp.zip
+zsh/.config/zsh/nvim-macos.tar.gz
+new_nvim/.config/coc/extensions/node_modules/vls/dist/*.map
