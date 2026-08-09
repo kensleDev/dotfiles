@@ -46,10 +46,20 @@ source <(NODE_NO_WARNINGS=1 openclaw completion --shell zsh 2>/dev/null)
 
 
 # opencode
-export PATH=/home/kd/.opencode/bin:$PATH
+export PATH="$HOME/.opencode/bin:$PATH"
 
 # nanobrew
 export PATH="/opt/nanobrew/prefix/bin:$PATH"
 
 # opencode
-export PATH=/Users/kd/.opencode/bin:$PATH
+export PATH="$HOME/.opencode/bin:$PATH"
+
+# bun completions
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+
+# Tell tmux where each prompt and command output begins (OSC 133).
+autoload -Uz add-zsh-hook
+_tmux_osc133_prompt() { printf '\e]133;A\e\\'; }
+_tmux_osc133_output() { printf '\e]133;C\e\\'; }
+add-zsh-hook precmd _tmux_osc133_prompt
+add-zsh-hook preexec _tmux_osc133_output
