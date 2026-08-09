@@ -26,6 +26,7 @@ export FZF_DEFAULT_COMMAND='rg --hidden --ignore .git -g ""'
 
 # Update PATH
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$PATH:$HOME/.local/share/bob/nvim-bin"
 export PATH="$PATH:/home/linuxbrew/.linuxbrew/bin/brew"
 
