@@ -1,0 +1,7 @@
+interface:
+  display_name: "Grill Me"
+  short_description: "Resolve decisions one-by-one, then create the plan"
+  default_prompt: "Use $grill-me to interview me about this task and create an implementation-ready plan."
+
+policy:
+  allow_implicit_invocation: false

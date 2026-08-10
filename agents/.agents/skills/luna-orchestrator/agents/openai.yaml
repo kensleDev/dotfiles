@@ -1,0 +1,7 @@
+interface:
+  display_name: "Luna Orchestrator"
+  short_description: "Plan with Sol; implement with bounded Luna workers"
+  default_prompt: "Use $luna-orchestrator for this implementation task."
+
+policy:
+  allow_implicit_invocation: false

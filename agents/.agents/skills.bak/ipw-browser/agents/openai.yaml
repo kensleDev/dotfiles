@@ -1,0 +1,7 @@
+interface:
+  display_name: "IPW Browser"
+  short_description: "Browse pages with the local IPW API"
+  default_prompt: "Use $ipw-browser for browser-required navigation, inspection, and safe public-page interactions."
+
+policy:
+  allow_implicit_invocation: true
